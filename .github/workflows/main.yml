@@ -21,9 +21,9 @@ jobs:
       - name: Publish Blazor Project
         run: dotnet publish -c Release -o release --nologo
       
-      # Deploy to GitHub Pages
+      # Deploy to GitHub Pages       
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
