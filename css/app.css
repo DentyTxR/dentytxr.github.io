@@ -1,5 +1,16 @@
+:root {
+    --bg-color: #2e2e2e; /* Dark gray background */
+    --text-color: #e0e0e0; /* Light gray text */
+    --secondary-color: #3c3c3c; /* Slightly lighter gray for panels or cards */
+    --accent-color: #4caf50; /* Accent color (green, can be changed) */
+    --button-bg-color: #4c4c4c; /* Medium gray for buttons */
+    --button-text-color: #ffffff; /* White text on buttons */
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 h1:focus {
@@ -7,12 +18,12 @@ h1:focus {
 }
 
 a, .btn-link {
-    color: #0071c1;
+    color: var(--accent-color);
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
     border-color: #1861ac;
 }
 
