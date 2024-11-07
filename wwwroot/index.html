@@ -8,16 +8,18 @@
     <title>Denty</title>
     <base href="/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
+    <link href="css/app.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="ghp-app.styles.css" rel="stylesheet" />
 </head>
 
 <body>
     <div id="app">
-        <div class="flex items-center justify-center min-h-screen p-5 min-w-screen">
-            <div class="m-auto flex flex-col space-y-4">
-                <span class="text-white mx-auto animate-pulse">Loading...</span>
+        <div class="d-flex align-items-center" id="loading">
+            <div class="w-100 d-flex flex-column align-items-center">
+                <div class="">
+                    <h1 class="">Loading...</h1>
+                </div>
             </div>
         </div>
     </div>
