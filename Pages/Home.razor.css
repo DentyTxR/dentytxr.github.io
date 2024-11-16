@@ -1,0 +1,189 @@
+﻿.header-section {
+    text-align: center;
+    padding: 35px;
+    background-color: #1e1e2f;
+    color: #f0f0f0;
+    border-radius: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0px;
+    max-width: none;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.about-section, .portfolio-section, .contact-section, .experience-section, .skills-section, .community-section {
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 900px;
+    background-color: #292b3a;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 15px 7px rgba(0, 0, 0, 0.2);
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+    /* Icons */
+    .contact-item i {
+        font-size: 1.7rem;
+        color: #904cff;
+    }
+
+    /* Links inside the contact items */
+    .contact-item a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+            text-decoration-color: #904cff;
+        }
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .contact-links {
+        padding: 0 20px;
+    }
+
+    .contact-item {
+        font-size: 1rem; /* Adjust text size for small screens */
+    }
+}
+
+
+.portfolio-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.experience-section .experience-grid, .skills-section .skills-grid, .community-section .community-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+.experience-box, .skill-box, .community-box {
+    background-color: #444;
+    padding: 5px;
+    border-radius: 8px;
+    width: calc(50% - 10px);
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .experience-box:hover, .skill-box:hover, .community-box:hover, .project-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .experience-section p, .community-box p {
+        font-size: 1rem;
+        color: #fff;
+}
+
+    .experience-section h3, .community-box h3, .project-box h3 {
+        font-size: 1.5rem;
+        color: #904cff;
+        margin-bottom: 10px;
+    }
+
+.experience-badges {
+    display: flex;
+    justify-content: start; /* Align the badges at the start of the container */
+    gap: 15px;              /* Add space between the badges */
+    margin-top: 20px;       /* Add margin between the experience content and badges */
+    flex-wrap: wrap;        /* Allow wrapping in case of small screen */
+}
+
+.badge {
+    background-color: #00b7f1;  /* TypeScript-like blue color */
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;         /* Prevent text from breaking into multiple lines */
+}
+
+.skills-grid span {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+
+.project-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.project-box {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 8px;
+    width: calc(33.33% - 20px); /* 3 items per row */
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-description {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.project-box a {
+    display: inline-block;
+    margin: 5px 10px;
+    padding: 8px 15px;
+    background-color: #6e3bc1;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+    .project-box a:hover {
+        background-color: #904cff;
+    }
+
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .experience-box, .skill-box, .community-box, .project-box {
+        width: calc(50% - 20px); /* 2 items per row on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .experience-box, .skill-box, .community-box, .project-box {
+        width: 100%; /* 1 item per row on very small screens */
+    }
+}

@@ -1,5 +1,131 @@
 ﻿@page "/"
+@using Components;
+@using ghp_app.Components
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Denty</PageTitle>
 
-<h1>WIP</h1>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+
+<div class="header-section">
+    <h1>Hello, I'm Denty :)</h1>
+    <p>Welcome to my about me page/portfolio</p>
+</div>
+
+<section class="about-section">
+    <h2>About Me</h2>
+    <p>Hello! I'm an 18 year old (03/01/2006) living in the United States. I do a variety of stuff (which honestly takes my attention away from important stuff) such as streaming, content creation, programming, creating game plugins, managing game servers (including backend infrastructure), reading manga and watching anime.</p>
+</section>
+
+<section class="skills-section">
+    <h2>Programming Languages</h2>
+    <div class="skills-grid">
+        <div class="skill-box">
+            <img src="/img/csharp.png" style="width: 50px; height: 50px;">
+            <span>C-Sharp (Self-Taught)</span>
+        </div>
+    </div>
+</section>
+
+<section class="experience-section">
+    <h2>Experience</h2>
+    <div class="experience-grid">
+        <div class="experience-badges">
+            <span class="badge">2-3 Years of Tech Support Experience</span>
+            <span class="badge">2-3 Years with C-Sharp</span>
+        </div>
+        <div class="experience-box">
+            <h3>Technical Support Specialist @@ <a href="https://scpslgame.com/" target="_blank">Northwood Studios</a></h3>
+            <p><strong>Duration:</strong> August 2024 - Present</p>
+            <p><strong>Responsibilities:</strong> Providing players and internal with technical support for SCP:SL client/dedicated server related.</p>
+        </div>
+        <div class="experience-box">
+            <h3>SCP:SL Technical Assistant</h3>
+            <p><strong>Duration:</strong> June 2020 - July 2022</p>
+            <p><strong>Responsibilities:</strong> Providing players with technical support for SCP:SL client/dedicated server related.</p>
+        </div>
+    </div>
+</section>
+
+
+<section class="community-section">
+    <h2>Community Experience</h2>
+    <div class="community-grid">
+        <div class="community-box">
+            <h3>Server Manager & Developer for D-Boys R Us Community</h3>
+            <p><strong>Duration:</strong> July 2021 - Present</p>
+            <p><strong>Responsibilities:</strong> Managing daily server operations, troubleshooting, creating new systems such as custom SCP:SL plugins to handle game related moderation, Patreon system and syncing between C# Discord bot, plugin and API. Used to help manage the Discord, cleaning it up and making it efficient for users and staff.</p>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="portfolio-section">
+    <h2>Projects</h2>
+    <div class="project-grid">
+        <div class="project-box">
+            <h3>Project Title 1</h3>
+            <p class="project-description">description.</p>
+            <a href="https://github.com/" target="_blank">View </a>
+        </div>
+        <div class="project-box">
+            <h3>Project Title 2</h3>
+            <p class="project-description">description.</p>
+            <a href="https://github.com/" target="_blank">View </a>
+        </div>
+        <div class="project-box">
+            <h3>Project Title 3</h3>
+            <p class="project-description">description.</p>
+            <a href="https://github.com/" target="_blank">View </a>
+        </div>
+    </div>
+</section>
+
+
+<section class="contact-section">
+    <h2>My Socials</h2>
+    <div class="contact-links">
+        <div class="contact-item">
+            <i class="fab fa-discord"></i>
+            <span>Discord: dentytxr</span>
+        </div>
+        <div class="contact-item">
+            <i class="fab fa-github"></i>
+            <span><a href="https://github.com/dentytxr" target="_blank">GitHub: dentytxr</a></span>
+        </div>
+        <div class="contact-item">
+            <i class="fab fa-youtube"></i>
+            <span><a href="https://www.youtube.com/@@DentyTxR" target="_blank">YouTube: DentyTxR</a></span>
+        </div>
+        <div class="contact-item">
+            <i class="fab fa-twitch"></i>
+            <span><a href="https://twitch.tv/dentytxr/" target="_blank">Twitch: DentyTxR</a></span>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span><a href="mailto:dentytxr@gmail.com">dentytxr@gmail.com</a></span>
+        </div>
+    </div>
+</section>
+
+@if (DialogOpen)
+{
+    <ModalDialog Title="Notice"
+                 Text="This is not finished, please keep that in mind when you continue."
+                 OnClose="@OnClose"
+                 DialogType="ModalDialog.ModalDialogType.Ok">
+    </ModalDialog>
+}
+
+@code {
+    public bool DialogOpen { get; set; } = true;
+
+    private void OnClose()
+    {
+        DialogOpen = false;
+        StateHasChanged();
+    }
+}
