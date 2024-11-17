@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">@Title</h4>
-                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                <Blazorise.Button Color="Color.Danger" class="close" @onclick="@ModalCancel">&times;</Blazorise.Button>
             </div>
             <div class="modal-body">
                 <p>@Text</p>
@@ -12,15 +12,11 @@
                 @switch (DialogType)
                 {
                     case ModalDialogType.Ok:
-                        <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
+                        <Blazorise.Button Color="Color.Primary" class="btn btn-primary" @onclick=@ModalOk>OK</Blazorise.Button>
                         break;
                     case ModalDialogType.OkCancel:
-                        <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
-                        <button type="button" class="btn btn-primary" @onclick=@ModalOk>OK</button>
-                        break;
-                    case ModalDialogType.DeleteCancel:
-                        <button type="button" class="btn" @onclick="@ModalCancel">Cancel</button>
-                        <button type="button" class="btn btn-danger" @onclick=@ModalOk>Delete</button>
+                        <Blazorise.Button Color="Color.Danger" class="btn" @onclick="@ModalCancel">Cancel</Blazorise.Button>
+                        <Blazorise.Button Color="Color.Primary" class="btn btn-primary" @onclick=@ModalOk>OK</Blazorise.Button>
                         break;
                 }
             </div>
@@ -54,7 +50,6 @@
     public enum ModalDialogType
     {
         Ok,
-        OkCancel,
-        DeleteCancel
+        OkCancel
     }
 }

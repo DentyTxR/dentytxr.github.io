@@ -54,7 +54,7 @@
     <h2>Community Experience</h2>
     <div class="community-grid">
         <div class="community-box">
-            <h3>Server Manager & Developer for D-Boys R Us Community</h3>
+            <h3>Server Manager & Developer for [REDACTED] Community</h3>
             <p><strong>Duration:</strong> July 2021 - Present</p>
             <p><strong>Responsibilities:</strong> Managing daily server operations, troubleshooting, creating new systems such as custom SCP:SL plugins to handle game related moderation, Patreon system and syncing between C# Discord bot, plugin and API. Used to help manage the Discord, cleaning it up and making it efficient for users and staff.</p>
         </div>
@@ -110,22 +110,3 @@
         </div>
     </div>
 </section>
-
-@if (DialogOpen)
-{
-    <ModalDialog Title="Notice"
-                 Text="This is not finished, please keep that in mind when you continue."
-                 OnClose="@OnClose"
-                 DialogType="ModalDialog.ModalDialogType.Ok">
-    </ModalDialog>
-}
-
-@code {
-    public bool DialogOpen { get; set; } = true;
-
-    private void OnClose()
-    {
-        DialogOpen = false;
-        StateHasChanged();
-    }
-}

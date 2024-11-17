@@ -1,4 +1,11 @@
 ﻿.modal-content {
-    background-color: #444;
+    background-color: #404040;
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.modal-title {
     text-align: center;
 }

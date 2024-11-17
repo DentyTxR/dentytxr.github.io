@@ -1,0 +1,33 @@
+﻿@page "/testing"
+@using Blazorise
+@using Blazorise.Components
+@using ghp_app.Components;
+
+<h3>Testing</h3>
+
+<Blazorise.Button Color="Blazorise.Color.Primary" Clicked="ShowModal">
+    Open Modal
+</Blazorise.Button>
+
+@if (DialogOpen)
+{
+    <ModalDialog Title="test"
+                 Text="test"
+                 DialogType="ModalDialog.ModalDialogType.Ok"
+                 OnClose="OnClose">
+    </ModalDialog>
+}
+
+@code {
+    public required bool DialogOpen { get; set; } = false;
+
+    private void ShowModal()
+    {
+        DialogOpen = true;
+    }
+
+    private void OnClose()
+    {
+        DialogOpen = false;
+    }
+}
