@@ -24,6 +24,17 @@
     <meta property="twitter:description" content="My Portfolio" />
 </head>
 
+<script>
+    var t = setInterval(function () {
+        if (window.goatcounter && window.goatcounter.visit_count) {
+            clearInterval(t)
+            window.goatcounter.visit_count({ append: 'body' })
+        }
+    }, 100)
+</script>
+<script data-goatcounter="https://031606.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
 
 <Blazorise.Button Color="Blazorise.Color.Primary" Clicked="ShowModal">
     Open Modal
