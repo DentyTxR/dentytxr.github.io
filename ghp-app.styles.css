@@ -1,6 +1,13 @@
 /* /Components/ModalDialog.razor.rz.scp.css */
 .modal-content[b-tohvgyw1y7] {
-    background-color: #444;
+    background-color: #404040;
+}
+
+.modal-body[b-tohvgyw1y7] {
+    text-align: center;
+}
+
+.modal-title[b-tohvgyw1y7] {
     text-align: center;
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
@@ -9,15 +16,15 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color); /* Dark background */
+    background-color: var(--bg-color);
     min-height: 91vh;
 }
 
 /* Main content area */
 main[b-4h9a7wv4a7] {
     flex: 1;
-    background-color: var(--secondary-color); /* Slightly lighter gray for the main content */
-    color: var(--text-color); /* Light text color */
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 /* Sidebar with gradient */
@@ -101,8 +108,11 @@ main[b-4h9a7wv4a7] {
     padding: 22px 0;
     width: 100%;
     box-sizing: border-box;
+    background-image: url('img/ArminChristmas.png');
+    background-size: 80px;
+    background-position: center;
+    background-blend-mode:  overlay;
 }
-
 /* /Layout/NavMenu.razor.rz.scp.css */
 .navbar-toggler[b-vtlht0l2p8] {
     background-color: rgba(255, 255, 255, 0.1);

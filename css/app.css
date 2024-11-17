@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #2e2e2e; /* Dark gray background */
+    --bg-color: #4b4b4b; /* Dark gray background */
     --text-color: #e0e0e0; /* Light gray text */
     --secondary-color: #3c3c3c; /* Slightly lighter gray for panels or cards */
     --accent-color: #4caf50; /* Accent color (green, can be changed) */
@@ -13,9 +13,11 @@ html, body {
     color: var(--text-color);
 }
 
+
 h1:focus {
     outline: none;
 }
+
 
 a, .btn-link {
     color: var(--accent-color);
