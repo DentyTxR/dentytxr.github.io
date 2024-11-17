@@ -1,11 +1,24 @@
 ﻿@page "/"
-@using Components;
-@using ghp_app.Components
 
 <PageTitle>Denty</PageTitle>
 
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Primary Meta Tags -->
+    <title>Denty - About Me</title>
+    <meta name="title" content="Denty - About Me" />
+    <meta name="description" content="My Portfolio" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dentytxr.github.io/" />
+    <meta property="og:title" content="Denty - About Me" />
+    <meta property="og:description" content="My Portfolio" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://dentytxr.github.io/" />
+    <meta property="twitter:title" content="Denty - About Me" />
+    <meta property="twitter:description" content="My Portfolio" />
 </head>
 
 
@@ -16,8 +29,8 @@
 
 <section class="about-section">
     <h2>About Me</h2>
-    <p>Hello! I'm an 18 year old (03/01/2006) living in the United States. I do a variety of stuff (which honestly takes my attention away from important stuff) such as streaming, content creation, programming, creating game plugins, managing game servers (including backend infrastructure), reading manga and watching anime.</p>
-</section>
+    <p>Hello! I'm an 18 year old (03/01/2006) living in the United States. I do a variety of stuff (which honestly takes my attention away from important stuff) such as streaming, content creation, programming, random c# apps, creating game plugins, managing game servers (including backend infrastructure), reading manga and watching anime.</p>
+    <p>I’m available for hire for work related to the skills and projects showcased on this page, such as plugin development. Feel free to send me an email with details about your request. Please note that I may decline if I feel the task is beyond my expertise. Thank you for understanding!</p></section>
 
 <section class="skills-section">
     <h2>Programming Languages</h2>
@@ -33,6 +46,7 @@
     <h2>Experience</h2>
     <div class="experience-grid">
         <div class="experience-badges">
+            <span class="badge">4-5 Years of Community Management Experience</span>
             <span class="badge">2-3 Years of Tech Support Experience</span>
             <span class="badge">2-3 Years with C-Sharp</span>
         </div>
@@ -45,6 +59,11 @@
             <h3>SCP:SL Technical Assistant</h3>
             <p><strong>Duration:</strong> June 2020 - July 2022</p>
             <p><strong>Responsibilities:</strong> Providing players with technical support for SCP:SL client/dedicated server related.</p>
+        </div>
+        <div class="experience-box">
+            <h3>C# Game Plugin Developer</h3>
+            <p><strong>Duration:</strong> March 2020 - Present</p>
+            <p><strong>Responsibilities:</strong> Making different types of plugins for games, mainly SCP:SL, including moderation solutions and tools, gameplay modifications, in-game events for players, etc.</p>
         </div>
     </div>
 </section>
@@ -67,19 +86,24 @@
     <h2>Projects</h2>
     <div class="project-grid">
         <div class="project-box">
-            <h3>Project Title 1</h3>
-            <p class="project-description">description.</p>
-            <a href="https://github.com/" target="_blank">View </a>
+            <h3>SCP:SL FAQ Project (Inactive)</h3>
+            <p class="project-description">The first FAQ source and FAQ website for SCP: Secret Laboratory.</p>
+            <a href="https://github.com/DentyTxR/SCPSL-FAQ-Project" target="_blank">View </a>
         </div>
         <div class="project-box">
-            <h3>Project Title 2</h3>
-            <p class="project-description">description.</p>
-            <a href="https://github.com/" target="_blank">View </a>
+            <h3>ShowReportsInGame</h3>
+            <p class="project-description">A simple but modular moderation plugin for SCP: Secret Laboratory to provide staff in-game with live player and cheater reports via hints, broadcast and console.</p>
+            <a href="https://github.com/DentyTxR/ShowReportsInGame" target="_blank">View </a>
         </div>
         <div class="project-box">
-            <h3>Project Title 3</h3>
-            <p class="project-description">description.</p>
-            <a href="https://github.com/" target="_blank">View </a>
+            <h3>CARDINAL</h3>
+            <p class="project-description">A semi-advanced full-stack system I developed to streamline and manage various personal tasks and projects.</p>
+            <a href="#" class="disabled-link">Private</a>
+        </div>
+        <div class="project-box">
+            <h3>GitHub Repositories</h3>
+            <p class="project-description">Explore a curated selection of my favorite work on this page. To view all my repositories, click the button below to visit my GitHub profile.</p>
+            <a href="https://github.com/DentyTxR/" target="_blank">View </a>
         </div>
     </div>
 </section>
