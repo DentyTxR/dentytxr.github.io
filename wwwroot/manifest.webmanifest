@@ -1,0 +1,22 @@
+{
+  "name": "Denty - About Me",
+  "short_name": "Denty",
+  "id": "./",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#4b4b4b",
+  "theme_color": "#1e1e2f",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ]
+}

@@ -24,16 +24,16 @@
     <meta property="twitter:description" content="My Portfolio" />
 </head>
 
+<div>Number of visitors: <div id="stats"></div></div>
+
 <script>
-    var t = setInterval(function () {
-        if (window.goatcounter && window.goatcounter.visit_count) {
-            clearInterval(t)
-            window.goatcounter.visit_count({ append: 'body' })
-        }
-    }, 100)
+    var r = new XMLHttpRequest();
+    r.addEventListener('load', function () {
+        document.querySelector('#stats').innerText = JSON.parse(this.responseText).count
+    })
+    r.open('GET', 'https://031606.goatcounter.com/counter/' + encodeURIComponent(location.pathname) + '.json')
+    r.send()
 </script>
-<script data-goatcounter="https://031606.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 
 
 <Blazorise.Button Color="Blazorise.Color.Primary" Clicked="ShowModal">
