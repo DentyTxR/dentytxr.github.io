@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ghp-app",
   "resources": {
-    "hash": "sha256-YDUNE3h45m2Slq0g/AoUYCoxrJd8xlpj8iBEQ9nZD50=",
+    "hash": "sha256-JEggmZqz2Brv5faYBXSxB8Sm3sNkvxjGceyZqFzYGy4=",
     "jsModuleNative": {
       "dotnet.native.8.0.11.n1sf6xr5tz.js": "sha256-VdKq87/z5NIxZKmuM+fv38XF+RcEb/bg3jVBwQSfwP4="
     },
@@ -22,7 +22,7 @@
       "Blazorise.Icons.FontAwesome.wasm": "sha256-jMbfy0Ql57HMbTxjZHz+Gzg3zW87CJ/LVrCRTvrwYFY=",
       "Blazorise.Licensing.wasm": "sha256-5Mr9mILwJ1jWAhoNXuDxak5Sw8yU7kCdOyCy13Rdpz4=",
       "Blazorise.wasm": "sha256-RUTBnfdzZVKrcal1VwSzTPuwrvopq/jzxHATBIC1POo=",
-      "ghp-app.wasm": "sha256-zjW9zcSlmnRU/DWTy9n7/k7GLDrFB4UQSOlBNdzAFBk=",
+      "ghp-app.wasm": "sha256-OeGvrKe5gLhaT7QXrVJMMt62wrSZwUe9F5Cx3kmV3iA=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-ErDaL7ENsG6MwP1boQhdf1FZGqYhQPx9L8jd33Qd7pE=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-LMKniiKX0ksqC8nP0zjsSJ/oWLad3919O4Utn5i0fBA=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-bfQZpEx7iDVf7w+Xy6aYuDvwFN8wNxxYF89NP6HOkiQ=",
