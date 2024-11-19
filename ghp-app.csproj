@@ -9,15 +9,16 @@
 
   <ItemGroup>
     <None Remove="Components\ModalDialog.razor.css" />
+    <None Remove="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Components\ModalDialog.razor.css" />
+    <Content Include="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 
 <ItemGroup>
-  <ServiceWorker Include="wwwroot\service-worker.js" 
-    PublishedContent="wwwroot\service-worker.published.js" />
+  <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
 </ItemGroup>
 
   <ItemGroup>

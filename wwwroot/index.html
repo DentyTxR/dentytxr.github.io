@@ -27,7 +27,6 @@
     <script data-goatcounter="https://031606.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 
-
 <body>
     <div id="app">
         <div style="position:absolute; top:30vh; width:100%; text-align:center">
@@ -43,15 +42,14 @@
         </div>
     </div>
 
-
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <!-- Service Worker for PWA -->
-    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' });</script>
+
+    <script src="sw-registrator.js"></script>
 </body>
 
 </html>

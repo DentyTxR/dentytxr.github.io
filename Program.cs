@@ -7,9 +7,11 @@ using Blazorise.Icons.FontAwesome;
 using Blazorise.Bootstrap;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
+
 
 builder.Services.AddBlazorise(options => {  } ).AddFontAwesomeIcons().AddBootstrapProviders();
 
