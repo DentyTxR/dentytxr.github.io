@@ -88,4 +88,4 @@ async function onFetch(event) {
     // For other requests, use default fetch behavior
     return fetch(event.request);
 }
-/* Manifest version: ev3N+apB */
+/* Manifest version: DHbjr5K6 */
