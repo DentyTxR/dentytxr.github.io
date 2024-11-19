@@ -27,6 +27,7 @@
     [JSInvokable(nameof(OnUpdateAvailable))]
     public Task OnUpdateAvailable()
     {
+        Console.WriteLine("Update available!");
         _newVersionAvailable = true;
 
         StateHasChanged();

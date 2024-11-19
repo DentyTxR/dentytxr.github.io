@@ -47,12 +47,8 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly.js"></script>
-
-    <script src="sw-registrator.js"></script>
 
     <script>
-        // Define the JavaScript function for update notifications
         window.registerForUpdateAvailableNotification = (callback) => {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -61,5 +57,8 @@
             }
         };
     </script>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="sw-registrator.js"></script>
 </body>
 </html>
