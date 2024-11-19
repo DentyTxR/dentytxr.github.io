@@ -25,6 +25,10 @@
     Open Modal
 </Blazorise.Button>
 
+
+
+
+
 @if (DialogOpen)
 {
     <ModalDialog Title="test"
@@ -34,7 +38,30 @@
     </ModalDialog>
 }
 
+@if (Testing1)
+{
+    ShowToast();
+}
+
 @code {
+    public bool Testing1 = true;
+
+    [Inject] IToastService ToastService { get; set; }
+
+    Task ShowToast()
+    {
+        return ToastService.Info("This is a simple toast message!", "Hello", BuildToastInstanceOptions);
+    }
+
+    private void BuildToastInstanceOptions(ToastInstanceOptions toastInstanceOptions)
+    {
+        toastInstanceOptions.Animated = true;
+        toastInstanceOptions.AnimationDuration = 300;
+        toastInstanceOptions.Autohide = false;
+        toastInstanceOptions.Closing = (e) => { Console.WriteLine("Closing"); return Task.CompletedTask; };
+        toastInstanceOptions.Opening = (e) => { Console.WriteLine("Opening"); return Task.CompletedTask; };
+    }
+
     public required bool DialogOpen { get; set; } = false;
 
     private void ShowModal()

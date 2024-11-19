@@ -28,9 +28,18 @@
 });
 
 window.registerForUpdateAvailableNotification = (caller, methodName) => {
-    window.updateAvailable.then(isUpdateAvailable => {
+    window.updateAvailable.then(async isUpdateAvailable => {
         if (isUpdateAvailable) {
-            caller.invokeMethodAsync(methodName).then();
+            // Fetch version info
+            try {
+                const response = await fetch('/version.json');
+                const data = await response.json();
+
+                // Trigger method with version info
+                caller.invokeMethodAsync(methodName, data.version, data.changes).then();
+            } catch (error) {
+                console.error('Error fetching version info:', error);
+            }
         }
     });
 };

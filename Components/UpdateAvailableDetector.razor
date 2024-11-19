@@ -1,15 +1,27 @@
 ﻿@inject IJSRuntime _jsRuntime
+@inject NavigationManager NavigationManager
 
-@if (_newVersionAvailable)
-{
-    <button type="button" class="btn btn-warning shadow floating-update-button" onclick="window.location.reload()">
-        A new version of the application is available. Click here to reload.
-    </button>
-}
+<Toaster Placement="ToasterPlacement.TopEnd">
+    <Toast @bind-Visible="@_newVersionAvailable" Autohide="false" Closed="OnToastClosed">
+        <ToastHeader>
+            <Strong Margin="Margin.IsAuto.FromEnd">Title</Strong>
+            <Small></Small>
+            <CloseButton />
+        </ToastHeader>
+        <ToastBody>
+            A new version of the app is available<br />
+            Version: @_newVersion<br />
+            Changelog: @UpdateChanges<br />
+            <Button @onclick="ReloadPage" Size="Size.Small" Color="Color.Info">Update</Button>
+        </ToastBody>
+    </Toast>
+</Toaster>
 
 @code {
 
     private bool _newVersionAvailable = false;
+    private string _newVersion = string.Empty;
+    private string UpdateChanges = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -25,14 +37,27 @@
     }
 
     [JSInvokable(nameof(OnUpdateAvailable))]
-    public Task OnUpdateAvailable()
+    public Task OnUpdateAvailable(string Version, string Changelog)
     {
-        Console.WriteLine("Update available!");
+        Console.WriteLine($"Update available! Version: {Version} Changelog: {Changelog}");
+
         _newVersionAvailable = true;
+        _newVersion = Version;
+        UpdateChanges = Changelog;
 
         StateHasChanged();
 
         return Task.CompletedTask;
     }
 
+    private void OnToastClosed()
+    {
+        _newVersionAvailable = false;
+        StateHasChanged();
+    }
+
+    private void ReloadPage()
+    {
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
 }
