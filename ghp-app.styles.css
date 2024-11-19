@@ -10,6 +10,22 @@
 .modal-title[b-tohvgyw1y7] {
     text-align: center;
 }
+/* /Components/UpdateAvailableDetector.razor.rz.scp.css */
+.floating-update-button[b-dhvqprm7at] {
+  position: fixed;
+
+  right: 2rem;
+  bottom: 2rem;
+
+  padding: 1rem 1.5rem;
+
+  animation: fadein-b-dhvqprm7at 2s ease-out;
+}
+
+@keyframes fadein-b-dhvqprm7at {
+  from { right: -100%; }
+  to { right: 2rem; }
+}
 /* /Layout/MainLayout.razor.rz.scp.css */
 /* Global page container */
 .page[b-4h9a7wv4a7] {
