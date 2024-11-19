@@ -50,5 +50,16 @@
     <script src="_framework/blazor.webassembly.js"></script>
 
     <script src="sw-registrator.js"></script>
+
+    <script>
+        // Define the JavaScript function for update notifications
+        window.registerForUpdateAvailableNotification = (callback) => {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    callback();
+                });
+            }
+        };
+    </script>
 </body>
 </html>
