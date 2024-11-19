@@ -53,7 +53,7 @@
       "url": "sample-data\/weather.json"
     },
     {
-      "hash": "sha256-DqFbAoITT7zIo1Fu6XlyWpP4FDT2h+SEs5km9ZO5QS8=",
+      "hash": "sha256-xGt9XDomaML7lY\/VLLQWjUTWMo6EKhacTOAGzC\/bYpM=",
       "url": "sw-registrator.js"
     },
     {
@@ -89,7 +89,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-feL7pW+KAh3EMVQdJboJIvNDjm1bbqojEci5R4Jkg0g=",
+      "hash": "sha256-muEkjS\/IRIlb5veUtyuIuPy\/wwygPrM9qSUmYp8aLEs=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/Blazorise.wasm"
     },
     {
-      "hash": "sha256-6zs9DMTVukQsB7RS9Md0B2t7un6TmavWbId9le6v70g=",
+      "hash": "sha256-K4+6i3IQ6RdK37LHGHUBQKTNYIk8brBi7l1iV+1pp4Q=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -617,5 +617,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "jNanAHh9"
+  "version": "FBxlzLih"
 };
