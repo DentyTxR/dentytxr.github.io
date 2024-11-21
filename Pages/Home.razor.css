@@ -113,6 +113,14 @@ h2 {
         font-size: 1rem;
     }
 
+    .experience-box a {
+        color: lightblue;
+    }
+        .experience-box a:hover {
+            text-decoration: underline;
+            text-decoration-color: #904cff;
+        }
+
     .experience-box strong,
     .community-box strong {
         color: #ffcc00;

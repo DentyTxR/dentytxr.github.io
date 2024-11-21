@@ -32,7 +32,7 @@ self.addEventListener('message', (event) => {
 
 // Install handler
 async function onInstall(event) {
-    console.info('Service worker: Install');
+    console.info('Service worker Install State');
 
     // Activate the new service worker as soon as the old one is retired
     self.skipWaiting();
@@ -49,7 +49,7 @@ async function onInstall(event) {
 
 // Activate handler
 async function onActivate(event) {
-    console.info('Service worker: Activate');
+    console.info('Service worker Activate State');
 
     // Delete unused caches
     const cacheKeys = await caches.keys();

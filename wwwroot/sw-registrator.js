@@ -8,7 +8,7 @@
 
     navigator.serviceWorker.register('/service-worker.js')
         .then(registration => {
-            console.info(`Service worker registration successful (scope: ${registration.scope})`);
+            console.info(`Service worker registration successful`);
             setInterval(() => {
                 registration.update();
             }, 60 * 1000); // 60000ms -> check each minute

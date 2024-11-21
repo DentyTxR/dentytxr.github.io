@@ -1,52 +1,52 @@
 /* Global page container */
-.page {
+/*.page {
     position: relative;
     display: flex;
     flex-direction: column;
     background-color: var(--bg-color);
     min-height: 91vh;
-}
+}*/
 
 /* Main content area */
-main {
+/*main {
     flex: 1;
     background-color: var(--bg-color);
     color: var(--text-color);
-}
+}*/
 
 /* Sidebar with gradient */
-.sidebar {
+/*.sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
-    color: var(--text-color); /* Light text color in sidebar */
-}
+    color: var(--text-color);*/ /* Light text color in sidebar */
+/*}*/
 
 /* Top row for the header */
-.top-row {
-    background-color: #2a2a2a; /* Dark gray background for header */
-    border-bottom: 1px solid #444444; /* Dark border */
-    justify-content: flex-end;
+/*.top-row {
+    background-color: #2a2a2a;*/ /* Dark gray background for header */
+    /*border-bottom: 1px solid #444444;*/ /* Dark border */
+    /*justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
-    color: var(--text-color); /* Text color for header */
-}
+    color: var(--text-color);*/ /* Text color for header */
+/*}*/
 
     /* Links and buttons in the top row */
-    .top-row ::deep a,
+    /*.top-row ::deep a,
     .top-row ::deep .btn-link {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
-        color: var(--accent-color); /* Accent color for links */
-    }
+        color: var(--accent-color);*/ /* Accent color for links */
+    /*}
 
         .top-row ::deep a:hover,
         .top-row ::deep .btn-link:hover {
             text-decoration: underline;
-        }
+        }*/
 
 /* Responsiveness for small screens */
-@media (max-width: 640.98px) {
+/*@media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
     }
@@ -55,10 +55,10 @@ main {
         .top-row ::deep .btn-link {
             margin-left: 0;
         }
-}
+}*/
 
 /* Large screen layout adjustments */
-@media (min-width: 641px) {
+/*@media (min-width: 641px) {
     .page {
         flex-direction: row;
     }
@@ -98,5 +98,20 @@ main {
     background-image: url('img/ArminChristmas.png');
     background-size: 80px;
     background-position: center;
-    background-blend-mode:  overlay;
+    background-blend-mode: overlay;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.mud-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}*/
