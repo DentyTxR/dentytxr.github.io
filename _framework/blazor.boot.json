@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ghp-app",
   "resources": {
-    "hash": "sha256-h74YT/QY2RGbgWG86xx7XECoRHlYSXovh2WaRbvUoQY=",
+    "hash": "sha256-UsTrRuH7LyzSdxtpc2OuQ/TOdnlhdlIoUcDYi5FiTE8=",
     "jsModuleNative": {
       "dotnet.native.8.0.11.n1sf6xr5tz.js": "sha256-VdKq87/z5NIxZKmuM+fv38XF+RcEb/bg3jVBwQSfwP4="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "ghp-app.wasm": "sha256-cuzW82WGFf08D7t+H2/FYjF+ZFhpmpARwT3UYIRpEvA=",
+      "ghp-app.wasm": "sha256-F25MELs+dVxIGuXGU89k+m/HmTMyJkyXvF5wON1zHFQ=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-EHakpJGh4u2E7wQH4imduSZ8VkubQmsvIE1H8pU7UAU=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-72ToGfem2fV/2xY68Ro6zKzTN+WDu2w7rZoH1uRNgtQ=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-BPvunG0MgtWDYp5VcN9rAihpa9F3pyKUIXzClkWbRv8=",
