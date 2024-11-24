@@ -1,14 +1,40 @@
-/* /Components/ModalDialog.razor.rz.scp.css */
-.modal-content[b-tohvgyw1y7] {
-    background-color: #404040;
+/* /Components/DestinyVenderComponent.razor.rz.scp.css */
+/* PotionCraft.razor.css or your component-specific CSS file */
+.image-row[b-tzxucmbsph] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center all items */
+    gap: 10px; /* Controls the space between the containers */
 }
 
-.modal-body[b-tohvgyw1y7] {
+.image-container[b-tzxucmbsph] {
+    display: flex;
+    flex-direction: column; /* Ensure vertical stacking of text and image */
+    align-items: center; /* Center content horizontally */
     text-align: center;
+    width: 100%; /* Default full width */
+    max-width: 200px; /* Ensure images don't stretch too far */
+    margin-bottom: 15px; /* Space below each container */
+    display: inline-block;
+    cursor: pointer;
 }
 
-.modal-title[b-tohvgyw1y7] {
-    text-align: center;
+@media (min-width: 768px) {
+    .image-container[b-tzxucmbsph] {
+        width: calc(33.333% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .image-container[b-tzxucmbsph] {
+        width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 480px) {
+    .image-container[b-tzxucmbsph] {
+        width: 100%;
+    }
 }
 /* /Components/UpdateAvailableDetector.razor.rz.scp.css */
 .floating-update-button[b-dhvqprm7at] {
@@ -232,15 +258,14 @@ html, body {
 .header-section[b-pytu1ulssn] {
     text-align: center;
     padding: 35px;
-    background-color: #1e1e2f;
+    background-color: #2a133d;
     color: #f0f0f0;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
 }
 
-h2[b-pytu1ulssn] {
-    text-align: center;
+mud-typography-h2[b-pytu1ulssn] {
     font-size: 2.5rem;
     margin-bottom: 20px;
     color: #fff;
@@ -255,7 +280,7 @@ h2[b-pytu1ulssn] {
     padding: 20px;
     margin: 40px auto;
     max-width: 900px;
-    background-color: #292b3a;
+    background-color: #2a133d;
     color: #fff;
     border-radius: 8px;
     box-shadow: 0 15px 7px rgba(0, 0, 0, 0.2);
@@ -321,7 +346,7 @@ h2[b-pytu1ulssn] {
 .skill-box[b-pytu1ulssn],
 .community-box[b-pytu1ulssn] {
     text-align: left;
-    background-color: #39365a;
+    background-color: #200e2e;
     color: #fff;
     padding: 20px;
     margin: 7px 0;
@@ -354,7 +379,7 @@ h2[b-pytu1ulssn] {
 
     .experience-box strong[b-pytu1ulssn],
     .community-box strong[b-pytu1ulssn] {
-        color: #ffcc00;
+        color: #863f7e;
     }
 
     .experience-section h3[b-pytu1ulssn],
@@ -373,7 +398,7 @@ h2[b-pytu1ulssn] {
 }
 
 .badge[b-pytu1ulssn] {
-    background-color: #00b7f1;
+    background-color: #863f7e;
     color: #fff;
     padding: 5px 15px;
     border-radius: 50px;
@@ -396,7 +421,7 @@ h2[b-pytu1ulssn] {
 }
 
 .project-box[b-pytu1ulssn] {
-    background-color: #39365a;
+    background-color: #200e2e;
     padding: 20px;
     border-radius: 8px;
     width: calc(33.33% - 20px);
@@ -449,3 +474,4 @@ h2[b-pytu1ulssn] {
         width: 100%;
     }
 }
+/* /Pages/Testing.razor.rz.scp.css */
