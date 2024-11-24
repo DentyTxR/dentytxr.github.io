@@ -16,12 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Components\ModalDialog.razor.css" />
+    <None Remove="Components\DestinyVenderComponent.razor.css" />
     <None Remove="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Components\ModalDialog.razor.css" />
+    <Content Include="Components\DestinyVenderComponent.razor.css" />
     <Content Include="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 

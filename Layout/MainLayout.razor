@@ -13,23 +13,23 @@
 <UpdateAvailableDetector />
 
 <MudLayout>
-@*     <MudAppBar Fixed="true" Elevation="0">
+    <MudAppBar Fixed="true" Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(DrawerToggle)" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" Width="240px">
-        <MudDrawerHeader>
+        <MudDrawerHeader >
 
         </MudDrawerHeader>
         <NavMenu />
-    </MudDrawer> *@
+    </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
-    <footer class="footer">
+@*     <footer class="footer">
         <div class="footer-content">
             <p>© 2024 Denty</p>
         </div>
-    </footer>
+    </footer> *@
 </MudLayout>
 
 @code {
@@ -40,12 +40,12 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    //need to work on custom theme later
     MudTheme MyCustomTheme = new MudTheme()
         {
             PaletteDark = new PaletteDark()
             {
-                AppbarBackground = Colors.Gray.Darken3,
+                Surface = "#16161d",
+                Background = "#0B0510",
             },
 
             LayoutProperties = new LayoutProperties()
