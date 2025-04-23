@@ -1,41 +1,3 @@
-/* /Components/DestinyVenderComponent.razor.rz.scp.css */
-/* PotionCraft.razor.css or your component-specific CSS file */
-.image-row[b-tzxucmbsph] {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center all items */
-    gap: 10px; /* Controls the space between the containers */
-}
-
-.image-container[b-tzxucmbsph] {
-    display: flex;
-    flex-direction: column; /* Ensure vertical stacking of text and image */
-    align-items: center; /* Center content horizontally */
-    text-align: center;
-    width: 100%; /* Default full width */
-    max-width: 200px; /* Ensure images don't stretch too far */
-    margin-bottom: 15px; /* Space below each container */
-    display: inline-block;
-    cursor: pointer;
-}
-
-@media (min-width: 768px) {
-    .image-container[b-tzxucmbsph] {
-        width: calc(33.333% - 10px);
-    }
-}
-
-@media (max-width: 768px) {
-    .image-container[b-tzxucmbsph] {
-        width: calc(50% - 10px);
-    }
-}
-
-@media (max-width: 480px) {
-    .image-container[b-tzxucmbsph] {
-        width: 100%;
-    }
-}
 /* /Components/UpdateAvailableDetector.razor.rz.scp.css */
 .floating-update-button[b-dhvqprm7at] {
   position: fixed;
@@ -474,4 +436,224 @@ mud-typography-h2[b-pytu1ulssn] {
         width: 100%;
     }
 }
-/* /Pages/Testing.razor.rz.scp.css */
+/* /Pages/Portfolio.razor.rz.scp.css */
+.header-section[b-eet0wbpxaw] {
+    text-align: center;
+    padding: 35px;
+    background-color: #2a133d;
+    color: #f0f0f0;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+mud-typography-h2[b-eet0wbpxaw] {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.about-section[b-eet0wbpxaw],
+.portfolio-section[b-eet0wbpxaw],
+.contact-section[b-eet0wbpxaw],
+.experience-section[b-eet0wbpxaw],
+.skills-section[b-eet0wbpxaw],
+.community-section[b-eet0wbpxaw] {
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 900px;
+    background-color: #2a133d;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 15px 7px rgba(0, 0, 0, 0.2);
+}
+
+.contact-links[b-eet0wbpxaw] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.contact-item[b-eet0wbpxaw] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+}
+
+    .contact-item i[b-eet0wbpxaw] {
+        font-size: 1.7rem;
+        color: #ffcc00;
+    }
+
+    .contact-item a[b-eet0wbpxaw] {
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .contact-item a:hover[b-eet0wbpxaw] {
+            text-decoration: underline;
+            text-decoration-color: #904cff;
+        }
+
+@media (max-width: 768px) {
+    .contact-links[b-eet0wbpxaw] {
+        padding: 0 20px;
+    }
+
+    .contact-item[b-eet0wbpxaw] {
+        font-size: 1rem;
+    }
+}
+
+.portfolio-section h2[b-eet0wbpxaw] {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.experience-section .experience-grid[b-eet0wbpxaw],
+.skills-section .skills-grid[b-eet0wbpxaw],
+.community-section .community-grid[b-eet0wbpxaw] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.experience-box[b-eet0wbpxaw],
+.skill-box[b-eet0wbpxaw],
+.community-box[b-eet0wbpxaw] {
+    text-align: left;
+    background-color: #200e2e;
+    color: #fff;
+    padding: 20px;
+    margin: 7px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .experience-box:hover[b-eet0wbpxaw],
+    .skill-box:hover[b-eet0wbpxaw],
+    .community-box:hover[b-eet0wbpxaw],
+    .project-box:hover[b-eet0wbpxaw] {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .experience-section p[b-eet0wbpxaw],
+    .community-box p[b-eet0wbpxaw] {
+        margin: 5px 0;
+        font-size: 1rem;
+    }
+
+    .experience-box a[b-eet0wbpxaw] {
+        color: lightblue;
+    }
+
+        .experience-box a:hover[b-eet0wbpxaw] {
+            text-decoration: underline;
+            text-decoration-color: #904cff;
+        }
+
+    .experience-box strong[b-eet0wbpxaw],
+    .community-box strong[b-eet0wbpxaw] {
+        color: #863f7e;
+    }
+
+    .experience-section h3[b-eet0wbpxaw],
+    .community-box h3[b-eet0wbpxaw],
+    .project-box h3[b-eet0wbpxaw] {
+        font-size: 1.5rem;
+        color: #ffcc00;
+        margin-bottom: 10px;
+    }
+
+.experience-badges[b-eet0wbpxaw] {
+    display: flex;
+    justify-content: center;
+    gap: 13px;
+    flex-wrap: wrap;
+}
+
+.badge[b-eet0wbpxaw] {
+    background-color: #863f7e;
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+}
+
+.skills-grid span[b-eet0wbpxaw] {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.project-grid[b-eet0wbpxaw] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.project-box[b-eet0wbpxaw] {
+    background-color: #200e2e;
+    padding: 20px;
+    border-radius: 8px;
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-description[b-eet0wbpxaw] {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.project-box a[b-eet0wbpxaw] {
+    display: inline-block;
+    margin: 5px 10px;
+    padding: 8px 15px;
+    background-color: #c29b00;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+    .project-box a:hover[b-eet0wbpxaw] {
+        background-color: #d8ad02;
+    }
+
+.disabled-link[b-eet0wbpxaw] {
+    pointer-events: none;
+    color: gray;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .experience-box[b-eet0wbpxaw],
+    .skill-box[b-eet0wbpxaw],
+    .community-box[b-eet0wbpxaw],
+    .project-box[b-eet0wbpxaw] {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .experience-box[b-eet0wbpxaw],
+    .skill-box[b-eet0wbpxaw],
+    .community-box[b-eet0wbpxaw],
+    .project-box[b-eet0wbpxaw] {
+        width: 100%;
+    }
+}
