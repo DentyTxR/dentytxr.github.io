@@ -45,7 +45,7 @@
       "url": "img\/F1BDA780.png"
     },
     {
-      "hash": "sha256-py5ga4h0U5EHGurWU0HrnizI9i4iG5fpFVBpAjRGtkY=",
+      "hash": "sha256-Tl22qEjQJ6FmdaWejbrr6Of1WwJ0znp9EAn+GaOFXoE=",
       "url": "index.html"
     },
     {
@@ -97,7 +97,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-eOh7WJcrfmAKsl8VQdZh4HYXwWNQV\/BnxOwfokVCCok=",
+      "hash": "sha256-dahQgzgF2w9237tR33zjdJmgyGxxnavDmbCLdrYq6mc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -105,7 +105,7 @@
       "url": "_framework\/Blazored.LocalStorage.wasm"
     },
     {
-      "hash": "sha256-J2dwZAzdBHMin04sf67q6baEN3cj7\/WH63u0hz2ruK8=",
+      "hash": "sha256-wxs4jnaYnWHvgc4d82e0UUko\/ceHQg9jiMnd+Y0aax8=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -309,5 +309,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "gA7WYAGB"
+  "version": "iN6+Nlhd"
 };
