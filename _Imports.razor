@@ -1,5 +1,8 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Reflection;
+@using System;
+@using System.Threading;
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -10,3 +13,6 @@
 @using ghp_app.Layout
 @using ghp_app.Components
 @using MudBlazor
+@using MudBlazor.ThemeManager
+@inject ghp_app.Services.AppUpdateService UpdateService
+@inject ghp_app.Services.AppVersionService AppVersionState

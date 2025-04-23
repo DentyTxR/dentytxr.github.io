@@ -1,0 +1,63 @@
+﻿@implements IDisposable
+@using ghp_app.Modals;
+
+@page "/info"
+
+<MudContainer Style="margin-top: 32px;">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="7">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h4">Website Info</MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">
+                        This website started as a personal project to learn Blazor and web development. It still is, but I'm also beginning to create and host tools, as well as share info about myself and my portfolio.
+                    </MudText>
+                    <MudText Typo="Typo.body1">
+                        Feel free to make suggestions such as new ideas, or source code suggestions <MudLink Href="https://github.com/DentyTxR/dentytxr.github.io/issues">here</MudLink>.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+<MudContainer Style="margin-top: 32px;">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="5">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">Current App Version: @AppVersionState.AppStateData.Version</MudText>
+                    <MudText Typo="Typo.body1">What's New: Check <MudLink Typo="Typo.body1">here</MudLink></MudText>
+                    <MudText Typo="Typo.body1">Latest Update Was: @AppVersionState.AppStateData.Date</MudText>
+                    <MudText Typo="Typo.body1">@timeConverted</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [CascadingParameter]
+    public required ghp_app.Services.AppVersionService appStateService { get; set; }
+
+    private string timeConverted = string.Empty;
+    Timer timer;
+
+    protected override void OnInitialized()
+    {
+        timer = new Timer(Tick, null, 0, 1000);
+    }
+
+    private void Tick(object _)
+    {
+        timeConverted = DateTime.Now.ToLongTimeString();
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}

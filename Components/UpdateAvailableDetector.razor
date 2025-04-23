@@ -7,10 +7,10 @@
     var config = (SnackbarOptions options) =>
     {
         options.RequireInteraction = true;
-        options.ShowCloseIcon = false;
+        options.ShowCloseIcon = true;
         options.Action = "Update";
         options.ActionColor = Color.Primary;
-        options.Onclick = snackbar =>
+        options.OnClick = Snackbar =>
         {
             _newVersionAvailable = false;
             StateHasChanged();
@@ -19,13 +19,11 @@
         };
     };
 
-    SnackbarService.Add(@<span>A new version of the app is available.<br /> <b>Version:</b> @_newVersion<br /><b>Update:</b> @UpdateChanges</span>, Severity.Info, configure: config);
+    SnackbarService.Add(@<span>A new version of the app is available.<br /> <b>Version:</b> @UpdateService.NewVersion<br /><b>Update:</b> @UpdateService.UpdateChanges</span>, Severity.Info, configure: config);
 }
 
 @code {
     private bool _newVersionAvailable = false;
-    private string _newVersion = string.Empty;
-    private string UpdateChanges = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,10 +43,8 @@
     {
         Console.WriteLine($"Update available! Version: {Version} Changelog: {Changelog}");
 
+        UpdateService.NotifyUpdate(Version, Changelog);
         _newVersionAvailable = true;
-        _newVersion = Version;
-        UpdateChanges = Changelog;
-
         StateHasChanged();
 
         return Task.CompletedTask;
@@ -57,5 +53,10 @@
     private void ReloadPage()
     {
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+
+    private void UpdateStorage()
+    {
+
     }
 }

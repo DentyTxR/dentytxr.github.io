@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -16,12 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Components\DestinyVenderComponent.razor.css" />
     <None Remove="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Components\DestinyVenderComponent.razor.css" />
     <Content Include="Components\UpdateAvailableDetector.razor.css" />
   </ItemGroup>
 
@@ -30,14 +29,16 @@
 </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
-    <PackageReference Include="MudBlazor" Version="8.0.0-preview.4" />
+    <PackageReference Include="MudBlazor" Version="8.5.1" />
     <PackageReference Include="MudBlazor.FontIcons.MaterialSymbols" Version="1.2.0" />
-    <PackageReference Include="MudBlazor.ThemeManager" Version="2.1.0" />
+    <PackageReference Include="MudBlazor.ThemeManager" Version="3.0.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

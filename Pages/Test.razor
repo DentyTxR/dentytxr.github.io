@@ -1,0 +1,27 @@
+﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+@page "/test"
+
+<h3>Test</h3>
+
+<MudInput @bind-Value=@InputValue></MudInput>
+<MudButton OnClick="@InputData">input data</MudButton>
+@TestValue
+
+@code {
+    private string TestValue = "null";
+    private string InputValue;
+    private string TestKey = "test";
+
+    private async Task InputData()
+    {
+        await localStorage.SetItemAsync(TestKey, InputValue);
+        TestValue = InputValue;
+    }
+
+    private async Task ReadData()
+    {
+        TestValue = await localStorage.GetItemAsync<string>(TestKey);
+    }
+
+}

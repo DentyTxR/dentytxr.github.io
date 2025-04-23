@@ -1,4 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
+@inherits LayoutComponentBase
+@inject HttpClient Http
+@inject IWebAssemblyHostEnvironment AppEnv
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 @* Required *@
 <MudThemeProvider IsDarkMode="true" Theme="MyCustomTheme" />
@@ -13,76 +17,42 @@
 <UpdateAvailableDetector />
 
 <MudLayout>
-    <MudAppBar Fixed="true" Elevation="0">
+    <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(DrawerToggle)" />
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen" Width="240px">
-        <MudDrawerHeader >
-
+    <MudDrawer @bind-Open="@_drawerOpen" Width="240px" ClipMode="DrawerClipMode.Docked">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Dent App</MudText>
         </MudDrawerHeader>
         <NavMenu />
+        <MudSpacer />
+        @if (AppEnv.IsDevelopment())
+        {
+            <MudText>Development</MudText>
+        }
     </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
-@*     <footer class="footer">
-        <div class="footer-content">
-            <p>© 2024 Denty</p>
-        </div>
-    </footer> *@
 </MudLayout>
 
 @code {
-    bool _drawerOpen = false;
+    bool _drawerOpen = true;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
 
+
     MudTheme MyCustomTheme = new MudTheme()
         {
-            PaletteDark = new PaletteDark()
-            {
-                Surface = "#16161d",
-                Background = "#0B0510",
-            },
-
             LayoutProperties = new LayoutProperties()
             {
                 DrawerWidthLeft = "260px",
-                DrawerWidthRight = "300px"
+                DrawerWidthRight = "300px",
+                DefaultBorderRadius = "9px",
             }
+
         };
 }
-
-<style>
-    .footer {
-        background-color: #292b3a;
-        color: #ffffff;
-        text-align: center;
-        padding: 22px 0;
-        width: 100%;
-        box-sizing: border-box;
-        background-image: url('img/ArminChristmas.png');
-        background-size: 80px;
-        background-position: center;
-        background-blend-mode: overlay;
-    }
-
-    html, body {
-        height: 100%;
-        margin: 0;
-    }
-
-    .mud-layout {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-
-    .main-content {
-        flex: 1;
-    }
-
-</style>

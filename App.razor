@@ -1,12 +1,24 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-    </Found>
-    <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <MudAlert NoIcon="true" Severity="Severity.Error">Sorry, there's nothing at this address</MudAlert>
+﻿<CascadingValue Value="@AppVersionState">
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <MudPaper Elevation="2">
+                    <MudAlert NoIcon="true" Severity="Severity.Error">Sorry, there's nothing at this address</MudAlert>
+                </MudPaper>
             </LayoutView>
-    </NotFound>
-</Router>
+        </NotFound>
+    </Router>
+</CascadingValue>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        //load version.json
+        await AppVersionState.LoadAsync();
+    }
+}

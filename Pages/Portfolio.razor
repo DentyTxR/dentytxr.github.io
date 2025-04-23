@@ -1,0 +1,183 @@
+﻿@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+@using System.Text.Json;
+
+
+@page "/portfolio"
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-6">
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" sm="10" md="9" lg="7">
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderAvatar>
+                        <MudAvatar>
+                            <MudImage Src="@avatarUrl"></MudImage>
+                        </MudAvatar>
+                    </CardHeaderAvatar>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">Hello, I'm Denty</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.body1">
+                        Hello! I'm an 19 year old (03/01/2006) living in the United States.
+                        <br />
+                        <br />
+                        I’m available for hire for work related to the skills and projects showcased on this page, such as plugin development. Feel free to send me an email with details about your request.
+                    </MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudPaper Class="pa-4 mt-6">
+        <MudText Align="Align.Center" Typo="Typo.h4">Experience</MudText>
+        <br />
+        <MudChip T="string" Variant="Variant.Text" Color="Color.Warning">5 Years of Community Management Experience</MudChip>
+        <MudChip T="string" Variant="Variant.Text" Color="Color.Info">3-4 Years of Tech Support Experience</MudChip>
+        <MudChip T="string" Variant="Variant.Text" Color="Color.Success">4 Years with C-Sharp (Self-Taught)</MudChip>
+
+        <MudGrid Spacing="6" Justify="Justify.Center" Style="margin-top:auto;">
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Outlined Class="mud-theme-dark d-flex flex-wrap">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1" Style="@($"color:{Colors.Indigo.Lighten2};")"><b>Technical Support Specialist @@ Northwood Studios</b></MudText>
+                        <MudText Typo="Typo.body1">Duration: August 2024 - Present</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Outlined Class="mud-theme-dark d-flex flex-wrap">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1" Style="@($"color:{Colors.Indigo.Lighten2};")"><b>Quality Assurance @@ Northwood Studios</b></MudText>
+                        <MudText Typo="Typo.body1">Duration: January 2025 - Present</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Outlined Class="mud-theme-dark d-flex flex-wrap">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1" Style="@($"color:{Colors.Indigo.Lighten2};")"><b>Server Manager & Developer for D-Boys R Us Community</b></MudText>
+                        <MudText Typo="Typo.body1">Duration: July 2021 - Present</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Outlined Class="mud-theme-dark d-flex flex-wrap">
+                    <MudCardContent>
+                        <MudText Typo="Typo.body1" Style="@($"color:{Colors.Indigo.Lighten2};")"><b>SCP:SL Technical Assistant</b></MudText>
+                        <MudText Typo="Typo.body1">Duration: June 2020 - July 2022</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudPaper Class="pa-4 mt-6">
+        <MudText Align="Align.Center" Typo="Typo.h4">Projects</MudText>
+        <MudGrid Spacing="6" Justify="Justify.Center" Style="margin-top:auto;">
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Class="mud-theme-dark d-flex flex-wrap" Style="align-items:center;" Outlined>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h5" Style="@($"color:{Colors.Indigo.Lighten2};")">ShowReportsInGame</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="d-flex flex-column align-items-center">
+                        <MudText Typo="Typo.body1" Class="mb-3">A simple but modular moderation plugin for SCP: Secret Laboratory to provide staff in-game with live player and cheater reports via hints, broadcast and console.</MudText>
+                        <MudButton Variant="Variant.Filled" Target="_blank" Href="https://github.com/DentyTxR/ShowReportsInGame" Style="@($"color:{Colors.Indigo.Lighten2};")">View</MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Class="mud-theme-dark d-flex flex-wrap" Style="align-items:center;" Outlined>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h5" Style="@($"color:{Colors.Indigo.Lighten2};")">SCP:SL FAQ Project</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="d-flex flex-column align-items-center">
+                        <MudText Typo="Typo.body1" Class="mb-3">The first and unoffical SCP:SL FAQ website, now archived.</MudText>
+                        <MudButton Variant="Variant.Filled" Target="_blank" Href="https://github.com/DentyTxR/SCPSL-FAQ-Project" Style="@($"color:{Colors.Indigo.Lighten2};")">View</MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="10" sm="7" md="6" lg="4">
+                <MudCard Class="mud-theme-dark d-flex flex-wrap" Style="align-items:center;" Outlined>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h5" Style="@($"color:{Colors.Indigo.Lighten2};")">GitHub Repositories</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="d-flex flex-column align-items-center">
+                        <MudText Typo="Typo.body1" Class="mb-3">View my other repositories on my Github.</MudText>
+                        <MudButton Variant="Variant.Filled" Target="_blank" Href="https://github.com/DentyTxR" Style="@($"color:{Colors.Indigo.Lighten2};")">View</MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <MudPaper Class="pa-4 mt-6">
+        <MudText Align="Align.Center" Typo="Typo.h4">Socials</MudText>
+        <MudGrid Spacing="7" Justify="Justify.Center" Style="margin-top:auto;">
+            <MudItem>
+                <div class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Custom.Brands.Discord" Class="me-2 align-self-center" Size="Size.Medium" />
+                    <MudText Typo="Typo.h5" Class="m-0" Color="Color.Primary">
+                        Discord: dentytxr
+                    </MudText>
+                </div>
+            </MudItem>
+            <MudItem>
+                <div class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Custom.Brands.GitHub" Class="me-2 align-self-center" Size="Size.Medium" />
+                    <MudText Typo="Typo.h5" Class="m-0" Color="Color.Primary">
+                        GitHub: DentyTxR
+                    </MudText>
+                </div>
+            </MudItem>
+            <MudItem>
+                <div class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Custom.Brands.YouTube" Class="me-2 align-self-center" Size="Size.Medium" />
+                    <MudText Typo="Typo.h5" Class="m-0" Color="Color.Primary">
+                        YouTube: DentyTxR
+                    </MudText>
+                </div>
+            </MudItem>
+            <MudItem>
+                <div class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Custom.Brands.Twitter" Class="me-2 align-self-center" Size="Size.Medium" />
+                    <MudText Typo="Typo.h5" Class="m-0" Color="Color.Primary">
+                        Twitch: DentyTxR
+                    </MudText>
+                </div>
+            </MudItem>
+            <MudItem>
+                <div class="d-flex align-items-center">
+                    <MudIcon Icon="@Icons.Material.Filled.Email" Class="me-2 align-self-center" Size="Size.Medium" />
+                    <MudText Typo="Typo.h5" Class="m-0" Color="Color.Primary">
+                        dentytxr@gmail.com
+                    </MudText>
+                </div>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string avatarUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var json = await Http.GetFromJsonAsync<JsonElement>("https://lanyard.rest/v1/users/1141379914474455080");
+
+        var user = json.GetProperty("data").GetProperty("discord_user");
+        var id = user.GetProperty("id").GetString();
+        var avatar = user.GetProperty("avatar").GetString();
+        var ext = avatar.StartsWith("a_") ? "gif" : "png";
+
+        avatarUrl = $"https://cdn.discordapp.com/avatars/{id}/{avatar}.{ext}";
+    }
+}
