@@ -4,6 +4,7 @@ on:
     branches: [ main ]
     paths-ignore:
       - '**/README.md'
+      - '.github/workflows/**'
 jobs:
   deploy-to-ghp-branch:
     runs-on: ubuntu-latest
