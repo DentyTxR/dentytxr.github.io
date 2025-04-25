@@ -3,9 +3,9 @@
 
 @page "/info"
 
-<MudContainer MaxWidth="MaxWidth.Large" Style="mt-8">
+<MudContainer MaxWidth="MaxWidth.Large" class="mt-8">
     <MudGrid Justify="Justify.Center">
-        <MudItem xs="12" sm="11" md="8" lg="6">
+        <MudItem xs="12" sm="11" md="8" lg="7">
             <MudCard>
                 <MudCardHeader>
                     <MudText Typo="Typo.h4">Website Info</MudText>
@@ -20,10 +20,8 @@
                 </MudCardContent>
             </MudCard>
         </MudItem>
-    </MudGrid>
-
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="12" sm="11" md="8" lg="6">
+        <MudFlexBreak/>
+        <MudItem xs="10" sm="8" md="6" lg="3" Class="">
             <MudCard>
                 <MudCardContent>
                     <MudText Typo="Typo.body1">Current App Version: @AppVersionState.AppStateData.Version</MudText>
