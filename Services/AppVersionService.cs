@@ -1,4 +1,4 @@
-﻿using ghp_app.Modals;
+﻿using ghp_app.Models;
 using System.Net.Http.Json;
 
 namespace ghp_app.Services
@@ -6,7 +6,7 @@ namespace ghp_app.Services
     public class AppVersionService
     {
         private readonly HttpClient _httpClient;
-        public AppVersionModal AppStateData { get; set; } = new();
+        public AppVersionModel AppStateData { get; set; } = new();
 
         public AppVersionService(HttpClient httpClient)
         {
@@ -15,7 +15,7 @@ namespace ghp_app.Services
 
         public async Task LoadAsync()
         {
-            var result = await _httpClient.GetFromJsonAsync<AppVersionModal>("./version.json");
+            var result = await _httpClient.GetFromJsonAsync<AppVersionModel>("./version.json");
             AppStateData = result;
         }
     }

@@ -71,13 +71,13 @@
     }
 
     .collapse {*/
-        /* Never collapse the sidebar for wide screens */
-        /*display: block;
+/* Never collapse the sidebar for wide screens */
+/*display: block;
     }
-    
+
     .nav-scrollable {*/
-        /* Allow sidebar to scroll for tall menus */
-        /*height: calc(100vh - 3.5rem);
+/* Allow sidebar to scroll for tall menus */
+/*height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }
 }*/

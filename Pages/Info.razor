@@ -1,7 +1,8 @@
 ﻿@implements IDisposable
-@using ghp_app.Modals;
 
 @page "/info"
+
+<PageTitle>Site Info</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Large" class="mt-8">
     <MudGrid Justify="Justify.Center">
@@ -20,14 +21,16 @@
                 </MudCardContent>
             </MudCard>
         </MudItem>
-        <MudFlexBreak/>
+        <MudFlexBreak />
         <MudItem xs="10" sm="8" md="6" lg="3" Class="">
             <MudCard>
                 <MudCardContent>
-                    <MudText Typo="Typo.body1">Current App Version: @AppVersionState.AppStateData.Version</MudText>
-                    <MudText Typo="Typo.body1">What's New: Check <MudLink Typo="Typo.body1">here</MudLink></MudText>
-                    <MudText Typo="Typo.body1">Latest Update Was: @AppVersionState.AppStateData.Date</MudText>
-                    <MudText Typo="Typo.body1">@timeConverted</MudText>
+                    <MudText Typo="Typo.body1">
+                        Current App Version: @AppVersionState.AppStateData.Version<br />
+                        What's New: Check <MudLink Href="/Updates#LatestUpdate">here</MudLink><br />
+                        Latest Update Was: @AppVersionState.AppStateData.Date<br />
+                        @timeConverted
+                    </MudText>
                 </MudCardContent>
             </MudCard>
         </MudItem>

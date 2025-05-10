@@ -1,0 +1,20 @@
+[
+  {
+    "pattern": "^OS:\\s*(.+)",
+    "display": "OS:",
+    "response": "${status}",
+    "category": "System"
+  },
+  {
+    "pattern": "^CPU:\\s*(.+)",
+    "display": "CPU:",
+    "response": "${data}",
+    "category": "System"
+  },
+  {
+    "pattern": "^RAM:\\s*(.+)",
+    "display": "Ram:",
+    "response": "${data}",
+    "category": "System"
+  }
+]

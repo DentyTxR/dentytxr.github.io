@@ -1,0 +1,46 @@
+﻿<MudDialog>
+    <DialogContent>
+        @if (Content != null)
+        {
+            @Content
+        }
+        else
+        {
+            <MudText>@ContentText</MudText>
+        }
+
+        <MudTextField @bind-Value=Url Label="@FieldLable" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCancel">Cancel</MudButton>
+        <MudButton OnClick="OnSubmit" Color="ButtonColor">@ButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialogInstance { get; set; }
+
+    [Parameter]
+    public string ContentText { get; set; }
+
+    [Parameter]
+    public RenderFragment Content { get; set; }
+
+    [Parameter]
+    public string FieldLable { get; set; } = "URL";
+
+    [Parameter]
+    public required string Url { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ButtonText { get; set; } = "Submit";
+
+    [Parameter]
+    public Color ButtonColor { get; set; } = Color.Info;
+
+    private void OnSubmit() => MudDialogInstance.Close(DialogResult.Ok(Url));
+
+    private void OnCancel() => MudDialogInstance.Cancel();
+}

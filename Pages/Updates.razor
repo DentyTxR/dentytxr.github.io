@@ -1,14 +1,42 @@
-﻿@page "/updates"
+﻿@inject HttpClient Http
+@using System.Text.Json
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class=" mt-6">
-    <MudText Typo="Typo.h4">Update Logs</MudText>
+@page "/updates"
+
+<PageTitle>Site Updates</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudText Typo="Typo.h3">Update Logs</MudText>
     <MudDivider />
     <MudDivider />
-    <MudDivider />
-    <br />
-    <MudText Typo="Typo.h4">2.0.0</MudText>
-    <MudText Typo="Typo.body1">• A lot</MudText>
-    <br />
-    <MudText Typo="Typo.h4">1.9.9</MudText>
-    <MudText Typo="Typo.body1">• Pre a lot</MudText>
+
+    @foreach (var update in updates)
+    {
+        <UpdatesEntry LatestUpdate="update.LatestUpdate"
+                      Title="@(update.Title)"
+                      New="update.New"
+                      Changes="update.Changes" />
+
+    }
 </MudContainer>
+
+@code {
+    private bool isLoaded = false;
+    private List<UpdateEntry> updates = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var json = await Http.GetStringAsync("updates.json");
+        updates = JsonSerializer.Deserialize<List<UpdateEntry>>(json) ?? new();
+
+        isLoaded = true;
+    }
+
+    public class UpdateEntry
+    {
+        public required string Title { get; set; }
+        public required List<string> New { get; set; }
+        public required List<string> Changes { get; set; }
+        public required bool LatestUpdate { get; set; }
+    }
+}

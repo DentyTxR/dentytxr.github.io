@@ -1,6 +1,6 @@
-﻿namespace ghp_app.Modals
+﻿namespace ghp_app.Models
 {
-    public class AppVersionModal
+    public class AppVersionModel
     {
         public string Version { get; set; } = string.Empty;
         public string Changes { get; set; } = string.Empty;

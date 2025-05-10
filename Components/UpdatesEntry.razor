@@ -1,0 +1,54 @@
+﻿<MudDivider />
+<br />
+<MudText id="@(LatestUpdate ? "LatestUpdate" : null)" Typo="Typo.h4">@(LatestUpdate ? $"Latest ({Title})" : Title)</MudText>
+<br />
+
+@if (LatestUpdate)
+{
+    <MudText Typo="Typo.h6"><b>New</b></MudText>
+    @foreach (var item in New)
+    {
+        <MudText Typo="Typo.body1">• @item</MudText>
+    }
+
+    <MudText Typo="Typo.h6" Class="mt-2"><b>Changes</b></MudText>
+    @foreach (var item in Changes)
+    {
+        <MudText Typo="Typo.body1">• @item</MudText>
+    }
+}
+else
+{
+    <MudExpansionPanels MultiExpansion="true">
+        <MudExpansionPanel>
+            <TitleContent>
+                <MudText Typo="Typo.h6">New</MudText>
+            </TitleContent>
+            <ChildContent>
+                @foreach (var item in New)
+                {
+                    <MudText Typo="Typo.body1">• @item</MudText>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+        <MudExpansionPanel>
+            <TitleContent>
+                <MudText Typo="Typo.h6">Changes</MudText>
+            </TitleContent>
+            <ChildContent>
+                @foreach (var item in Changes)
+                {
+                    <MudText Typo="Typo.body1">• @item</MudText>
+                }
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+}
+<br />
+
+@code {
+    [Parameter, EditorRequired] public bool LatestUpdate { get; set; }
+    [Parameter, EditorRequired] public string Title { get; set; }
+    [Parameter, EditorRequired] public List<string> New { get; set; }
+    [Parameter, EditorRequired] public List<string> Changes { get; set; }
+}

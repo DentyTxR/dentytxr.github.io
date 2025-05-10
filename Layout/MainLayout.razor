@@ -4,25 +4,20 @@
 @inject IWebAssemblyHostEnvironment AppEnv
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-@* Required *@
 <MudThemeProvider IsDarkMode="true" Theme="MyCustomTheme" />
 <MudPopoverProvider />
-
-@* Needed for dialogs *@
 <MudDialogProvider />
-
-@* Needed for snackbars *@
 <MudSnackbarProvider />
 
 <UpdateAvailableDetector />
 
 <MudLayout>
-    <MudAppBar Elevation="0">
+    <MudAppBar Elevation="0" Dense="true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(DrawerToggle)" />
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen" Width="240px" ClipMode="DrawerClipMode.Docked">
-        <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Dent App</MudText>
+    <MudDrawer @bind-Open="@_drawerOpen" Width="200px" ClipMode="DrawerClipMode.Docked">
+        <MudDrawerHeader LinkToIndex>
+            <MudText Typo="Typo.h5">Dent App</MudText>
         </MudDrawerHeader>
         <NavMenu />
         <MudSpacer />
@@ -32,12 +27,31 @@
         }
     </MudDrawer>
     <MudMainContent>
-        @Body
+        <ErrorBoundary @ref=errorBoundary>
+            <ChildContent>
+                @Body
+            </ChildContent>
+            <ErrorContent Context="Exception">
+                @Exception.Message
+                <br/>
+                @Exception.Source
+                <br/>
+                @Exception.InnerException
+            </ErrorContent>
+        </ErrorBoundary>
     </MudMainContent>
 </MudLayout>
 
 @code {
+    private ErrorBoundary? errorBoundary;
+
     bool _drawerOpen = true;
+
+    protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+        //base.OnParametersSet();
+    }
 
     void DrawerToggle()
     {
@@ -53,6 +67,5 @@
                 DrawerWidthRight = "300px",
                 DefaultBorderRadius = "9px",
             }
-
         };
 }

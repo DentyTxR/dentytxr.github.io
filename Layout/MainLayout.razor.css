@@ -23,22 +23,22 @@
 /* Top row for the header */
 /*.top-row {
     background-color: #2a2a2a;*/ /* Dark gray background for header */
-    /*border-bottom: 1px solid #444444;*/ /* Dark border */
-    /*justify-content: flex-end;
+/*border-bottom: 1px solid #444444;*/ /* Dark border */
+/*justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
     color: var(--text-color);*/ /* Text color for header */
 /*}*/
 
-    /* Links and buttons in the top row */
-    /*.top-row ::deep a,
+/* Links and buttons in the top row */
+/*.top-row ::deep a,
     .top-row ::deep .btn-link {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
         color: var(--accent-color);*/ /* Accent color for links */
-    /*}
+/*}
 
         .top-row ::deep a:hover,
         .top-row ::deep .btn-link:hover {

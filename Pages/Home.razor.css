@@ -115,6 +115,7 @@ mud-typography-h2 {
     .experience-box a {
         color: lightblue;
     }
+
         .experience-box a:hover {
             text-decoration: underline;
             text-decoration-color: #904cff;
