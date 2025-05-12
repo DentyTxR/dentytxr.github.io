@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ghp-app",
   "resources": {
-    "hash": "sha256-xB72lqhdvwa8JWzgyY+d8YUk1WZ7SPImrFBmOwtAERs=",
+    "hash": "sha256-I0mTXd5hH9qvfF6lizAsJujN8beUcEcJgw0B9kXjxMI=",
     "jsModuleNative": {
       "dotnet.native.8.0.15.l5bze06whq.js": "sha256-ftpNqtARtVNE8ku5eB/jXoklb41UQ+EutUHfwmbNTBY="
     },
@@ -18,11 +18,11 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-OaMAAd5n7ORfyur5e3QIyEVKJ76MKIvwbg7/icnnYcU=",
-      "ghp-app.wasm": "sha256-jkRajZpcugcbj7/Rz1rj4Sb8FaQauIE6tau/LXmk4uM=",
+      "ghp-app.wasm": "sha256-0o52UpxJX+66YSN4sg1zth8M91Gc/3zPEBiNTOmUT78=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-89iuHISD/XnYUxI+leQKE1lYtKRCq7cCNs46WPyRmOY=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-PfMazFQpjSkEfOApuTXU4gZZE8Kwx/IWRAM+3NHYV9g=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-EoVMDSG1/JdkaPjVNocW9MbpSG/38Jo35fojH4da1AM=",
-      "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-Gaty+lnRv584obrX4rUOEe5Sps8wgm3RDSLkAaM38Ig=",
+      "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-cFY1ctkxBCtYFgUv4tCLz5pomQZ582A8gOzKJy45fw4=",
       "Microsoft.Extensions.Configuration.Abstractions.wasm": "sha256-eHL9z6HYyE7a/rq3HzrfVo2TDxVcfmV12XJaVRgZju0=",
       "Microsoft.Extensions.Configuration.Json.wasm": "sha256-HXvUji368oY2nq5GdiD0AbaDX06P1S5CuoixeYUXgas=",
       "Microsoft.Extensions.Configuration.wasm": "sha256-Qjn/n4Eq3VY1PJ9v5L9NqCcvcUJSyKPmpK+EQSWLYb4=",
@@ -31,7 +31,7 @@
       "Microsoft.Extensions.Localization.Abstractions.wasm": "sha256-lIucf/MOwp54cSSe8ndJZKDupRpDKsGcdkSWK1HJpug=",
       "Microsoft.Extensions.Localization.wasm": "sha256-gf7Gi0NrGBJ05OsJrNCezrrLR1lLHxQPEO4Plbto4jA=",
       "Microsoft.Extensions.Logging.Abstractions.wasm": "sha256-3qwDe4eX9fklL/F/Onuil0oloSk5oEIEHpX4DllijO0=",
-      "Microsoft.Extensions.Logging.wasm": "sha256-jlXZQ8iErZLW3rDfcztRxykUhfG7yPbeV5J6MSwUk5c=",
+      "Microsoft.Extensions.Logging.wasm": "sha256-zFCDhKmTLNFQM/HT62IUT3/SZSFEi0lYtNNzkkW2nvM=",
       "Microsoft.Extensions.Options.wasm": "sha256-2TiOnBtFDlGcENWRaDktmoatsO3iOze5htDSVUZlh6E=",
       "Microsoft.Extensions.Primitives.wasm": "sha256-0UVg4tW8sNXlJCmj95HKTDnuOs9iufulO1t0bY8chUA=",
       "Microsoft.JSInterop.wasm": "sha256-GU9tGo3GCGz/508jaDetljVxWPBgOk5v1/5AY2JtCBE=",

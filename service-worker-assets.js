@@ -105,7 +105,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-U7bLqgkaJj9YyjQVJNFHTGjwU218akVyXv\/KchjmM4k=",
+      "hash": "sha256-DtUvY9xiCAXeoYdOmHQQZ5jDcxyMArlYWAE8lnDL6Vg=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/Blazored.LocalStorage.wasm"
     },
     {
-      "hash": "sha256-jkRajZpcugcbj7\/Rz1rj4Sb8FaQauIE6tau\/LXmk4uM=",
+      "hash": "sha256-0o52UpxJX+66YSN4sg1zth8M91Gc\/3zPEBiNTOmUT78=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/Microsoft.AspNetCore.Components.Web.wasm"
     },
     {
-      "hash": "sha256-Gaty+lnRv584obrX4rUOEe5Sps8wgm3RDSLkAaM38Ig=",
+      "hash": "sha256-cFY1ctkxBCtYFgUv4tCLz5pomQZ582A8gOzKJy45fw4=",
       "url": "_framework\/Microsoft.AspNetCore.Components.WebAssembly.wasm"
     },
     {
@@ -165,7 +165,7 @@
       "url": "_framework\/Microsoft.Extensions.Logging.Abstractions.wasm"
     },
     {
-      "hash": "sha256-jlXZQ8iErZLW3rDfcztRxykUhfG7yPbeV5J6MSwUk5c=",
+      "hash": "sha256-zFCDhKmTLNFQM\/HT62IUT3\/SZSFEi0lYtNNzkkW2nvM=",
       "url": "_framework\/Microsoft.Extensions.Logging.wasm"
     },
     {
@@ -353,5 +353,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "w4JT895H"
+  "version": "DSgo8shG"
 };
