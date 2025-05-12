@@ -1,9 +1,12 @@
-name: Deploy to gh pages
+name: Deploy to GHP branch
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - '**/README.md'
+      - '.github/workflows/**'
 jobs:
-  deploy-to-github-pages:
+  deploy-to-ghp-branch:
     runs-on: ubuntu-latest
     steps:
       # Check out the repository
@@ -20,7 +23,7 @@ jobs:
         run: dotnet publish -c Release -o release --nologo
       
       # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GHP branch final
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
