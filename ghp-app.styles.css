@@ -1,18 +1,23 @@
+@import '_content/AuralizeBlazor/AuralizeBlazor.tf5u2o3oxg.bundle.scp.css';
+@import '_content/Nextended.Blazor/Nextended.Blazor.tkxqvq0zjw.bundle.scp.css';
+
 /* /Components/UpdateAvailableDetector.razor.rz.scp.css */
 .floating-update-button[b-dhvqprm7at] {
-  position: fixed;
-
-  right: 2rem;
-  bottom: 2rem;
-
-  padding: 1rem 1.5rem;
-
-  animation: fadein-b-dhvqprm7at 2s ease-out;
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    padding: 1rem 1.5rem;
+    animation: fadein-b-dhvqprm7at 2s ease-out;
 }
 
 @keyframes fadein-b-dhvqprm7at {
-  from { right: -100%; }
-  to { right: 2rem; }
+    from {
+        right: -100%;
+    }
+
+    to {
+        right: 2rem;
+    }
 }
 /* /Layout/MainLayout.razor.rz.scp.css */
 /* Global page container */
@@ -40,22 +45,22 @@
 /* Top row for the header */
 /*.top-row {
     background-color: #2a2a2a;*/ /* Dark gray background for header */
-    /*border-bottom: 1px solid #444444;*/ /* Dark border */
-    /*justify-content: flex-end;
+/*border-bottom: 1px solid #444444;*/ /* Dark border */
+/*justify-content: flex-end;
     height: 3.5rem;
     display: flex;
     align-items: center;
     color: var(--text-color);*/ /* Text color for header */
 /*}*/
 
-    /* Links and buttons in the top row */
-    /*.top-row ::deep a,
+/* Links and buttons in the top row */
+/*.top-row ::deep a,
     .top-row ::deep .btn-link {
         white-space: nowrap;
         margin-left: 1.5rem;
         text-decoration: none;
         color: var(--accent-color);*/ /* Accent color for links */
-    /*}
+/*}
 
         .top-row ::deep a:hover,
         .top-row ::deep .btn-link:hover {
@@ -206,13 +211,13 @@ html, body {
     }
 
     .collapse {*/
-        /* Never collapse the sidebar for wide screens */
-        /*display: block;
+/* Never collapse the sidebar for wide screens */
+/*display: block;
     }
-    
+
     .nav-scrollable {*/
-        /* Allow sidebar to scroll for tall menus */
-        /*height: calc(100vh - 3.5rem);
+/* Allow sidebar to scroll for tall menus */
+/*height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }
 }*/
@@ -334,6 +339,7 @@ mud-typography-h2[b-pytu1ulssn] {
     .experience-box a[b-pytu1ulssn] {
         color: lightblue;
     }
+
         .experience-box a:hover[b-pytu1ulssn] {
             text-decoration: underline;
             text-decoration-color: #904cff;

@@ -1,0 +1,44 @@
+[
+  {
+    "Title": "1.9.96",
+    "New": [
+      "New and first tool (playerlog tool)",
+      "Added new error handling (very simple, need to expand upon more)"
+    ],
+    "Changes": [
+      "Navbar UI"
+    ],
+    "LatestUpdate": true
+  },
+  {
+    "Title": "1.9.95",
+    "New": [
+      "Reworked Update Logs page"
+    ],
+    "Changes": [
+      "UI top margin is consistent between containers",
+      "Fixed some parts of UI looking bad on different screen sizes"
+    ],
+    "LatestUpdate": false
+  },
+  {
+    "Title": "1.9.9",
+    "New": [
+      "idek a lot"
+    ],
+    "Changes": [
+      "idek a lot"
+    ],
+    "LatestUpdate": false
+  },
+  {
+    "Title": "1.0.0",
+    "New": [
+      "who knows"
+    ],
+    "Changes": [
+      "i forgor"
+    ],
+    "LatestUpdate": false
+  }
+]
