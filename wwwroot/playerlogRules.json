@@ -50,8 +50,8 @@
       "order": 3,
       "latest": true
     },
-    "Info": {
-      "pattern": "^GPU API:\\s*(.+)",
+    "GPU API": {
+      "pattern": "^Info:\\s*(.+)",
       "response": "${data}",
       "order": 4,
       "latest": false
