@@ -15,7 +15,7 @@ builder.Services.AddMudServices().AddMudBlazorDialog();
 builder.Services.AddSingleton<AppUpdateService>();
 builder.Services.AddScoped<AppVersionService>();
 builder.Services.AddBlazoredLocalStorage();
-
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
 builder.Services.AddSingleton<GlobalErrorService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
