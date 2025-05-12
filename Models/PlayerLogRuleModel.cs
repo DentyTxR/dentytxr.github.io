@@ -7,13 +7,13 @@ namespace ghp_app.Models
         [JsonPropertyName("pattern")]
         public string Pattern { get; set; } = string.Empty;
 
-        [JsonPropertyName("display")]
-        public string Display { get; set; } = string.Empty;
-
         [JsonPropertyName("response")]
         public string Response { get; set; } = string.Empty;
 
-        [JsonPropertyName("category")]
-        public string Category { get; set; } = string.Empty;
+        [JsonPropertyName("order")]
+        public int Order { get; set; } = 0;
+
+        [JsonPropertyName("latest")]
+        public bool Latest { get; set; } = false;
     }
 }

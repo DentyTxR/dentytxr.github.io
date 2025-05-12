@@ -1,5 +1,16 @@
 [
   {
+    "Title": "1.9.96",
+    "New": [
+      "New and first tool (playerlog tool)",
+      "Added new error handling (very simple, need to expand upon more)"
+    ],
+    "Changes": [
+      "Navbar UI"
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "1.9.95",
     "New": [
       "Reworked Update Logs page"
@@ -8,7 +19,7 @@
       "UI top margin is consistent between containers",
       "Fixed some parts of UI looking bad on different screen sizes"
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "1.9.9",

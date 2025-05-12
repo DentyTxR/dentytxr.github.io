@@ -1,20 +1,142 @@
-[
-  {
-    "pattern": "^OS:\\s*(.+)",
-    "display": "OS:",
-    "response": "${status}",
-    "category": "System"
+{
+  "System": {
+    "CPU": {
+      "pattern": "^CPU:\\s*(.+)",
+      "response": "${data}",
+      "order": 1,
+      "latest": false
+    },
+    "Threads": {
+      "pattern": "^Threads:\\s*(.+)",
+      "response": "${data}",
+      "order": 2,
+      "latest": false
+    },
+    "Frequency": {
+      "pattern": "^Frequency:\\s*(.+)",
+      "response": "${data}",
+      "order": 3,
+      "latest": false
+    },
+    "RAM": {
+      "pattern": "^RAM:\\s*(.+)",
+      "response": "${data}",
+      "order": 4,
+      "latest": false
+    },
+    "OS": {
+      "pattern": "^OS:\\s*(.+)",
+      "response": "${status}",
+      "order": 5,
+      "latest": false
+    }
   },
-  {
-    "pattern": "^CPU:\\s*(.+)",
-    "display": "CPU:",
-    "response": "${data}",
-    "category": "System"
+  "Graphics": {
+    "GPU": {
+      "pattern": "^GPU:\\s*(.+)",
+      "response": "${data}",
+      "order": 1,
+      "latest": false
+    },
+    "VRAM": {
+      "pattern": "^VRAM:\\s*(.+)",
+      "response": "${data}",
+      "order": 2,
+      "latest": false
+    },
+    "Driver Version": {
+      "pattern": "^Driver:\\s*(.+)",
+      "response": "${data}",
+      "order": 3,
+      "latest": true
+    },
+    "Info": {
+      "pattern": "^GPU API:\\s*(.+)",
+      "response": "${data}",
+      "order": 4,
+      "latest": false
+    },
+    "Screen Resolution": {
+      "pattern": "^Resolution:\\s*(.+)",
+      "response": "${data}",
+      "order": 5,
+      "latest": false
+    },
+    "Screen Mode": {
+      "pattern": "^Fullscreen:\\s*(.+)",
+      "response": "${data}",
+      "order": 6,
+      "latest": false
+    }
   },
-  {
-    "pattern": "^RAM:\\s*(.+)",
-    "display": "Ram:",
-    "response": "${data}",
-    "category": "System"
+  "Game": {
+    "Unity Version": {
+      "pattern": "^Unity:\\s*(.+)",
+      "response": "${data}",
+      "order": 2,
+      "latest": false
+    },
+    "Game Version": {
+      "pattern": "^Game version:\\s*(.+)",
+      "response": "${data}",
+      "order": 1,
+      "latest": false
+    },
+    "Build Type": {
+      "pattern": "^Build type:\\s*(.+)",
+      "response": "${data}",
+      "order": 3,
+      "latest": false
+    },
+    "Preauth Version": {
+      "pattern": "^Preauth version:\\s*(.+)",
+      "response": "${data}",
+      "order": 4,
+      "latest": false
+    },
+    "Backward compatibility": {
+      "pattern": "^Backward compatibility:\\s*(.+)",
+      "response": "${data}",
+      "order": 5,
+      "latest": false
+    },
+    "Launch Arguments": {
+      "pattern": "^Launch arguments:\\s*(.+)",
+      "response": "${data}",
+      "order": 6,
+      "latest": false
+    }
+  },
+  "Errors": {
+    "Crash": {
+      "pattern": "^Crash!!!$",
+      "response": "Users game crashed",
+      "order": 1,
+      "latest": false
+    },
+    "Output device error 60": {
+      "pattern": "Error initializing output device.*\\(60\\)",
+      "response": "Sound mixer input error. Have game open, navigate to Sound Mixer Options in Windows and properly set SCPSL input/output",
+      "order": 2,
+      "latest": false
+    },
+    "Unsupported file or audio format": {
+      "pattern": "Unsupported file or audio format",
+      "response": "User is using unsupported mic (such as array device)",
+      "order": 3,
+      "latest": false
+    },
+    "Microphone failed to start recording": {
+      "pattern": "microphone '' failed to start recording",
+      "response": "https://techwiki.scpslgame.com/link/82#bkmrk-the-solution-to-this",
+      "order": 4,
+      "latest": false
+    },
+    "0x887A0005": {
+      "pattern": "[0x887A0005]",
+      "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast",
+      "order": 4,
+      "latest": false
+    }
   }
-]
+}

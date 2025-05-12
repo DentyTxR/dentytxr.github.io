@@ -1,0 +1,301 @@
+﻿@using System.Text.RegularExpressions;
+@using System.Text.Json.Serialization;
+@using System.Text.Json;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
+
+@page "/playerlogtool"
+
+<PageTitle>PlayerLog Tool</PageTitle>
+
+<MudOverlay @bind-Visible="isLoading" DarkBackground>
+    <MudContainer Style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <MudText Typo="Typo.h4">Loading...</MudText>
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate />
+    </MudContainer>
+</MudOverlay>
+
+<MudDialog @bind-Visible="_ruleDialogVisible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">Filter Rules</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudGrid Spacing="4">
+            @foreach (var categoryGroup in _compiledRules.GroupBy(r => r.Category))
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="pa-3 mud-theme-dark">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@categoryGroup.Key</MudText>
+                        <MudList T="string">
+                            @foreach (var rule in categoryGroup.OrderBy(r => r.Rule.Order))
+                            {
+                                <MudText Typo="Typo.body2">Display: @rule.DisplayName</MudText>
+                                <MudText Typo="Typo.body2">Pattern: @rule.CompiledRegex</MudText>
+                                <MudText Typo="Typo.body2">Order: @rule.Rule.Order</MudText>
+                                <MudText Typo="Typo.body2">Latest: @rule.Rule.Latest</MudText>
+                                <MudDivider />
+                            }
+                        </MudList>
+                    </MudPaper>
+                </MudItem>
+            }
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="CloseRuleDialog" Color="Color.Primary">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta</MudText></MudText>
+        <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
+        <MudText Typo="Typo.body2">UI bad yes i know, i will try to make better :(</MudText>
+    </MudStack>
+
+    <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
+        <MudToolBar Class="justify-center gap-5 pb-2">
+            <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept="txt">
+                <ActivatorContent>
+                    <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                        Browse...
+                    </MudButton>
+                </ActivatorContent>
+            </MudFileUpload>
+            <MudButton OnClick="UrlDialogPopup" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                Upload via URL
+            </MudButton>
+            <MudButton OnClick="OpenRuleDialog" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                View rules
+            </MudButton>
+        </MudToolBar>
+
+        <MudTabs Elevation="3" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Outlined="true" ApplyEffectsToContainer="true">
+            @foreach (var categoryGroup in _compiledRules.GroupBy(r => r.Category))
+            {
+                var categoryName = categoryGroup.Key;
+
+                var entriesInCategory = logEntries
+                .Where(entry => entry.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(entry => entry.Order)
+                .ToList();
+
+                var entriesWithBadges = entriesInCategory
+                .Where(entry => !string.IsNullOrWhiteSpace(entry.BadgeText))
+                .ToList();
+
+                var alwaysShowBadgeCategories = new[] { "Errors" };
+                bool forceShowBadge = alwaysShowBadgeCategories.Contains(categoryName, StringComparer.OrdinalIgnoreCase);
+
+                int badgeCount = entriesWithBadges.Count;
+                string? badgeData = (badgeCount > 0 || forceShowBadge) ? badgeCount.ToString() : null;
+                var badgeColor = entriesWithBadges.FirstOrDefault()?.BadgeColor ?? Color.Success;
+
+                <MudTabPanel Text="@categoryName" BadgeData="@badgeData" BadgeColor="@badgeColor">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:300px; max-height: 500px; overflow-y:auto;">
+                        @if (entriesInCategory.Any())
+                        {
+                            foreach (var entry in entriesInCategory)
+                            {
+                                <MudText><MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response</MudText>
+                            }
+                        }
+                        else
+                        {
+                            <MudText>No entries for this category</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+            }
+        </MudTabs>
+    </MudPaper>
+</MudContainer>
+
+
+@code {
+    private class LogEntry //clean & found data
+    {
+        public string DisplayName { get; set; } = string.Empty;
+        public string Response { get; set; } = string.Empty;
+        public string Category { get; set; } = "Uncategorized";
+        public int Order { get; set; } = 0;
+        public string BadgeText { get; set; } = string.Empty;
+        public Color BadgeColor { get; set; } = Color.Default;
+    }
+
+    private class CompiledRule //preloaded, for performance
+    {
+        public string Category { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public PlayerLogRuleModel Rule { get; set; } = default!;
+        public Regex CompiledRegex { get; set; } = default!;
+    }
+
+    private List<LogEntry> logEntries = new(); //actual clean cleaned data
+
+    private List<CompiledRule> _compiledRules = new(); //preload
+
+    private Dictionary<string, Dictionary<string, PlayerLogRuleModel>> rules = new(); //raw
+
+    private string logUrl = string.Empty;
+    private bool isLoading = false;
+
+    private DialogOptions dialogOptions = new() { FullWidth = true };
+
+    private bool _ruleDialogVisible;
+    private void OpenRuleDialog() => _ruleDialogVisible = true;
+    private void CloseRuleDialog() => _ruleDialogVisible = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            var json = await Http.GetStringAsync("playerlogRules.json");
+            rules = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRuleModel>>>(json) ?? new();
+
+            _compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
+                {
+                    Category = category.Key,
+                    DisplayName = rule.Key,
+                    Rule = rule.Value,
+                    CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                })).ToList();
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+        }
+        isLoading = false;
+    }
+
+    private async Task UrlDialogPopup()
+    {
+        var parameters = new DialogParameters<Components.InsertUrlDialog>
+        {
+            { x => x.Content, @<MudAlert Severity="Severity.Warning">Larger files (5MB+) will not upload, This is due to the CORS proxy limit. Larger files will take longer to process.</MudAlert> },
+            { x => x.ButtonText, "Upload" }
+        };
+
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                MaxWidth = MaxWidth.ExtraSmall
+            };
+
+        var dialog = await DialogService.ShowAsync<Components.InsertUrlDialog>("URL Upload", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is string url && !string.IsNullOrWhiteSpace(url))
+        {
+            logUrl = url;
+            await HandleUrlUpload();
+        }
+    }
+
+    private async Task HandleUrlUpload()
+    {
+        if (string.IsNullOrWhiteSpace(logUrl)) return;
+
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            var content = await Http.GetStringAsync("https://api.codetabs.com/v1/proxy?quest=" + Uri.EscapeDataString(logUrl));
+            ProcessPlayerLogContent(content);
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+        }
+
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleManualUpload(IBrowserFile file)
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); //10mb
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+
+            ProcessPlayerLogContent(content);
+            isLoading = false;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+            isLoading = false;
+        }
+    }
+
+    private void ProcessPlayerLogContent(string content)
+    {
+        logEntries.Clear();
+        var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+
+        var totalerrors = 0;
+
+        foreach (var rule in _compiledRules)
+        {
+            var matches = lines
+                .Select((line, index) => new { line, index, match = rule.CompiledRegex.Match(line) })
+                .Where(x => x.match.Success)
+                .ToList();
+
+            if (matches.Count == 0)
+                continue;
+
+            var selected = rule.Rule.Latest ? matches.Last() : matches.First();
+            var data = selected.match.Groups[1].Value;
+
+            string responseText = rule.Rule.Response.Replace("${data}", data);
+
+            if (rule.Rule.Pattern.Contains("OS", StringComparison.OrdinalIgnoreCase))
+            {
+                responseText = responseText.Replace("${status}", GetOsStatus(data));
+            }
+
+            if (rule.Category == "Errors")
+            {
+                totalerrors++;
+                logEntries.Add(new LogEntry
+                    {
+                        DisplayName = rule.DisplayName,
+                        Response = responseText,
+                        Category = rule.Category,
+                        Order = rule.Rule.Order,
+                        BadgeText = totalerrors.ToString(),
+                        BadgeColor = Color.Error
+
+                    });
+            }
+            else
+                logEntries.Add(new LogEntry
+                    {
+                        DisplayName = rule.DisplayName,
+                        Response = responseText,
+                        Category = rule.Category,
+                        Order = rule.Rule.Order
+                    });
+        }
+    }
+
+    //hardcode hell below
+    private string GetOsStatus(string osLine)
+    {
+        if (osLine.Contains("Windows 10", StringComparison.OrdinalIgnoreCase) || osLine.Contains("Windows 11", StringComparison.OrdinalIgnoreCase))
+            return $"[Supported] {osLine}";
+        else
+            return $"[Unsupported] {osLine}";
+    }
+}

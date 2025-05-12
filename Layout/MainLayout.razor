@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.WebAssembly.Hosting
 @inherits LayoutComponentBase
 @inject HttpClient Http
+@inject ISnackbar Snackbar
 @inject IWebAssemblyHostEnvironment AppEnv
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
@@ -32,11 +33,9 @@
                 @Body
             </ChildContent>
             <ErrorContent Context="Exception">
-                @Exception.Message
-                <br/>
-                @Exception.Source
-                <br/>
-                @Exception.InnerException
+                @{
+                    ErrorService.ShowError(Exception);
+                }
             </ErrorContent>
         </ErrorBoundary>
     </MudMainContent>
@@ -44,13 +43,16 @@
 
 @code {
     private ErrorBoundary? errorBoundary;
-
     bool _drawerOpen = true;
+
+    protected override void OnInitialized()
+    {
+        ErrorService.Initialize(Snackbar);
+    }
 
     protected override void OnParametersSet()
     {
         errorBoundary?.Recover();
-        //base.OnParametersSet();
     }
 
     void DrawerToggle()
