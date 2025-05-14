@@ -137,6 +137,12 @@
       "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast",
       "order": 4,
       "latest": false
+    },
+    "ignoremetestingsomething": {
+      "pattern": "ignoremetestingsomething",
+      "response": "ignoremetestingsomething",
+      "order": 4,
+      "latest": false
     }
   }
 }
