@@ -134,7 +134,7 @@
     },
     "0x887A0005": {
       "pattern": "[0x887A0005]",
-      "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast",
+      "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast.",
       "order": 4,
       "latest": false
     }
