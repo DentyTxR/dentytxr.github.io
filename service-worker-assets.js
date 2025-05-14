@@ -57,7 +57,7 @@
       "url": "manifest.webmanifest"
     },
     {
-      "hash": "sha256-k\/DqklpLgf7TD+H1G8Inva0NB5mmfAFp0ElRb9M+YdE=",
+      "hash": "sha256-sZsMJRsyhht0gzcHs2ih2nnr1ogzFTEofU3NIWeLUTY=",
       "url": "playerlogRules.json"
     },
     {
@@ -105,7 +105,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-4\/dTf9N6CwgowVz1goMeBNlbOWimVD5jsz+wgv75OoE=",
+      "hash": "sha256-JDgqQm7AX1euEsMZKuBJVGXL6HmClNGN5FoVfuhejQY=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/Blazored.LocalStorage.wasm"
     },
     {
-      "hash": "sha256-u1NQLctpYxeno1DW9dHVQ1p2iic6E5VnM3Zc0B2JHsc=",
+      "hash": "sha256-X\/5Xq8Fn70hhyi3avTdkKv3n41W6DiCsGR\/M3Iuh20Y=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -349,5 +349,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "+CLR5nOR"
+  "version": "w8GFrHFg"
 };
