@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ghp-app",
   "resources": {
-    "hash": "sha256-z0pX9t4kV9anqczMrRwrYKjEw663eTtKN7Qi7/M3iRs=",
+    "hash": "sha256-9o1c51Z2dKbU/3bYiUnihKTxLRecKrxOAtVqFHjEIQ0=",
     "jsModuleNative": {
       "dotnet.native.8.0.16.khcj4p6y0x.js": "sha256-RiGT44TFZmHOY+Oqvb8o8r+BJVWex6+dPxFxrOiWvFY="
     },
@@ -18,7 +18,7 @@
     },
     "assembly": {
       "Blazored.LocalStorage.wasm": "sha256-OaMAAd5n7ORfyur5e3QIyEVKJ76MKIvwbg7/icnnYcU=",
-      "ghp-app.wasm": "sha256-fQCFcPeTjPvajMV25atPE/NJm6FVsNEpQXvsuv17W0w=",
+      "ghp-app.wasm": "sha256-u1NQLctpYxeno1DW9dHVQ1p2iic6E5VnM3Zc0B2JHsc=",
       "Microsoft.AspNetCore.Components.Forms.wasm": "sha256-89iuHISD/XnYUxI+leQKE1lYtKRCq7cCNs46WPyRmOY=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-0nbyFhYJq50g/YBw8fJiiAi8vgOisr7t4QXc1f0VHPU=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-1CwN/piKr4cOnHxKEqJi4NpF/bfq5JUEl0Tc+A7OJpM=",
