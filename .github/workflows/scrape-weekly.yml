@@ -34,7 +34,7 @@ jobs:
           git fetch origin main
           git checkout main
           mkdir -p wwwroot/data
-          cp passmark-data.json wwwroot/data/passmark-data.json
+          cp -f passmark-data.json wwwroot/data/passmark-data.json
           git add wwwroot/data/passmark-data.json
           git commit -m "Update scraped data [bot]" || echo "No changes"
           git push origin main
@@ -44,7 +44,7 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
           mkdir -p data
-          cp passmark-data.json data/passmark-data.json
+          cp -f passmark-data.json data/passmark-data.json
           git add data/passmark-data.json
           git commit -m "Update scraped data [bot]" || echo "No changes"
           git push origin gh-pages
