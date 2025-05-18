@@ -1,0 +1,49 @@
+﻿@inject NavigationManager navigation
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+
+<MudDialog>
+    <TitleContent>
+        <MudText>Settings</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudColorPicker ColorPickerMode="ColorPickerMode.RGB" Label="Basic Color Picker" @bind-Text="_colorValue" Style="@($"color: {_colorValue};")" Placeholder="Select Color" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="OnCancel">Cancel</MudButton>
+        <MudButton OnClick="OnSubmit" Color="Color.Primary">Save Changes</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialogInstance { get; set; }
+
+    private string _colorValue;
+
+    private async Task SaveSetting()
+    {
+        try
+        {
+            _colorValue = Utils.ColorHelper.HexToRgba(_colorValue);
+            var storageData = new Storage
+                {
+                    Color = _colorValue
+                };
+
+            await localStorage.SetItemAsync("Settings", storageData);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        navigation.Refresh();
+    }
+
+    private async Task OnSubmit() => await SaveSetting();
+
+    private void OnCancel() => MudDialogInstance.Cancel();
+
+
+}

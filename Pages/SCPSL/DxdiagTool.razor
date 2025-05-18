@@ -1,0 +1,455 @@
+﻿@using System.Text.RegularExpressions
+@using System.Text.Json.Serialization
+@using System.Text.Json
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
+
+@page "/scpsl/dxdiagtool"
+
+<PageTitle>DxDiag Tool</PageTitle>
+
+<MudOverlay @bind-Visible="isLoading" DarkBackground>
+    <MudContainer Style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <MudText Typo="Typo.h4">@LoadingMessage</MudText>
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate />
+    </MudContainer>
+</MudOverlay>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+        <MudText Typo="Typo.h4">DxDiag Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.1</MudText></MudText>
+        <MudText Typo="Typo.body1">A simple tool to filter out data from a Windows DxDiag file.</MudText>
+    </MudStack>
+
+    <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
+        <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.Sm">
+            <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept="txt">
+                <ActivatorContent>
+                    <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                        Browse...
+                    </MudButton>
+                </ActivatorContent>
+            </MudFileUpload>
+            <MudButton OnClick="UrlDialogPopup" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                Upload via URL
+            </MudButton>
+        </MudStack>
+
+        <MudTabs Elevation="3" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Outlined="true" ApplyEffectsToContainer="true">
+            @foreach (var categoryGroup in compiledRules.GroupBy(r => r.Category))
+            {
+                var categoryName = categoryGroup.Key;
+                var entriesInCategory = logEntries
+                .Where(entry => entry.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(entry => entry.Order);
+
+                <MudTabPanel Text="@categoryName">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:300px; max-height: 500px; overflow-y:auto;">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@categoryName</MudText>
+                        @if (entriesInCategory.Any())
+                        {
+                            foreach (var entry in entriesInCategory)
+                            {
+                                <MudText Class="pb-2">
+                                    <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                </MudText>
+                            }
+                        }
+                        else
+                        {
+                            <MudText>No entries for this category</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Display">
+                <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:300px; max-height: 500px; overflow-y:auto;">
+                    <MudText Typo="Typo.h6" Color="Color.Primary">Display Devices</MudText>
+                    @if (displayDevices.Any())
+                    {
+                        @foreach (var device in displayDevices)
+                        {
+                            <MudPaper Class="pa-2 my-2" Elevation="0">
+                                <MudText><b>Card Name:</b> @device.CardName</MudText>
+                                <MudText><b>Manufacturer:</b> @device.Manufacturer</MudText>
+                                <MudText><b>Chip Type:</b> @device.ChipType</MudText>
+                                <MudText><b>Device Type:</b> @device.DeviceType</MudText>
+                                <MudText><b>Display Memory:</b> @device.DisplayMemory</MudText>
+                                <MudText><b>Current Mode:</b> @device.CurrentMode</MudText>
+                                <MudText><b>Driver Version:</b> @device.DriverVersion</MudText>
+                                <MudText><b>Driver Date:</b> @device.DriverDate</MudText>
+                                <MudText><b>Driver Model:</b> @device.DriverModel</MudText>
+                            </MudPaper>
+                        }
+                    }
+                    else
+                    {
+                        <MudText>No entries for this category</MudText>
+                    }
+                </div>
+            </MudTabPanel>
+            }
+        </MudTabs>
+    </MudPaper>
+</MudContainer>
+
+@code {
+
+
+    private class LogEntry
+    {
+        public string DisplayName { get; set; } = string.Empty;
+        public string Response { get; set; } = string.Empty;
+        public string Category { get; set; } = "nocategory";
+        public int Order { get; set; }
+        public Color HighlightText { get; set; } = Color.Primary;
+        public string BadgeText { get; set; } = string.Empty;
+        public Color BadgeColor { get; set; } = Color.Default;
+    }
+
+    private class CompiledRule
+    {
+        public string Category { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public Regex CompiledRegex { get; set; } = default!;
+        public string Response { get; set; } = string.Empty;
+        public int Order { get; set; }
+        public bool Latest { get; set; }
+    }
+
+    public class PassmarkData
+    {
+        [JsonPropertyName("cpu")]
+        public Dictionary<string, int> Cpu { get; set; } = new();
+        [JsonPropertyName("gpu")]
+        public Dictionary<string, int> Gpu { get; set; } = new();
+    }
+
+    public class MinRequirements
+    {
+        [JsonPropertyName("cpu")]
+        public string MinCpu { get; set; } = string.Empty;
+        [JsonPropertyName("gpu")]
+        public string MinGpu { get; set; } = string.Empty;
+    }
+
+    private class DisplayDeviceInfo
+    {
+        public string CardName { get; set; } = "";
+        public string Manufacturer { get; set; } = "";
+        public string ChipType { get; set; } = "";
+        public string DeviceType { get; set; } = "";
+        public string DisplayMemory { get; set; } = "";
+        public string CurrentMode { get; set; } = "";
+        public string DriverVersion { get; set; } = "";
+        public string DriverDate { get; set; } = "";
+        public string DriverModel { get; set; } = "";
+    }
+
+    private string minCpu = "";
+    private string minGpu = "";
+
+    private List<LogEntry> logEntries = new();
+    private List<CompiledRule> compiledRules = new();
+    private Dictionary<string, int> cpuScores = new();
+    private Dictionary<string, int> gpuScores = new();
+    private List<DisplayDeviceInfo> displayDevices = new();
+
+    private string logUrl = "";
+
+    private bool isLoading = false;
+    private string LoadingMessage = "Loading...";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            LoadingMessage = "Loading rules...";
+            await ShowLoading();
+
+            compiledRules = HardcodedRules();
+
+            LoadingMessage = "Loading data...";
+            await ShowLoading();
+
+            var minRequirements = await Http.GetStringAsync("data/scpslMinHardware.json");
+            var passmarkJson = await Http.GetStringAsync("data/passmark-data.json");
+
+            LoadingMessage = "Deserializing data...";
+            await ShowLoading();
+
+            var minResults = JsonSerializer.Deserialize<MinRequirements>(minRequirements) ?? new();
+            minCpu = minResults.MinCpu ?? "";
+            minGpu = minResults.MinGpu ?? "";
+
+            var results = JsonSerializer.Deserialize<PassmarkData>(passmarkJson);
+            if (results != null)
+            {
+                cpuScores = results.Cpu ?? new Dictionary<string, int>();
+                gpuScores = results.Gpu ?? new Dictionary<string, int>();
+            }
+
+
+            LoadingMessage = "Warming up...";
+            await ShowLoading();
+            
+            Utils.CompareHardwareHelper.Prime(cpuScores, gpuScores);
+            
+            LoadingMessage = "Loading...";
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+            isLoading = false;
+        }
+    }
+
+    private async Task ShowLoading()
+    {
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(1);
+    }
+
+    private static List<CompiledRule> HardcodedRules() => new()
+    {
+        new CompiledRule
+        {
+            Category = "System",
+            DisplayName = "OS",
+            CompiledRegex = new Regex(@"Operating System:\s+(.+)",  RegexOptions.IgnoreCase),
+            Response = "${status}",
+            Order = 0,
+            Latest = false
+        },
+        new CompiledRule
+        {
+            Category = "System",
+            DisplayName = "CPU",
+            CompiledRegex = new Regex(@"Processor:\s+(.+)",  RegexOptions.IgnoreCase),
+            Response = "[${status}] ${data}",
+            Order = 1,
+            Latest = false
+        },
+        new CompiledRule
+        {
+            Category = "System",
+            DisplayName = "GPU",
+            CompiledRegex = new Regex(@"Card name:\s+(.+)", RegexOptions.IgnoreCase),
+            Response = "[${status}] ${data}",
+            Order = 2,
+            Latest = false
+        }
+    };
+
+    private async Task UrlDialogPopup()
+    {
+        var parameters = new DialogParameters<Components.InsertUrlDialog>
+        {
+            { x => x.Content, @<MudAlert Severity="Severity.Warning">Larger files (5MB+) will not upload, This is due to the CORS proxy limit. Larger files will take longer to process.</MudAlert> },
+            { x => x.ButtonText, "Upload" }
+        };
+
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.ExtraSmall
+        };
+
+        var dialog = await DialogService.ShowAsync<Components.InsertUrlDialog>("URL Upload", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is string url && !string.IsNullOrWhiteSpace(url))
+        {
+            logUrl = url;
+            await HandleUrlUpload();
+        }
+    }
+
+    private async Task HandleUrlUpload()
+    {
+        if (string.IsNullOrWhiteSpace(logUrl)) return;
+
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            var content = await Http.GetStringAsync("https://api.codetabs.com/v1/proxy?quest=" + Uri.EscapeDataString(logUrl));
+            ProcessDxdiagContent(content);
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+        }
+
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleManualUpload(IBrowserFile file)
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+
+            ProcessDxdiagContent(content);
+            isLoading = false;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+            isLoading = false;
+        }
+    }
+
+    private void ProcessDxdiagContent(string content)
+    {
+        logEntries.Clear();
+        displayDevices = ParseDisplayDevices(content);
+
+        var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        foreach (var rule in compiledRules)
+        {
+            var matches = lines
+                .Select((line, idx) => new { line, idx, match = rule.CompiledRegex.Match(line) })
+                .Where(x => x.match.Success);
+
+            if (!matches.Any())
+                continue;
+
+            var selectedMatch = rule.Latest ? matches.Last() : matches.First();
+            var data = selectedMatch.match.Groups.Count > 1 ? selectedMatch.match.Groups[1].Value : selectedMatch.match.Value;
+
+            string response = rule.Response.Replace("${data}", data);
+
+            var entry = new LogEntry
+            {
+                DisplayName = rule.DisplayName,
+                Category = rule.Category,
+                Order = rule.Order
+            };
+
+            switch (rule.DisplayName)
+            {
+                case "OS":
+                    response = response.Replace("${status}", GetOsStatus(data));
+                    break;
+                case "CPU":
+                    response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
+                    if (response.Contains("Below Minimum"))
+                    {
+                        entry.HighlightText = Color.Error;
+                        entry.BadgeText = "!";
+                        entry.BadgeColor = Color.Error;
+                    }
+                    break;
+                case "GPU":
+                    response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
+                    if (response.Contains("Below Minimum"))
+                    {
+                        entry.HighlightText = Color.Error;
+                        entry.BadgeText = "!";
+                        entry.BadgeColor = Color.Error;
+                    }
+                    break;
+            }
+
+            entry.Response = response;
+            logEntries.Add(entry);
+        }
+    }
+
+    private string GetOsStatus(string osLine)
+    {
+        if (osLine.Contains("Windows 10", StringComparison.OrdinalIgnoreCase) || osLine.Contains("Windows 11", StringComparison.OrdinalIgnoreCase))
+            return $"[Supported] {osLine}";
+        else
+            return $"[Unsupported] {osLine}";
+    }
+
+    private List<DisplayDeviceInfo> ParseDisplayDevices(string content)
+    {
+        var devices = new List<DisplayDeviceInfo>();
+        var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+        int start = -1, end = lines.Length;
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (lines[i].Trim().Equals("Display Devices", StringComparison.OrdinalIgnoreCase))
+            {
+                start = i + 1;
+                break;
+            }
+        }
+        if (start == -1) return devices;
+
+        for (int i = start; i < lines.Length; i++)
+        {
+            if (lines[i].Trim().Equals("Sound Devices", StringComparison.OrdinalIgnoreCase))
+            {
+                end = i;
+                break;
+            }
+        }
+
+        var deviceBlocks = new List<List<string>>();
+        List<string> currentBlock = null;
+        for (int i = start; i < end; i++)
+        {
+            var line = lines[i];
+            if (Regex.IsMatch(line, @"^\s*Card\s+Name\s*:", RegexOptions.IgnoreCase))
+            {
+                if (currentBlock != null && currentBlock.Count > 0)
+                    deviceBlocks.Add(currentBlock);
+                currentBlock = new List<string>();
+            }
+            if (currentBlock != null)
+                currentBlock.Add(line);
+        }
+        if (currentBlock != null && currentBlock.Count > 0)
+            deviceBlocks.Add(currentBlock);
+
+        foreach (var block in deviceBlocks)
+        {
+            var fields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var line in block)
+            {
+                var fieldMatch = Regex.Match(line, @"^\s*([\w\s\/]+?)\s*:\s*(.*)$");
+                if (fieldMatch.Success)
+                {
+                    var key = fieldMatch.Groups[1].Value.Trim();
+                    var value = fieldMatch.Groups[2].Value.Trim();
+                    fields[key] = value;
+                }
+            }
+            if (!fields.TryGetValue("Card Name", out var cardName) || string.IsNullOrWhiteSpace(cardName))
+                continue;
+
+            devices.Add(new DisplayDeviceInfo
+            {
+                CardName = Utils.CompareHardwareHelper.CompareGpu(cardName, minGpu, gpuScores).ToString() + " " + cardName,
+                Manufacturer = fields.TryGetValue("Manufacturer", out var manufacturer) ? manufacturer : "",
+                ChipType = fields.TryGetValue("Chip Type", out var chipType) ? chipType : "",
+                DeviceType = fields.TryGetValue("Device Type", out var deviceType) ? deviceType : "",
+                DisplayMemory = fields.TryGetValue("Display Memory", out var displayMemory) ? displayMemory : "",
+                CurrentMode = fields.TryGetValue("Current Mode", out var currentMode) ? currentMode : "",
+                DriverVersion = fields.TryGetValue("Driver Version", out var driverVersion) ? driverVersion : "",
+                DriverDate = fields.TryGetValue("Driver Date", out var driverDate) ? driverDate : "",
+                DriverModel = fields.TryGetValue("Driver Model", out var driverModel) ? driverModel : ""
+            });
+        }
+
+        return devices;
+    }
+}

@@ -15,7 +15,7 @@ namespace ghp_app.Services
 
         public async Task LoadAsync()
         {
-            var result = await _httpClient.GetFromJsonAsync<AppVersionModel>("./version.json");
+            var result = await _httpClient.GetFromJsonAsync<AppVersionModel>("./data/version.json");
             AppStateData = result;
         }
     }

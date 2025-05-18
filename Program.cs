@@ -17,6 +17,7 @@ builder.Services.AddScoped<AppVersionService>();
 builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<GlobalErrorService>();
+builder.Services.AddScoped<SettingsService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

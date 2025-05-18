@@ -6,13 +6,13 @@
 @inject IDialogService DialogService
 @inject ISnackbar SnackbarService
 
-@page "/playerlogtool"
+@page "/scpsl/playerlogtool"
 
 <PageTitle>PlayerLog Tool</PageTitle>
 
 <MudOverlay @bind-Visible="isLoading" DarkBackground>
     <MudContainer Style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <MudText Typo="Typo.h4">Loading...</MudText>
+        <MudText Typo="Typo.h4">@LoadingMessage</MudText>
         <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate />
     </MudContainer>
 </MudOverlay>
@@ -23,10 +23,10 @@
     </TitleContent>
     <DialogContent>
         <MudGrid Spacing="4">
-            @foreach (var categoryGroup in _compiledRules.GroupBy(r => r.Category))
+            @foreach (var categoryGroup in compiledRules.GroupBy(r => r.Category))
             {
-                <MudItem xs="12" sm="6" md="4">
-                    <MudPaper Class="pa-3 mud-theme-dark">
+                <MudItem xs="10" sm="7" md="6">
+                    <MudPaper Class="pa-3 mud-theme-dark" Square=true>
                         <MudText Typo="Typo.h6" Color="Color.Primary">@categoryGroup.Key</MudText>
                         <MudList T="string">
                             @foreach (var rule in categoryGroup.OrderBy(r => r.Rule.Order))
@@ -35,8 +35,7 @@
                                 <MudText Typo="Typo.body2">Pattern: @rule.CompiledRegex</MudText>
                                 <MudText Typo="Typo.body2">Order: @rule.Rule.Order</MudText>
                                 <MudText Typo="Typo.body2">Latest: @rule.Rule.Latest</MudText>
-                                <MudDivider />
-                                <br/>
+                                <MudDivider Class=" pb-2 mt-2" />
                             }
                         </MudList>
                     </MudPaper>
@@ -51,13 +50,13 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
     <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
-        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta</MudText></MudText>
+        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.5</MudText></MudText>
         <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
         <MudText Typo="Typo.body2">UI bad yes i know, i will try to make better :(</MudText>
     </MudStack>
 
     <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
-        <MudToolBar Class="justify-center gap-5 pb-2">
+        <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.Sm">
             <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept="txt">
                 <ActivatorContent>
                     <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
@@ -71,10 +70,10 @@
             <MudButton OnClick="OpenRuleDialog" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
                 View rules
             </MudButton>
-        </MudToolBar>
+        </MudStack>
 
         <MudTabs Elevation="3" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Outlined="true" ApplyEffectsToContainer="true">
-            @foreach (var categoryGroup in _compiledRules.GroupBy(r => r.Category))
+            @foreach (var categoryGroup in compiledRules.GroupBy(r => r.Category))
             {
                 var categoryName = categoryGroup.Key;
 
@@ -87,20 +86,31 @@
                 .Where(entry => !string.IsNullOrWhiteSpace(entry.BadgeText))
                 .ToList();
 
-                var alwaysShowBadgeCategories = new[] { "Errors" };
-                bool forceShowBadge = alwaysShowBadgeCategories.Contains(categoryName, StringComparer.OrdinalIgnoreCase);
+                bool forceShowBadge = categoryName.Equals("Errors", StringComparison.OrdinalIgnoreCase);
 
-                int badgeCount = entriesWithBadges.Count;
-                string? badgeData = (badgeCount > 0 || forceShowBadge) ? badgeCount.ToString() : null;
-                var badgeColor = entriesWithBadges.FirstOrDefault()?.BadgeColor ?? Color.Success;
+                string? badgeData = null;
+                Color badgeColor = Color.Success;
+
+                if (entriesWithBadges.Any())
+                {
+                    var firstBadge = entriesWithBadges.First();
+                    badgeData = firstBadge.BadgeText;
+                    badgeColor = firstBadge.BadgeColor;
+                }
+                else if (forceShowBadge)
+                {
+                    badgeData = "0";
+                    badgeColor = Color.Success;
+                }
 
                 <MudTabPanel Text="@categoryName" BadgeData="@badgeData" BadgeColor="@badgeColor">
                     <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:300px; max-height: 500px; overflow-y:auto;">
+                        <MudText Typo="Typo.h6" Color="Color.Primary">@categoryName</MudText>
                         @if (entriesInCategory.Any())
                         {
                             foreach (var entry in entriesInCategory)
                             {
-                                <MudText><MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response</MudText>
+                                <MudText Class="pb-2"><MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response</MudText>
                             }
                         }
                         else
@@ -122,6 +132,7 @@
         public string Response { get; set; } = string.Empty;
         public string Category { get; set; } = "Uncategorized";
         public int Order { get; set; } = 0;
+        public Color HighlightText { get; set; } = Color.Primary;
         public string BadgeText { get; set; } = string.Empty;
         public Color BadgeColor { get; set; } = Color.Default;
     }
@@ -134,18 +145,39 @@
         public Regex CompiledRegex { get; set; } = default!;
     }
 
-    private List<LogEntry> logEntries = new(); //actual clean cleaned data
+    public class PassmarkData
+    {
+        [JsonPropertyName("cpu")]
+        public Dictionary<string, int> Cpu { get; set; } = new();
+        [JsonPropertyName("gpu")]
+        public Dictionary<string, int> Gpu { get; set; } = new();
+    }
 
-    private List<CompiledRule> _compiledRules = new(); //preload
+    public class MinRequirements
+    {
+        [JsonPropertyName("cpu")]
+        public string MinCpu { get; set; } = string.Empty;
+        [JsonPropertyName("gpu")]
+        public string MinGpu { get; set; } = string.Empty;
+    }
 
+    private string minCpu = "";
+    private string minGpu = "";
+
+    private List<LogEntry> logEntries = new(); //actual cleaned
+    private List<CompiledRule> compiledRules = new(); //preload
     private Dictionary<string, Dictionary<string, PlayerLogRuleModel>> rules = new(); //raw
+    private Dictionary<string, int> cpuScores = new();
+    private Dictionary<string, int> gpuScores = new();
 
-    private string logUrl = string.Empty;
+    private string logUrl = "";
+
     private bool isLoading = false;
+    private string LoadingMessage = "Loading...";
 
-    private DialogOptions dialogOptions = new() { FullWidth = true };
+    private readonly DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Large };
+    private bool _ruleDialogVisible = false;
 
-    private bool _ruleDialogVisible;
     private void OpenRuleDialog() => _ruleDialogVisible = true;
     private void CloseRuleDialog() => _ruleDialogVisible = false;
 
@@ -154,22 +186,60 @@
         try
         {
             isLoading = true;
-            var json = await Http.GetStringAsync("playerlogRules.json");
-            rules = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRuleModel>>>(json) ?? new();
+            LoadingMessage = "Loading rules...";
+            await ShowLoading();
 
-            _compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
-                {
-                    Category = category.Key,
-                    DisplayName = rule.Key,
-                    Rule = rule.Value,
-                    CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
-                })).ToList();
+            var playerlogJson = await Http.GetStringAsync("data/playerlogRules.json");
+
+            rules = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRuleModel>>>(playerlogJson) ?? new();
+
+            compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
+            {
+                Category = category.Key,
+                DisplayName = rule.Key,
+                Rule = rule.Value,
+                CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
+            })).ToList();
+
+            LoadingMessage = "Loading data...";
+            await ShowLoading();
+
+            var minReqJson = await Http.GetStringAsync("data/scpslMinHardware.json");
+            var passmarkJson = await Http.GetStringAsync("data/passmark-data.json");
+
+            LoadingMessage = "Deserializing data...";
+            await ShowLoading();
+
+            var minResults = JsonSerializer.Deserialize<MinRequirements>(minReqJson) ?? new();
+            minCpu = minResults.MinCpu ?? "";
+            minGpu = minResults.MinGpu ?? "";
+
+            var results = JsonSerializer.Deserialize<PassmarkData>(passmarkJson);
+            if (results != null)
+            {
+                cpuScores = results.Cpu ?? new Dictionary<string, int>();
+                gpuScores = results.Gpu ?? new Dictionary<string, int>();
+            }
+
+            LoadingMessage = "Warming up...";
+            await ShowLoading();
+
+            Utils.CompareHardwareHelper.Prime(cpuScores, gpuScores);
         }
         catch (Exception ex)
         {
             ErrorService.ShowError(ex);
         }
         isLoading = false;
+
+        LoadingMessage = "Loading...";
+        await ShowLoading();
+    }
+
+    private async Task ShowLoading()
+    {
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(1);
     }
 
     private async Task UrlDialogPopup()
@@ -181,10 +251,10 @@
         };
 
         var options = new DialogOptions
-            {
-                CloseOnEscapeKey = true,
-                MaxWidth = MaxWidth.ExtraSmall
-            };
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.ExtraSmall
+        };
 
         var dialog = await DialogService.ShowAsync<Components.InsertUrlDialog>("URL Upload", parameters, options);
         var result = await dialog.Result;
@@ -242,56 +312,67 @@
     private void ProcessPlayerLogContent(string content)
     {
         logEntries.Clear();
-        var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+        var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        var totalerrors = 0;
-
-        foreach (var rule in _compiledRules)
+        foreach (var rule in compiledRules)
         {
             var matches = lines
-                .Select((line, index) => new { line, index, match = rule.CompiledRegex.Match(line) })
+                .Select((line, idx) => new { line, idx, match = rule.CompiledRegex.Match(line) })
                 .Where(x => x.match.Success)
                 .ToList();
 
             if (matches.Count == 0)
                 continue;
 
-            var selected = rule.Rule.Latest ? matches.Last() : matches.First();
-            var data = selected.match.Groups[1].Value;
+            var selectedMatch = rule.Rule.Latest ? matches.Last() : matches.First();
+            var data = selectedMatch.match.Groups[1].Value;
 
-            string responseText = rule.Rule.Response.Replace("${data}", data);
+            string response = rule.Rule.Response.Replace("${data}", data);
 
-            if (rule.Rule.Pattern.Contains("OS", StringComparison.OrdinalIgnoreCase))
+            var entry = new LogEntry
             {
-                responseText = responseText.Replace("${status}", GetOsStatus(data));
+                DisplayName = rule.DisplayName,
+                Category = rule.Category,
+                Order = rule.Rule.Order
+            };
+
+            if (rule.DisplayName == "OS")
+                response = response.Replace("${status}", GetOsStatus(data));
+            else if (rule.DisplayName == "CPU")
+            {
+                response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
+                if (response.Contains("Below Minimum")) //kinda scuffed (like everything) might redo later
+                {
+                    entry.HighlightText = Color.Error;
+                    entry.BadgeText = "!";
+                    entry.BadgeColor = Color.Error;
+                }
+            }
+            else if (rule.DisplayName == "GPU")
+            {
+                response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
+                if (response.Contains("Below Minimum"))
+                {
+                    entry.HighlightText = Color.Error;
+                    entry.BadgeText = "!";
+                    entry.BadgeColor = Color.Error;
+                }
             }
 
             if (rule.Category == "Errors")
             {
-                totalerrors++;
-                logEntries.Add(new LogEntry
-                    {
-                        DisplayName = rule.DisplayName,
-                        Response = responseText,
-                        Category = rule.Category,
-                        Order = rule.Rule.Order,
-                        BadgeText = totalerrors.ToString(),
-                        BadgeColor = Color.Error
-
-                    });
+                entry.HighlightText = Color.Error;
+                entry.BadgeText = "!";
+                entry.BadgeColor = Color.Error;
             }
-            else
-                logEntries.Add(new LogEntry
-                    {
-                        DisplayName = rule.DisplayName,
-                        Response = responseText,
-                        Category = rule.Category,
-                        Order = rule.Rule.Order
-                    });
+
+            entry.Response = response;
+
+            logEntries.Add(entry);
         }
     }
 
-    //hardcode hell below
+    //hardcode hell below (soon, maybe)
     private string GetOsStatus(string osLine)
     {
         if (osLine.Contains("Windows 10", StringComparison.OrdinalIgnoreCase) || osLine.Contains("Windows 11", StringComparison.OrdinalIgnoreCase))

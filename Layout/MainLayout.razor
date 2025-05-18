@@ -5,7 +5,7 @@
 @inject IWebAssemblyHostEnvironment AppEnv
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<MudThemeProvider IsDarkMode="true" Theme="MyCustomTheme" />
+<MudThemeProvider IsDarkMode="true" Theme="Theme" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -42,12 +42,15 @@
 </MudLayout>
 
 @code {
+    private MudTheme Theme = new MudTheme();
+
     private ErrorBoundary? errorBoundary;
     bool _drawerOpen = true;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ErrorService.Initialize(Snackbar);
+        Theme = await SettingsService.GetThemeAsync();
     }
 
     protected override void OnParametersSet()
@@ -59,15 +62,4 @@
     {
         _drawerOpen = !_drawerOpen;
     }
-
-
-    MudTheme MyCustomTheme = new MudTheme()
-        {
-            LayoutProperties = new LayoutProperties()
-            {
-                DrawerWidthLeft = "260px",
-                DrawerWidthRight = "300px",
-                DefaultBorderRadius = "9px",
-            }
-        };
 }

@@ -2,7 +2,7 @@
   "System": {
     "CPU": {
       "pattern": "^CPU:\\s*(.+)",
-      "response": "${data}",
+      "response": "${status} ${data}",
       "order": 1,
       "latest": false
     },
@@ -34,7 +34,7 @@
   "Graphics": {
     "GPU": {
       "pattern": "^GPU:\\s*(.+)",
-      "response": "${data}",
+      "response": "${status} ${data}",
       "order": 1,
       "latest": false
     },
@@ -50,22 +50,16 @@
       "order": 3,
       "latest": true
     },
-    "GPU API": {
-      "pattern": "^Info:\\s*(.+)",
-      "response": "${data}",
-      "order": 4,
-      "latest": false
-    },
     "Screen Resolution": {
       "pattern": "^Resolution:\\s*(.+)",
       "response": "${data}",
-      "order": 5,
+      "order": 4,
       "latest": false
     },
     "Screen Mode": {
       "pattern": "^Fullscreen:\\s*(.+)",
       "response": "${data}",
-      "order": 6,
+      "order": 5,
       "latest": false
     }
   },
@@ -82,28 +76,34 @@
       "order": 1,
       "latest": false
     },
+    "GPU API": {
+      "pattern": "^Info:\\s*(.+)",
+      "response": "${data}",
+      "order": 3,
+      "latest": false
+    },
     "Build Type": {
       "pattern": "^Build type:\\s*(.+)",
       "response": "${data}",
-      "order": 3,
+      "order": 4,
       "latest": false
     },
     "Preauth Version": {
       "pattern": "^Preauth version:\\s*(.+)",
       "response": "${data}",
-      "order": 4,
+      "order": 5,
       "latest": false
     },
     "Backward compatibility": {
       "pattern": "^Backward compatibility:\\s*(.+)",
       "response": "${data}",
-      "order": 5,
+      "order": 6,
       "latest": false
     },
     "Launch Arguments": {
       "pattern": "^Launch arguments:\\s*(.+)",
       "response": "${data}",
-      "order": 6,
+      "order": 7,
       "latest": false
     }
   },
@@ -133,9 +133,15 @@
       "latest": false
     },
     "0x887A0005": {
-      "pattern": "[0x887A0005]",
+      "pattern": "\\[0x887A0005\\]",
       "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast.",
-      "order": 4,
+      "order": 6,
+      "latest": false
+    },
+    "Steam client failed to initialize": {
+      "pattern": "Steam client failed to initialize",
+      "response": "Steam might not be running. solution is restarting Steam",
+      "order": 6,
       "latest": false
     }
   }

@@ -26,7 +26,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var json = await Http.GetStringAsync("updates.json");
+        var json = await Http.GetStringAsync("data/updates.json");
         updates = JsonSerializer.Deserialize<List<UpdateEntry>>(json) ?? new();
 
         isLoaded = true;
