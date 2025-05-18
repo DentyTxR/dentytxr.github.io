@@ -1,0 +1,51 @@
+name: Weekly scraped
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run scraper
+        run: python ./scripts/scrape_passmark.py
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Save scraped data to main
+        run: |
+          git fetch origin main
+          git checkout main
+          mkdir -p wwwroot/data
+          cp passmark-data.json wwwroot/data/passmark-data.json
+          git add wwwroot/data/passmark-data.json
+          git commit -m "Update scraped data [bot]" || echo "No changes"
+          git push origin main
+
+      - name: Save scraped data to gh-pages
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          mkdir -p wwwroot/data
+          cp passmark-data.json wwwroot/data/passmark-data.json
+          git add wwwroot/data/passmark-data.json
+          git commit -m "Update scraped data [bot]" || echo "No changes"
+          git push origin gh-pages
+
