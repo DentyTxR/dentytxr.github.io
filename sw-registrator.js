@@ -32,7 +32,7 @@ window.registerForUpdateAvailableNotification = (caller, methodName) => {
         if (isUpdateAvailable) {
             // Fetch version info
             try {
-                const response = await fetch('/version.json');
+                const response = await fetch('/data/version.json');
                 const data = await response.json();
 
                 // Trigger method with version info
