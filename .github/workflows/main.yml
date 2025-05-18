@@ -5,6 +5,7 @@ on:
     paths-ignore:
       - '**/README.md'
       - '.github/workflows/**'
+      - 'scripts/**'
 jobs:
   deploy-to-ghp-branch:
     runs-on: ubuntu-latest
