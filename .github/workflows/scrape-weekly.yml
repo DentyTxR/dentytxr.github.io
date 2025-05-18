@@ -33,19 +33,20 @@ jobs:
         run: |
           git fetch origin main
           git checkout main
+          git pull origin main        # <-- Pull latest changes here
           mkdir -p wwwroot/data
           cp -f passmark-data.json wwwroot/data/passmark-data.json
           git add wwwroot/data/passmark-data.json
-          git commit -m "Update scraped data [bot]" || echo "No changes"
+          git diff --cached --quiet || git commit -m "Update scraped data [bot]"
           git push origin main
 
       - name: Save scraped data to gh-pages
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
+          git pull origin gh-pages    # <-- Pull latest changes here
           mkdir -p data
           cp -f passmark-data.json data/passmark-data.json
           git add data/passmark-data.json
-          git commit -m "Update scraped data [bot]" || echo "No changes"
+          git diff --cached --quiet || git commit -m "Update scraped data [bot]"
           git push origin gh-pages
-
