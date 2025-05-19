@@ -1,0 +1,78 @@
+name: Weekly scraped
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Every Sunday at midnight UTC
+  workflow_dispatch:
+
+jobs:
+  scrape-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run scraper
+        run: python ./scripts/scrape_passmark.py
+
+      - name: Check if file was created
+        run: |
+          test -f passmark-data.json || (echo "Scraper did not generate passmark-data.json" && exit 1)
+
+      - name: Save file to wwwroot/data
+        run: |
+          mkdir -p wwwroot/data
+          cp -f passmark-data.json wwwroot/data/passmark-data.json
+
+      - name: Commit and push to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wwwroot/data/passmark-data.json
+          git diff --cached --quiet || git commit -m "Update scraped data [bot]"
+          git push origin main
+
+      - name: Upload file for use in gh-pages job
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraped-data
+          path: passmark-data.json
+
+  scrape-gh-pages:
+    runs-on: ubuntu-latest
+    needs: scrape-main
+
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+
+      - name: Download scraped data
+        uses: actions/download-artifact@v4
+        with:
+          name: scraped-data
+
+      - name: Move file into data/
+        run: |
+          mkdir -p data
+          cp -f passmark-data.json data/passmark-data.json
+
+      - name: Commit and push to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/passmark-data.json
+          git diff --cached --quiet || git commit -m "Update scraped data [bot]"
+          git push origin gh-pages
