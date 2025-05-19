@@ -26,7 +26,11 @@ jobs:
       - name: Run scraper
         run: python ./scripts/scrape_passmark.py
 
-      - name: Save scraped data to wwwroot/data
+      - name: Check if file was created
+        run: |
+          test -f passmark-data.json || (echo "Scraper did not generate passmark-data.json" && exit 1)
+
+      - name: Save file to wwwroot/data
         run: |
           mkdir -p wwwroot/data
           cp -f passmark-data.json wwwroot/data/passmark-data.json
@@ -39,7 +43,7 @@ jobs:
           git diff --cached --quiet || git commit -m "Update scraped data [bot]"
           git push origin main
 
-      - name: Upload scraped data as artifact
+      - name: Upload file for use in gh-pages job
         uses: actions/upload-artifact@v3
         with:
           name: scraped-data
@@ -55,12 +59,12 @@ jobs:
         with:
           ref: gh-pages
 
-      - name: Download scraped data artifact
+      - name: Download scraped data
         uses: actions/download-artifact@v3
         with:
           name: scraped-data
 
-      - name: Save scraped data to data/
+      - name: Move file into data/
         run: |
           mkdir -p data
           cp -f passmark-data.json data/passmark-data.json
