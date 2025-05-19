@@ -9,7 +9,8 @@
         options.RequireInteraction = true;
         options.ShowCloseIcon = true;
         options.Action = "Update";
-        options.ActionColor = Color.Primary;
+        options.ActionColor = Color.Info;
+        options.SnackbarVariant = Variant.Outlined;
         options.OnClick = Snackbar =>
         {
             _newVersionAvailable = false;

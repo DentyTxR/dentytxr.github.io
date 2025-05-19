@@ -1,5 +1,16 @@
 [
   {
+    "Title": "1.9.98",
+    "New": [
+      "DxDiag tool",
+      "Playerlog and dxdiag tool will now compare the users hardware vs the min requirements"
+    ],
+    "Changes": [
+      "Updated update snackbar"
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "1.9.96",
     "New": [
       "New and first tool (playerlog tool)",
@@ -8,7 +19,7 @@
     "Changes": [
       "Navbar UI"
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "1.9.95",
