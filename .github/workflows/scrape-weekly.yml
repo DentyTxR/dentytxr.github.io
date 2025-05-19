@@ -44,7 +44,7 @@ jobs:
           git push origin main
 
       - name: Upload file for use in gh-pages job
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           name: scraped-data
           path: passmark-data.json
@@ -60,7 +60,7 @@ jobs:
           ref: gh-pages
 
       - name: Download scraped data
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4
         with:
           name: scraped-data
 
