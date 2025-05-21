@@ -1,3 +1,4 @@
+//I will never relearn javscript again, so im using a post i found
 // Import the assets manifest
 self.importScripts('./service-worker-assets.js');
 
@@ -7,7 +8,7 @@ const cacheName = `${cacheNamePrefix}${self.assetsManifest.version}`;
 
 // Include and exclude patterns for caching
 const offlineAssetsInclude = [/\.dll$/, /\.pdb$/, /\.wasm/, /\.html/, /\.js$/, /\.json$/, /\.css$/, /\.woff$/, /\.png$/, /\.jpe?g$/, /\.gif$/, /\.ico$/, /\.blat$/, /\.dat$/];
-const offlineAssetsExclude = [/^service-worker\.js$/];
+const offlineAssetsExclude = [/^service-worker\.js$/, /^data\/.*\.json$/];
 
 // Replace with your base path if hosting on a subfolder (e.g., "/<repository-name>/")
 const base = "/";
@@ -66,11 +67,21 @@ async function onActivate(event) {
 // Fetch handler
 async function onFetch(event) {
     const cache = await caches.open(cacheName);
+    const url = new URL(event.request.url);
+
+    if (url.pathname.startsWith('/data/') && url.pathname.endsWith('.json')) {
+        try {
+            return await fetch(event.request, { cache: 'no-store' });
+        } catch (error) {
+            const cached = await cache.match(event.request);
+            return cached || Promise.reject(error);
+        }
+    }
 
     if (event.request.method === 'GET') {
         // For navigation requests, serve index.html if not in the manifest
         const shouldServeIndexHtml = event.request.mode === 'navigate'
-            && !manifestUrlList.includes(event.request.url);
+            && !manifestUrlList.includes(url);
 
         const request = shouldServeIndexHtml ? 'index.html' : event.request;
 

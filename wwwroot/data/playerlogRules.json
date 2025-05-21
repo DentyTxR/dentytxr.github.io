@@ -135,13 +135,25 @@
     "0x887A0005": {
       "pattern": "\\[0x887A0005\\]",
       "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast.",
-      "order": 6,
+      "order": 5,
       "latest": false
     },
     "Steam client failed to initialize": {
       "pattern": "Steam client failed to initialize",
       "response": "Steam might not be running. solution is restarting Steam",
       "order": 6,
+      "latest": false
+    },
+    "MainMenuSoundtrackController": {
+      "pattern": "at\\s+MainMenuSoundtrackController\\.SetPreferredTheme\\s+\\(System\\.Boolean\\s+forcePlay\\)",
+      "response": "Users theme song is set to a custom song that no longer exists.",
+      "order": 7,
+      "latest": false
+    },
+    "Direct3D vsync broken": {
+      "pattern": "Direct3D: detected that vsync is broken",
+      "response": "Direct3D is reporting vsync as broken, this may causing FPS and choppy gameplay.",
+      "order": 8,
       "latest": false
     }
   }

@@ -30,13 +30,17 @@
 window.registerForUpdateAvailableNotification = (caller, methodName) => {
     window.updateAvailable.then(async isUpdateAvailable => {
         if (isUpdateAvailable) {
-            // Fetch version info
             try {
-                const response = await fetch('/data/version.json');
+                const response = await fetch(`/data/version.json?nocache=${Date.now()}`);
                 const data = await response.json();
 
-                // Trigger method with version info
-                caller.invokeMethodAsync(methodName, data.version, data.changes).then();
+                const previousVersion = localStorage.getItem('app-version');
+                if (data.version !== previousVersion) {
+                    localStorage.setItem('app-version', data.version);
+                    await caller.invokeMethodAsync(methodName, data.version, data.changes);
+                } else {
+                    console.info('Service worker updated, but app version did not change. Skipping notification.');
+                }
             } catch (error) {
                 console.error('Error fetching version info:', error);
             }

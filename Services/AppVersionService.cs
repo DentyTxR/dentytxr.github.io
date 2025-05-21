@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 
 namespace ghp_app.Services
 {
+    //need to clean/redo. scuffed asf
     public class AppVersionService
     {
         private readonly HttpClient _httpClient;
