@@ -1,5 +1,14 @@
 [
   {
+    "Title": "1.9.99",
+    "New": [
+    ],
+    "Changes": [
+      "Updated service worker to hopefully be better."
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "1.9.98",
     "New": [
       "DxDiag tool",
@@ -8,7 +17,7 @@
     "Changes": [
       "Updated update snackbar"
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "1.9.96",

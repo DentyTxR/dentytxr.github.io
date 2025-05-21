@@ -37,7 +37,7 @@
       "url": "data\/passmark-data.json"
     },
     {
-      "hash": "sha256-vcTHJvAUK85BTWnC89J3AH5Xwv4vfzyrFdE55t2jPSM=",
+      "hash": "sha256-kLvsmSVf8LPX943CtQPMMu0r8cT7DOaUSClfTGtnjfs=",
       "url": "data\/playerlogRules.json"
     },
     {
@@ -45,11 +45,11 @@
       "url": "data\/scpslMinHardware.json"
     },
     {
-      "hash": "sha256-sJk+BRP+kJRFKZDtcLfbYP+H4StFiywmMiK1V4sUyZw=",
+      "hash": "sha256-OFZpOTnxg6\/tPT3510R1Mv9zFXyvMSpODshl4fjUl1g=",
       "url": "data\/updates.json"
     },
     {
-      "hash": "sha256-7dF7Fk7nVhGyU0dfiDkCKNlUQeUjtr3D8Ftxd9uoo7c=",
+      "hash": "sha256-8avhdsXP6CIHzlTK\/QpBBpvq91yTo8qY6dSZMGWC2eM=",
       "url": "data\/version.json"
     },
     {
@@ -77,7 +77,7 @@
       "url": "manifest.webmanifest"
     },
     {
-      "hash": "sha256-\/KXxdfUgIdlNdzMbveFI0pF6wFgKVrjWK\/b7CEca76w=",
+      "hash": "sha256-Ng9Qu\/RaC7tH02ZynIkWLVdb6N9yGhk+WtnUrpQuez4=",
       "url": "sw-registrator.js"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-st\/t0Ds7VxcqcsuTag3oIR+Jthx0zb1vCi0oOUijMTY=",
+      "hash": "sha256-OjlC\/LCKXNFGzDLBiOl85NvtGfQG83NxafGt08pdZxA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -125,7 +125,7 @@
       "url": "_framework\/FuzzySharp.wasm"
     },
     {
-      "hash": "sha256-pvcDRIoyKHotm+STqyrWojQMfCvyYHSkAm0fWplkzsY=",
+      "hash": "sha256-ihGiAUG4V6GzalHTfjxoac+KhNnXizB1gFJT1xZTHdE=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -369,5 +369,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "qeb8EMAB"
+  "version": "xq2h9ouZ"
 };
