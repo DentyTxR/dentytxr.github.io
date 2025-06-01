@@ -1,12 +1,27 @@
 [
   {
+    "Title": "2.0.0",
+    "New": [
+      "Created loading component to be used throughout the whole app, and overlay over everything instead of body.",
+      "Added 'Raw' section to PL and dxdiag tool to see the raws.",
+      "Added 'page settings', this allows pages to have their own settings for the user. (this was a horrible implementation. i rly need to get better at c# and learn properly)"
+    ],
+    "Changes": [
+      "UI changes for active tools.",
+      "Reworked 'Errors' tab for PL tool, nice and cleaner.",
+      "Better naming stuff.",
+      "The codebase is getting worse and im already lost my mind looking at it, surely I will make it cleaner and better."
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "1.9.99",
     "New": [
     ],
     "Changes": [
       "Updated service worker to hopefully be better."
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "1.9.98",
@@ -27,37 +42,6 @@
     ],
     "Changes": [
       "Navbar UI"
-    ],
-    "LatestUpdate": false
-  },
-  {
-    "Title": "1.9.95",
-    "New": [
-      "Reworked Update Logs page"
-    ],
-    "Changes": [
-      "UI top margin is consistent between containers",
-      "Fixed some parts of UI looking bad on different screen sizes"
-    ],
-    "LatestUpdate": false
-  },
-  {
-    "Title": "1.9.9",
-    "New": [
-      "idek a lot"
-    ],
-    "Changes": [
-      "idek a lot"
-    ],
-    "LatestUpdate": false
-  },
-  {
-    "Title": "1.0.0",
-    "New": [
-      "who knows"
-    ],
-    "Changes": [
-      "i forgor"
     ],
     "LatestUpdate": false
   }

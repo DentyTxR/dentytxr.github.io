@@ -1,11 +1,11 @@
-:root {
-    --bg-color: #4b4b4b; /* Dark gray background */
-    --text-color: #e0e0e0; /* Light gray text */
-    --secondary-color: #3c3c3c; /* Slightly lighter gray for panels or cards */
-    --accent-color: #4caf50; /* Accent color (green, can be changed) */
-    --button-bg-color: #4c4c4c; /* Medium gray for buttons */
-    --button-text-color: #ffffff; /* White text on buttons */
-}
+/*:root {
+    --bg-color: #4b4b4b;*/ /* Dark gray background */
+/*--text-color: #e0e0e0;*/ /* Light gray text */
+/*--secondary-color: #3c3c3c;*/ /* Slightly lighter gray for panels or cards */
+/*--accent-color: #4caf50;*/ /* Accent color (green, can be changed) */
+/*--button-bg-color: #4c4c4c;*/ /* Medium gray for buttons */
+/*--button-text-color: #ffffff;*/ /* White text on buttons */
+/*}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -111,4 +111,4 @@ a, .btn-link {
 
 code {
     color: #c02d76;
-}
+}*/

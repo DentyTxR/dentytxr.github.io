@@ -110,49 +110,106 @@
   "Errors": {
     "Crash": {
       "pattern": "^Crash!!!$",
-      "response": "Users game crashed",
+      "response": "Game crash detected",
+      "solution": "User can try our genaric crash guide [here](https://techwiki.scpslgame.com/books/common-debugging-steps/page/resolving-crash-issues) or try reading the users crash.dmp.",
       "order": 1,
       "latest": false
     },
     "Output device error 60": {
       "pattern": "Error initializing output device.*\\(60\\)",
-      "response": "Sound mixer input error. Have game open, navigate to Sound Mixer Options in Windows and properly set SCPSL input/output",
+      "response": "Error initializing output device (60)",
+      "solution": "Sound mixer input error. Have game open, navigate to Sound Mixer Options in Windows and properly set SCPSL input/output to connect devices.",
       "order": 2,
       "latest": false
     },
     "Unsupported file or audio format": {
       "pattern": "Unsupported file or audio format",
-      "response": "User is using unsupported mic (such as array device)",
+      "response": "Unsupported file or audio format",
+      "solution": "User is using unsupported mic (such as array device). They need to use a virtual audio device such as VoiceMod to route their mic through, then use the virtual audio device in game.",
       "order": 3,
       "latest": false
     },
     "Microphone failed to start recording": {
       "pattern": "microphone '' failed to start recording",
-      "response": "https://techwiki.scpslgame.com/link/82#bkmrk-the-solution-to-this",
+      "response": "microphone '' failed to start recording",
+      "solution": "Read [this](https://techwiki.scpslgame.com/link/82#bkmrk-the-solution-to-this).",
       "order": 4,
       "latest": false
     },
     "0x887A0005": {
       "pattern": "\\[0x887A0005\\]",
-      "response": "corrupt GPU driver, unity bug or the users GPU is fucking toast.",
+      "response": " d3dxx Error [0x887A0005]",
+      "solution": "corrupt GPU driver, unity bug or the users GPU is fucking toast.",
       "order": 5,
       "latest": false
     },
     "Steam client failed to initialize": {
       "pattern": "Steam client failed to initialize",
-      "response": "Steam might not be running. solution is restarting Steam",
+      "response": "Steam client failed to initialize",
+      "solution": "Steam might not be running. solution is restarting Steam or clean reinstall of game.",
       "order": 6,
       "latest": false
     },
     "MainMenuSoundtrackController": {
       "pattern": "at\\s+MainMenuSoundtrackController\\.SetPreferredTheme\\s+\\(System\\.Boolean\\s+forcePlay\\)",
-      "response": "Users theme song is set to a custom song that no longer exists.",
+      "response": "MainMenuSoundtrackController.SetPreferredTheme exception",
+      "solution": "User has set theme song to a custom one which no longer exists, they need to select a existing one.",
       "order": 7,
       "latest": false
     },
     "Direct3D vsync broken": {
       "pattern": "Direct3D: detected that vsync is broken",
-      "response": "Direct3D is reporting vsync as broken, this may causing FPS and choppy gameplay.",
+      "response": "Direct3D: detected that vsync is broken",
+      "solution": "Direct3D is reporting vsync as broken, this may causing FPS and choppy gameplay.",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a0002": {
+      "pattern": "(?i)887a0002",
+      "response": "DXGI_ERROR_NOT_FOUND",
+      "solution": "Verify the GPU is properly connected, or restart PC.",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a0005": {
+      "pattern": "(?i)887a0005",
+      "response": "DXGI_ERROR_DEVICE_REMOVED",
+      "solution": "Driver crash or reset due to (for example) TDR (Timeout Detection Recovery). Try\n- updating or clean reinstalling GPU drivers \n- disabling GPU overclocking\n- GPU isoverheating\n- unstable is GPU\nThis can also be caused from a Unity bug, or the users GPU is cooked :skull:",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a0006": {
+      "pattern": "(?i)887a0006",
+      "response": "DXGI_ERROR_DEVICE_HUNG",
+      "solution": "GPU is unresponsive. This can happen due to:\n- GPU overload\n- GPU overheating\n- GPU resources issue\n- Driver issue (try update/clean reinstall)\n- Unstable overclock\n- GPU hardware issue",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a0007": {
+      "pattern": "(?i)887a0007",
+      "response": "DXGI_ERROR_DEVICE_RESET",
+      "solution": "The GPU was reset due to a timeout (common on laptops/integrated GPUs), this can happen due to:\n- GPU overload (too many tasks running)\n- GPU overheating\n- Game running in exclusive fullscreen (try windowed)",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a000c": {
+      "pattern": "(?i)887a000c",
+      "response": "DXGI_ERROR_DRIVER_INTERNAL_ERROR",
+      "solution": "GPU driver encountered a fatal internal error. Solutions:\n- Update drivers or clean reinstall\n- Rollback GPU drivers",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a0020": {
+      "pattern": "(?i)887a0020",
+      "response": "DXGI_ERROR_ACCESS_LOST",
+      "solution": "System lost access to the GPU. This can happen when switching users or using remote desktop while a game is running.",
+      "order": 8,
+      "latest": false
+    },
+    "Device removed reason 887a002b": {
+      "pattern": "(?i)887a002b",
+      "response": "DXGI_ERROR_DEVICE_REMOVED",
+      "solution": "This is 887A0005 but logged by unity.\nDriver crash or reset due to (for example) TDR (Timeout Detection Recovery).\nTry updating or clean reinstalling GPU drivers, disabling GPU overclocking, overheating GPU or unstable GPU. This can also be caused from a Unity bug, or the users GPU is cooked :skull:",
       "order": 8,
       "latest": false
     }
