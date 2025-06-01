@@ -1,7 +1,7 @@
 ﻿self.assetsManifest = {
   "assets": [
     {
-      "hash": "sha256-bJb44gepEr\/RZeKeMaBi2aywI5924NPJaNPIFPn+Pw8=",
+      "hash": "sha256-+nyoqONEPgc6+WnYtWcXUCrre5sf5hca\/sfNzMpsbJg=",
       "url": "404.html"
     },
     {
@@ -69,7 +69,7 @@
       "url": "img\/csharp.png"
     },
     {
-      "hash": "sha256-3KjY5sJ3\/8RablFCd2MXDX5HIQtbPJjz5\/I1qWP4hmI=",
+      "hash": "sha256-goDzVykBNOHA3LE3QVQxAhtLzlcNKAH18x2kPw8nMqM=",
       "url": "index.html"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-es8uIEU84KujPMuJbgVHqZmRbcmP\/cJi5rlF1khMe8A=",
+      "hash": "sha256-cpQFX0DAqNE+TsUCbHvM4F0P5dMtxxf71L7ej6O9HDw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -125,7 +125,7 @@
       "url": "_framework\/FuzzySharp.wasm"
     },
     {
-      "hash": "sha256-vKuyDejSgNQp3bcuZAmgKvjSPNIsDE8toaTRcl1Unm4=",
+      "hash": "sha256-zr4DwJcm6vIkOaRqaAIzyj0KIo+CukGiT\/I23R18mFs=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -369,5 +369,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "mrtmDhn5"
+  "version": "0yWfKFyE"
 };
