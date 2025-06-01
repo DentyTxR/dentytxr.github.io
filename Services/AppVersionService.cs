@@ -7,7 +7,7 @@ namespace ghp_app.Services
     public class AppVersionService
     {
         private readonly HttpClient _httpClient;
-        public AppVersionModel AppStateData { get; set; } = new();
+        public AppVersion AppStateData { get; set; } = new();
 
         public AppVersionService(HttpClient httpClient)
         {
@@ -16,7 +16,7 @@ namespace ghp_app.Services
 
         public async Task LoadAsync()
         {
-            var result = await _httpClient.GetFromJsonAsync<AppVersionModel>("./data/version.json");
+            var result = await _httpClient.GetFromJsonAsync<AppVersion>("./data/version.json");
             AppStateData = result;
         }
     }

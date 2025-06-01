@@ -1,27 +1,41 @@
 ﻿using Blazored.LocalStorage;
 using MudBlazor;
+using System.Text.Json;
 
 namespace ghp_app.Services
 {
     public class SettingsService
     {
         private readonly ILocalStorageService _localStorageService;
-        private const string _key = "Settings";
 
         public SettingsService(ILocalStorageService localStorageService)
         {
-            this._localStorageService = localStorageService;
+            _localStorageService = localStorageService;
         }
 
-        public async Task<Models.Storage> LoadSettingsAsync()
+        public async Task<T?> GetPageSettingsAsync<T>(string pageRoute)
         {
-            var settings = await _localStorageService.GetItemAsync<Models.Storage>(_key);
-            return settings ?? new Models.Storage();
+            return await _localStorageService.GetItemAsync<T>($"Settings:{pageRoute}");
+        }
+
+        public async Task SetPageSettingsAsync<T>(string pageRoute, T pageSettings)
+        {
+            await _localStorageService.SetItemAsync($"Settings:{pageRoute}", pageSettings);
+        }
+
+        public async Task<T?> GetGlobalSettingsAsync<T>()
+        {
+            return await _localStorageService.GetItemAsync<T>("Settings:Global");
+        }
+
+        public async Task SetGlobalSettingsAsync<T>(T globalSettings)
+        {
+            await _localStorageService.SetItemAsync("Settings:Global", globalSettings);
         }
 
         public async Task<MudTheme> GetThemeAsync()
         {
-            var settings = await LoadSettingsAsync();
+            var color = await _localStorageService.GetItemAsync<string>("Settings:Global:Color");
 
             var theme = new MudTheme
             {
@@ -34,12 +48,17 @@ namespace ghp_app.Services
                 PaletteDark = new PaletteDark()
             };
 
-            if (!string.IsNullOrWhiteSpace(settings.Color))
+            if (!string.IsNullOrWhiteSpace(color))
             {
-                theme.PaletteDark.Background = settings.Color;
+                theme.PaletteDark.Background = color;
             }
 
             return theme;
+        }
+
+        public async Task SetThemeColorAsync(string color)
+        {
+            await _localStorageService.SetItemAsync("Settings:Global:Color", color);
         }
     }
 }

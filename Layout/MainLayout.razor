@@ -2,8 +2,13 @@
 @inherits LayoutComponentBase
 @inject HttpClient Http
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 @inject IWebAssemblyHostEnvironment AppEnv
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject ghp_app.Services.PageSettingsProvider PageSettingsProvider
+@inject ghp_app.Services.SettingsService SettingsService
+@inject ghp_app.Services.LoadingService LoadingService
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider IsDarkMode="true" Theme="Theme" />
 <MudPopoverProvider />
@@ -11,10 +16,13 @@
 <MudSnackbarProvider />
 
 <UpdateAvailableDetector />
+<LoadingOverlay />
 
 <MudLayout>
     <MudAppBar Elevation="0" Dense="true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(DrawerToggle)" />
+        <MudSpacer/>
+        <MudButton  StartIcon="@Icons.Material.Filled.Settings" OnClick="ShowPageSettings" Color="Color.Primary" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen" Width="200px" ClipMode="DrawerClipMode.Docked">
         <MudDrawerHeader LinkToIndex>
@@ -30,7 +38,9 @@
     <MudMainContent>
         <ErrorBoundary @ref=errorBoundary>
             <ChildContent>
-                @Body
+                <CascadingValue Value="PageSettingsProvider.CurrentSettings">
+                    @Body
+                </CascadingValue>
             </ChildContent>
             <ErrorContent Context="Exception">
                 @{
@@ -61,5 +71,22 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private async Task ShowPageSettings()
+    {
+        var entries = PageSettingsProvider.CurrentSettings ?? new List<PageSettingEntry>();
+        var parameters = new DialogParameters
+    {
+        { "SettingEntries", entries },
+        { "OnSave", EventCallback.Factory.Create(this, SavePageSettingsFromLayout) }
+    };
+        await DialogService.ShowAsync<GlobalSettingsDialog>("Page Settings", parameters);
+    }
+
+    private async Task SavePageSettingsFromLayout()
+    {
+        if (PageSettingsProvider.SaveSettingsAction is not null)
+            await PageSettingsProvider.SaveSettingsAction();
     }
 }

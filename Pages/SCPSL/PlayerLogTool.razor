@@ -1,21 +1,14 @@
 ﻿@using System.Text.RegularExpressions;
 @using System.Text.Json.Serialization;
 @using System.Text.Json;
+@inherits SettingsPageBase<PlayerLogToolSettings>
+@page "/scpsl/playerlogtool"
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject HttpClient Http
 @inject IDialogService DialogService
 @inject ISnackbar SnackbarService
 
-@page "/scpsl/playerlogtool"
-
 <PageTitle>PlayerLog Tool</PageTitle>
-
-<MudOverlay @bind-Visible="isLoading" DarkBackground>
-    <MudContainer Style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-        <MudText Typo="Typo.h4">@LoadingMessage</MudText>
-        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate />
-    </MudContainer>
-</MudOverlay>
 
 <MudDialog @bind-Visible="_ruleDialogVisible" Options="dialogOptions">
     <TitleContent>
@@ -50,14 +43,13 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
     <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
-        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.5</MudText></MudText>
+        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.6</MudText></MudText>
         <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
-        <MudText Typo="Typo.body2">UI bad yes i know, i will try to make better :(</MudText>
     </MudStack>
 
     <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
-        <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.Sm">
-            <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept="txt">
+        <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.None">
+            <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept=".log">
                 <ActivatorContent>
                     <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
                         Browse...
@@ -72,46 +64,69 @@
             </MudButton>
         </MudStack>
 
-        <MudTabs Elevation="3" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Outlined="true" ApplyEffectsToContainer="true">
-            @foreach (var categoryGroup in compiledRules.GroupBy(r => r.Category))
+        <MudTabs Elevation="0" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Rounded>
+            @foreach (var categoryName in compiledRules.Where(c => c.Category != "Errors").Select(c => c.Category).Distinct())
             {
-                var categoryName = categoryGroup.Key;
+                var entries = logEntries
+                .Where(e => e.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(e => e.Order);
 
-                var entriesInCategory = logEntries
-                .Where(entry => entry.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(entry => entry.Order)
-                .ToList();
-
-                var entriesWithBadges = entriesInCategory
-                .Where(entry => !string.IsNullOrWhiteSpace(entry.BadgeText))
-                .ToList();
-
-                bool forceShowBadge = categoryName.Equals("Errors", StringComparison.OrdinalIgnoreCase);
-
-                string? badgeData = null;
-                Color badgeColor = Color.Success;
-
-                if (entriesWithBadges.Any())
-                {
-                    var firstBadge = entriesWithBadges.First();
-                    badgeData = firstBadge.BadgeText;
-                    badgeColor = firstBadge.BadgeColor;
-                }
-                else if (forceShowBadge)
-                {
-                    badgeData = "0";
-                    badgeColor = Color.Success;
-                }
-
-                <MudTabPanel Text="@categoryName" BadgeData="@badgeData" BadgeColor="@badgeColor">
-                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:300px; max-height: 500px; overflow-y:auto;">
-                        <MudText Typo="Typo.h6" Color="Color.Primary">@categoryName</MudText>
-                        @if (entriesInCategory.Any())
+                var badgeEntry = entries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                <MudTabPanel Text="@categoryName" BadgeData="@(badgeEntry?.BadgeText)" BadgeColor="@(badgeEntry?.BadgeColor ?? Color.Success)">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (entries.Any())
                         {
-                            foreach (var entry in entriesInCategory)
+                            foreach (var entry in entries)
                             {
-                                <MudText Class="pb-2"><MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response</MudText>
+                                <MudText Class="pb-2">
+                                    <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                </MudText>
                             }
+                        }
+                        else
+                        {
+                            <MudText>No entries for this category</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+            }            
+
+            @if (categoryLoaded)
+            {
+                var errorEntries = logEntries
+                .Where(e => e.Category.Equals("Errors", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(e => e.Order);
+                
+                var errorBadgeEntry = errorEntries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                var errorBadge = errorBadgeEntry?.BadgeText ?? (errorEntries.Any() ? "!" : "0");
+                var errorBadgeColor = errorBadgeEntry?.BadgeColor ?? (errorEntries.Any() ? Color.Error : Color.Success);
+        
+                <MudTabPanel Text="Errors" BadgeData="@errorBadge" BadgeColor="@errorBadgeColor">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (errorEntries.Any())
+                        {
+                            foreach (var entry in errorEntries)
+                            {
+                                <MudPaper Class="pa-3 my-2" Elevation="0">
+                                    <MudText Typo="Typo.h6" Color="Color.Error">@entry.Response</MudText>
+                                    <MudDivider Class="my-1" />
+                                    <MudText Typo="Typo.body1" Color="Color.Primary">Solution:</MudText>
+                                    <MudText Typo="Typo.subtitle2">@((MarkupString)entry.Solution)</MudText>
+                                </MudPaper>
+                            }
+                        }
+                        else
+                        {
+                            <MudText>No errors found in this log.</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Raw">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (!string.IsNullOrEmpty(uploadedFile))
+                        {
+                            <pre style="white-space: pre-wrap; word-break: break-all;">@uploadedFile</pre>
                         }
                         else
                         {
@@ -124,13 +139,13 @@
     </MudPaper>
 </MudContainer>
 
-
 @code {
     private class LogEntry //clean & found data
     {
+        public string Category { get; set; } = "Uncategorized";
         public string DisplayName { get; set; } = string.Empty;
         public string Response { get; set; } = string.Empty;
-        public string Category { get; set; } = "Uncategorized";
+        public string Solution { get; set; } = string.Empty;
         public int Order { get; set; } = 0;
         public Color HighlightText { get; set; } = Color.Primary;
         public string BadgeText { get; set; } = string.Empty;
@@ -141,7 +156,7 @@
     {
         public string Category { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
-        public PlayerLogRuleModel Rule { get; set; } = default!;
+        public PlayerLogRule Rule { get; set; } = default!;
         public Regex CompiledRegex { get; set; } = default!;
     }
 
@@ -161,37 +176,39 @@
         public string MinGpu { get; set; } = string.Empty;
     }
 
+    private string uploadedFile = string.Empty;
+
     private string minCpu = "";
     private string minGpu = "";
 
     private List<LogEntry> logEntries = new(); //actual cleaned
     private List<CompiledRule> compiledRules = new(); //preload
-    private Dictionary<string, Dictionary<string, PlayerLogRuleModel>> rules = new(); //raw
+    private Dictionary<string, Dictionary<string, PlayerLogRule>> rules = new(); //raw
     private Dictionary<string, int> cpuScores = new();
     private Dictionary<string, int> gpuScores = new();
 
     private string logUrl = "";
 
-    private bool isLoading = false;
-    private string LoadingMessage = "Loading...";
+    private bool categoryLoaded = false;
 
     private readonly DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Large };
     private bool _ruleDialogVisible = false;
 
     private void OpenRuleDialog() => _ruleDialogVisible = true;
     private void CloseRuleDialog() => _ruleDialogVisible = false;
-
+    
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+        
         try
         {
-            isLoading = true;
-            LoadingMessage = "Loading rules...";
+            LoadingService.Show("Loading rules...");
             await ShowLoading();
 
             var playerlogJson = await Http.GetStringAsync("data/playerlogRules.json");
 
-            rules = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRuleModel>>>(playerlogJson) ?? new();
+            rules = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRule>>>(playerlogJson) ?? new();
 
             compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
             {
@@ -201,38 +218,40 @@
                 CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
             })).ToList();
 
-            LoadingMessage = "Loading data...";
+            categoryLoaded = true;
+            LoadingService.Show("Loading data...");
             await ShowLoading();
-
-            var minReqJson = await Http.GetStringAsync("data/scpslMinHardware.json");
-            var passmarkJson = await Http.GetStringAsync("data/passmark-data.json");
-
-            LoadingMessage = "Deserializing data...";
-            await ShowLoading();
-
-            var minResults = JsonSerializer.Deserialize<MinRequirements>(minReqJson) ?? new();
-            minCpu = minResults.MinCpu ?? "";
-            minGpu = minResults.MinGpu ?? "";
-
-            var results = JsonSerializer.Deserialize<PassmarkData>(passmarkJson);
-            if (results != null)
+            
+            if (PageSettings.EnableHardwareCompare)
             {
-                cpuScores = results.Cpu ?? new Dictionary<string, int>();
-                gpuScores = results.Gpu ?? new Dictionary<string, int>();
+                var minReqJson = await Http.GetStringAsync("data/scpslMinHardware.json");
+                var passmarkJson = await Http.GetStringAsync("data/passmark-data.json");
+                
+                LoadingService.Show("Deserializing data...");
+                await ShowLoading();
+                
+                var minResults = JsonSerializer.Deserialize<MinRequirements>(minReqJson) ?? new();
+                minCpu = minResults.MinCpu ?? "";
+                minGpu = minResults.MinGpu ?? "";
+                
+                var results = JsonSerializer.Deserialize<PassmarkData>(passmarkJson);
+                if (results != null)
+                {
+                    cpuScores = results.Cpu ?? new Dictionary<string, int>();
+                    gpuScores = results.Gpu ?? new Dictionary<string, int>();
+                }
+                
+                LoadingService.Show("Warming up...");
+                await ShowLoading();
+                
+                Utils.CompareHardwareHelper.Prime(cpuScores, gpuScores);
             }
-
-            LoadingMessage = "Warming up...";
-            await ShowLoading();
-
-            Utils.CompareHardwareHelper.Prime(cpuScores, gpuScores);
         }
         catch (Exception ex)
         {
             ErrorService.ShowError(ex);
         }
-        isLoading = false;
-
-        LoadingMessage = "Loading...";
+        LoadingService.Hide();
         await ShowLoading();
     }
 
@@ -241,6 +260,18 @@
         await InvokeAsync(StateHasChanged);
         await Task.Delay(1);
     }
+
+    protected override string SettingsKey => "PlayerLogToolPage";
+
+    protected override List<PageSettingEntry> GetSettingEntries(PlayerLogToolSettings model) => new()
+    {
+        new PageSettingEntry
+        {
+            Title = "Hardware Comparison",
+            Description = "Should the uploaded hardware be compared to the min requirements of the game? (This is a PERFORMANCE BOOST when off)",
+            Editor = @<MudSwitch @bind-Value="model.EnableHardwareCompare" />
+        }
+    };
 
     private async Task UrlDialogPopup()
     {
@@ -270,7 +301,7 @@
     {
         if (string.IsNullOrWhiteSpace(logUrl)) return;
 
-        isLoading = true;
+        LoadingService.Show();
         StateHasChanged();
 
         try
@@ -283,7 +314,7 @@
             ErrorService.ShowError(ex);
         }
 
-        isLoading = false;
+        LoadingService.Hide();
         StateHasChanged();
     }
 
@@ -291,7 +322,7 @@
     {
         try
         {
-            isLoading = true;
+            LoadingService.Show();
             StateHasChanged();
 
             using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); //10mb
@@ -299,19 +330,22 @@
             var content = await reader.ReadToEndAsync();
 
             ProcessPlayerLogContent(content);
-            isLoading = false;
+            LoadingService.Hide();
             StateHasChanged();
         }
         catch (Exception ex)
         {
             ErrorService.ShowError(ex);
-            isLoading = false;
+            LoadingService.Hide();
         }
     }
 
     private void ProcessPlayerLogContent(string content)
     {
         logEntries.Clear();
+       
+        uploadedFile = content.ToString();
+       
         var lines = content.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         foreach (var rule in compiledRules)
@@ -331,32 +365,49 @@
 
             var entry = new LogEntry
             {
-                DisplayName = rule.DisplayName,
                 Category = rule.Category,
+                DisplayName = rule.DisplayName,
+                Solution = ConvertMarkdownToHtml(rule.Rule.Solution),
                 Order = rule.Rule.Order
             };
 
-            if (rule.DisplayName == "OS")
-                response = response.Replace("${status}", GetOsStatus(data));
-            else if (rule.DisplayName == "CPU")
+            switch (rule.DisplayName)
             {
-                response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
-                if (response.Contains("Below Minimum")) //kinda scuffed (like everything) might redo later
-                {
-                    entry.HighlightText = Color.Error;
-                    entry.BadgeText = "!";
-                    entry.BadgeColor = Color.Error;
-                }
-            }
-            else if (rule.DisplayName == "GPU")
-            {
-                response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
-                if (response.Contains("Below Minimum"))
-                {
-                    entry.HighlightText = Color.Error;
-                    entry.BadgeText = "!";
-                    entry.BadgeColor = Color.Error;
-                }
+                case "OS":
+                    response = response.Replace("${status}", GetOsStatus(data));
+                    break;
+                case "CPU":
+                    if (PageSettings.EnableHardwareCompare)
+                    {
+                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
+                        if (response.Contains("Below Minimum"))
+                        {
+                            entry.HighlightText = Color.Error;
+                            entry.BadgeText = "!";
+                            entry.BadgeColor = Color.Error;
+                        }
+                        break;
+                    } else 
+                    {
+                        response = response.Replace("${status}", string.Empty);
+                        break;
+                    }
+                case "GPU":
+                if(PageSettings.EnableHardwareCompare)
+                    {
+                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
+                        if (response.Contains("Below Minimum"))
+                        {
+                            entry.HighlightText = Color.Error;
+                            entry.BadgeText = "!";
+                            entry.BadgeColor = Color.Error;
+                        }
+                        break;
+                    }else 
+                    {
+                        response = response.Replace("${status}", string.Empty);
+                        break;
+                    }
             }
 
             if (rule.Category == "Errors")
@@ -371,7 +422,18 @@
             logEntries.Add(entry);
         }
     }
-
+  
+    private static string ConvertMarkdownToHtml(string? markdown)
+    {
+        if (string.IsNullOrEmpty(markdown))
+        return string.Empty;
+        
+        string html = Regex.Replace(markdown,@"\[(.*?)\]\((.*?)\)","<a href=\"$2\" target=\"_blank\" class=\"highlight-link\">$1</a>");
+        
+        html = html.Replace("\r\n", "<br />").Replace("\n", "<br />");
+        return html;
+    }
+    
     //hardcode hell below (soon, maybe)
     private string GetOsStatus(string osLine)
     {
@@ -381,3 +443,10 @@
             return $"[Unsupported] {osLine}";
     }
 }
+
+<style>
+    .highlight-link{
+        color: var(--mud-palette-primary);
+        text-decoration: underline;
+    }
+</style>

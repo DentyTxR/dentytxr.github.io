@@ -1,0 +1,20 @@
+﻿@inject LoadingService LoadingService
+
+<MudOverlay @bind-Visible="LoadingService.IsLoading" DarkBackground ZIndex="5000">
+    <MudContainer Style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <MudText Typo="Typo.h4">@LoadingService.Message</MudText>
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate />
+    </MudContainer>
+</MudOverlay>
+
+@code {
+    protected override void OnInitialized()
+    {
+        LoadingService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        LoadingService.OnChange -= StateHasChanged;
+    }
+}

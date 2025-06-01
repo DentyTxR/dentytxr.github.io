@@ -11,12 +11,13 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices().AddMudBlazorDialog();
-//builder.Services.AddMudExtensions();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddSingleton<AppUpdateService>();
 builder.Services.AddScoped<AppVersionService>();
-builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddSingleton<GlobalErrorService>();
+builder.Services.AddSingleton<LoadingService>();
+builder.Services.AddSingleton<PageSettingsProvider>();
 builder.Services.AddScoped<SettingsService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });

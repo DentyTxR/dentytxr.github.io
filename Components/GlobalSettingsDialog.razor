@@ -1,0 +1,55 @@
+﻿@using ghp_app.Models
+@using MudBlazor
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager NavigationManager
+
+<MudDialog>
+    <DialogContent>
+        @if (SettingEntries == null || SettingEntries.Count == 0)
+        {
+            <MudText>No settings for this page.</MudText>
+        }
+        else
+        {
+            <MudList T="string" ReadOnly>
+                @foreach (var entry in SettingEntries)
+                {
+                    <MudListItem>
+                        <MudText Typo="Typo.h6">@entry.Title</MudText>
+                        <MudText Typo="Typo.body2">@entry.Description</MudText>
+                        <div class="my-2">
+                            @entry.Editor
+                        </div>
+                    </MudListItem>
+                    <MudDivider />
+                }
+            </MudList>
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (SettingEntries?.Count > 0)
+        {
+            <MudButton OnClick="OnSaveClicked" Color="Color.Primary">Save</MudButton>
+        }
+        <MudButton OnClick="OnCancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [Parameter] public List<PageSettingEntry>? SettingEntries { get; set; }
+    [Parameter] public EventCallback OnSave { get; set; }
+
+    [CascadingParameter] private IMudDialogInstance MudDialogInstance { get; set; } = default!;
+
+    private async Task OnSaveClicked()
+    {
+        if (OnSave.HasDelegate)
+            await OnSave.InvokeAsync();
+
+        NavigationManager.Refresh(true);
+
+        MudDialogInstance.Close(DialogResult.Ok(true));
+    }
+
+    private void OnCancel() => MudDialogInstance.Cancel();
+}
