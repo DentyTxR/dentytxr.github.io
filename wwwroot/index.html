@@ -11,14 +11,14 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dentytxr.github.io">
     <meta property="og:title" content="Denty">
-    <meta property="og:description" content="A simple WebApp with tools to help users">
+    <meta property="og:description" content="A simple blazor webapp with tools.">
     <meta property="og:image" content="https://dentytxr.github.io/android-chrome-192x192.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://dentytxr.github.io">
     <meta property="twitter:title" content="Denty">
-    <meta property="twitter:description" content="A simple WebApp with tools to help users">
+    <meta property="twitter:description" content="A simple blazor webapp with tools.">
     <meta property="twitter:image" content="https://dentytxr.github.io/android-chrome-192x192.png">
 
     <!-- Optional Meta Tags -->
@@ -66,11 +66,11 @@
 
     <script>
         window.registerForUpdateAvailableNotification = (callback) => {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    callback();
-                });
-            }
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+        callback();
+        });
+        }
         };
     </script>
 

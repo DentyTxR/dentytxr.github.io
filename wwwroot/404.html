@@ -4,30 +4,50 @@
 <head>
     <!-- Primary Meta Tags -->
     <title>Denty</title>
-    <meta name="title" content="Denty" />
-    <meta name="description" content="My Portfolio" />
+    <meta name="title" content="Denty">
+    <meta name="description" content="A simple WebApp with tools to help users">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dentytxr.github.io">
+    <meta property="og:title" content="Denty">
+    <meta property="og:description" content="A simple blazor webapp with tools.">
+    <meta property="og:image" content="https://dentytxr.github.io/android-chrome-192x192.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://dentytxr.github.io">
+    <meta property="twitter:title" content="Denty">
+    <meta property="twitter:description" content="A simple blazor webapp with tools.">
+    <meta property="twitter:image" content="https://dentytxr.github.io/android-chrome-192x192.png">
+
+    <!-- Optional Meta Tags -->
+    <meta name="keywords" content="">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="5 days days">
+    <meta name="author" content="Denty">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <!-- PWA and Icons -->
     <link href="manifest.webmanifest" rel="manifest" />
-    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" href="favicon.ico" />
     <!-- Custom and Framework Styles -->
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
-    <link href="ghp-app.styles.css" rel="stylesheet" />
-    <!-- Simple View Tracking -->
-    <script data-goatcounter="https://031606.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
     <link href="css/Loading.css" rel="stylesheet" />
 </head>
 
 <body>
     <div id="app">
-        <div id="loading-screen" style="height:100%;width:100%;margin:0;position:fixed;background-color:rgba(26,26,39,1);">
-            <div style="display: flex;justify-content: center;align-items:center;height:100%;width:100%;">
+        <div id="loading-screen" style="height:100%; width:100%; margin:0; position:fixed; background-color:rgba(26,26,39,1)">
+            <div style="display: flex; justify-content: center; align-items:center; height:100%; width:100%">
                 <div style="color: snow">
                     <h1 style="font-family:Roboto">The application is loading...</h1>
                 </div>
@@ -41,7 +61,7 @@
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
+        <a class="dismiss">ðŸ—™</a>
     </div>
 
     <script>
@@ -54,6 +74,9 @@
         };
     </script>
 
+    <environment names="Development">
+        <script src="_framework/aspnetcore-browser-refresh.js"></script>
+    </environment>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="sw-registrator.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
