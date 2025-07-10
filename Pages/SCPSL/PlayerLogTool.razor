@@ -76,11 +76,21 @@
                     <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
                         @if (entries.Any())
                         {
-                            foreach (var entry in entries)
+                            @foreach (var entry in entries)
                             {
-                                <MudText Class="pb-2">
-                                    <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response
-                                </MudText>
+                                if (entry.DisplayName == "CPU" || entry.DisplayName == "GPU")
+                                {
+                                    <MudText Class="pb-2">
+                                        <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText>
+                                        <MudText Inline Color="entry.HighlightText">@entry.Response</MudText>
+                                    </MudText>
+                                }
+                                else
+                                {
+                                    <MudText Class="pb-2">
+                                        <MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                    </MudText>
+                                }
                             }
                         }
                         else
@@ -379,35 +389,39 @@
                 case "CPU":
                     if (PageSettings.EnableHardwareCompare)
                     {
-                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
-                        if (response.Contains("Below Minimum"))
-                        {
+                        var status = Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores);
+                        response = response.Replace("${status}", "");
+
+                        if (status.Contains("Below Minimum"))
                             entry.HighlightText = Color.Error;
-                            entry.BadgeText = "!";
-                            entry.BadgeColor = Color.Error;
-                        }
-                        break;
-                    } else 
+                        else if (status.Contains("Above Minimum"))
+                            entry.HighlightText = Color.Success;
+                        else
+                            entry.HighlightText = Color.Default;
+                    }
+                    else
                     {
                         response = response.Replace("${status}", string.Empty);
-                        break;
                     }
+                    break;
                 case "GPU":
-                if(PageSettings.EnableHardwareCompare)
+                    if (PageSettings.EnableHardwareCompare)
                     {
-                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
-                        if (response.Contains("Below Minimum"))
-                        {
+                        var status = Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores);
+                        response = response.Replace("${status}", "");
+
+                        if (status.Contains("Below Minimum"))
                             entry.HighlightText = Color.Error;
-                            entry.BadgeText = "!";
-                            entry.BadgeColor = Color.Error;
-                        }
-                        break;
-                    }else 
+                        else if (status.Contains("Above Minimum"))
+                            entry.HighlightText = Color.Success;
+                        else
+                            entry.HighlightText = Color.Default;
+                    }
+                    else
                     {
                         response = response.Replace("${status}", string.Empty);
-                        break;
                     }
+                    break;
             }
 
             if (rule.Category == "Errors")
