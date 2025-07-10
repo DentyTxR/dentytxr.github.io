@@ -45,8 +45,8 @@
                         {
                             foreach (var entry in entriesInCategory)
                             {
-                                <MudText Class="pb-2">
-                                    <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                <MudText Class="pb-2" Color="entry.HighlightText">
+                                    <b>@entry.DisplayName:</b> @entry.Response
                                 </MudText>
                             }
                         }
@@ -247,7 +247,7 @@
             Category = "System",
             DisplayName = "CPU",
             CompiledRegex = new Regex(@"Processor:\s+(.+)",  RegexOptions.IgnoreCase),
-            Response = "[${status}] ${data}",
+            Response = "${data}",
             Order = 1,
             Latest = false
         },
@@ -256,7 +256,7 @@
             Category = "System",
             DisplayName = "GPU",
             CompiledRegex = new Regex(@"Card name:\s+(.+)", RegexOptions.IgnoreCase),
-            Response = "[${status}] ${data}",
+            Response = "${data}",
             Order = 2,
             Latest = false
         }
@@ -364,38 +364,52 @@
                 case "OS":
                     response = response.Replace("${status}", GetOsStatus(data));
                     break;
+
                 case "CPU":
                     if (PageSettings.EnableHardwareCompare)
                     {
-                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores));
-                        if (response.Contains("Below Minimum"))
+                        var status = Utils.CompareHardwareHelper.CompareCpu(data, minCpu, cpuScores);
+                        response = response.Replace("${status}", status);
+
+                        if (status.Contains("Below Minimum"))
                         {
                             entry.HighlightText = Color.Error;
                             entry.BadgeText = "!";
                             entry.BadgeColor = Color.Error;
                         }
-                        break;
-                    } else 
-                    {
-                        response = response.Replace("${status}", string.Empty);
-                        break;
+                        else
+                        {
+                            entry.HighlightText = Color.Success;
+                        }
                     }
+                    else
+                    {
+                        response = response.Replace("${status}", "");
+                    }
+                    break;
+
                 case "GPU":
-                if(PageSettings.EnableHardwareCompare)
+                    if (PageSettings.EnableHardwareCompare)
                     {
-                        response = response.Replace("${status}", Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores));
-                        if (response.Contains("Below Minimum"))
+                        var status = Utils.CompareHardwareHelper.CompareGpu(data, minGpu, gpuScores);
+                        response = response.Replace("${status}", status);
+
+                        if (status.Contains("Below Minimum"))
                         {
                             entry.HighlightText = Color.Error;
                             entry.BadgeText = "!";
                             entry.BadgeColor = Color.Error;
                         }
-                        break;
-                    }else 
-                    {
-                        response = response.Replace("${status}", string.Empty);
-                        break;
+                        else
+                        {
+                            entry.HighlightText = Color.Success;
+                        }
                     }
+                    else
+                    {
+                        response = response.Replace("${status}", "");
+                    }
+                    break;
             }
 
             entry.Response = response;
@@ -482,10 +496,7 @@
                 };
 
             if (PageSettings.EnableHardwareCompare)
-                displayDevice.CardName = Utils.CompareHardwareHelper.CompareGpu(cardName, minGpu, gpuScores).ToString() + " " + cardName;
-            else
                 displayDevice.CardName = cardName;
-
             devices.Add(displayDevice);
         }
 
