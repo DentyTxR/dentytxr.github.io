@@ -7,6 +7,7 @@
 @inject HttpClient Http
 @inject IDialogService DialogService
 @inject ISnackbar SnackbarService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>PlayerLog Tool</PageTitle>
 
@@ -41,113 +42,124 @@
     </DialogActions>
 </MudDialog>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
-    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
-        <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.6</MudText></MudText>
-        <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
-    </MudStack>
+<!-- Drag overlay -->
+<div id="drag-overlay" class="drag-overlay @(_isDragOver ? "drag-overlay-visible" : "")">
+    <div class="drag-overlay-content">
+        <MudIcon Icon="@Icons.Material.Filled.CloudUpload" Style="font-size: 4rem;" Color="Color.Primary" />
+        <MudText Typo="Typo.h4" Color="Color.Primary">Drop your log file here</MudText>
+        <MudText Typo="Typo.body1">Only .log files are accepted</MudText>
+    </div>
+</div>
 
-    <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
-        <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.None">
-            <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept=".log">
-                <ActivatorContent>
-                    <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
-                        Browse...
-                    </MudButton>
-                </ActivatorContent>
-            </MudFileUpload>
-            <MudButton OnClick="UrlDialogPopup" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
-                Upload via URL
-            </MudButton>
-            <MudButton OnClick="OpenRuleDialog" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
-                View rules
-            </MudButton>
+<div id="page-content">
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+        <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+            <MudText Typo="Typo.h4">PlayerLog Filter <MudText Inline Typo="Typo.h4" Color="Color.Primary">Beta 0.6</MudText></MudText>
+            <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
         </MudStack>
 
-        <MudTabs Elevation="0" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Rounded>
-            @foreach (var categoryName in compiledRules.Where(c => c.Category != "Errors").Select(c => c.Category).Distinct())
-            {
-                var entries = logEntries
-                .Where(e => e.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
-                .OrderBy(e => e.Order);
+        <MudPaper Elevation="1" Class="mt-2 pa-4" Square>
+            <MudStack Class="justify-center gap-5 pb-2" Row Breakpoint="Breakpoint.None">
+                <MudFileUpload T="IBrowserFile" FilesChanged="HandleManualUpload" Accept=".log">
+                    <ActivatorContent>
+                        <MudButton Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                            Browse...
+                        </MudButton>
+                    </ActivatorContent>
+                </MudFileUpload>
+                <MudButton OnClick="UrlDialogPopup" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                    Upload via URL
+                </MudButton>
+                <MudButton OnClick="OpenRuleDialog" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Upload">
+                    View rules
+                </MudButton>
+            </MudStack>
 
-                var badgeEntry = entries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
-                <MudTabPanel Text="@categoryName" BadgeData="@(badgeEntry?.BadgeText)" BadgeColor="@(badgeEntry?.BadgeColor ?? Color.Success)">
-                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
-                        @if (entries.Any())
-                        {
-                            @foreach (var entry in entries)
+            <MudTabs Elevation="0" Color="Color.Dark" PanelClass="mud-theme-dark" Border="true" Rounded>
+                @foreach (var categoryName in compiledRules.Where(c => c.Category != "Errors").Select(c => c.Category).Distinct())
+                {
+                    var entries = logEntries
+                    .Where(e => e.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(e => e.Order);
+
+                    var badgeEntry = entries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                    <MudTabPanel Text="@categoryName" BadgeData="@(badgeEntry?.BadgeText)" BadgeColor="@(badgeEntry?.BadgeColor ?? Color.Success)">
+                        <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                            @if (entries.Any())
                             {
-                                if (entry.DisplayName == "CPU" || entry.DisplayName == "GPU")
+                                @foreach (var entry in entries)
                                 {
-                                    <MudText Class="pb-2">
-                                        <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText>
-                                        <MudText Inline Color="entry.HighlightText">@entry.Response</MudText>
-                                    </MudText>
-                                }
-                                else
-                                {
-                                    <MudText Class="pb-2">
-                                        <MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response
-                                    </MudText>
+                                    if (entry.DisplayName == "CPU" || entry.DisplayName == "GPU")
+                                    {
+                                        <MudText Class="pb-2">
+                                            <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText>
+                                            <MudText Inline Color="entry.HighlightText">@entry.Response</MudText>
+                                        </MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText Class="pb-2">
+                                            <MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                        </MudText>
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            <MudText>No entries for this category</MudText>
-                        }
-                    </div>
-                </MudTabPanel>
-            }            
-
-            @if (categoryLoaded)
-            {
-                var errorEntries = logEntries
-                .Where(e => e.Category.Equals("Errors", StringComparison.OrdinalIgnoreCase))
-                .OrderBy(e => e.Order);
-                
-                var errorBadgeEntry = errorEntries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
-                var errorBadge = errorBadgeEntry?.BadgeText ?? (errorEntries.Any() ? "!" : "0");
-                var errorBadgeColor = errorBadgeEntry?.BadgeColor ?? (errorEntries.Any() ? Color.Error : Color.Success);
-        
-                <MudTabPanel Text="Errors" BadgeData="@errorBadge" BadgeColor="@errorBadgeColor">
-                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
-                        @if (errorEntries.Any())
-                        {
-                            foreach (var entry in errorEntries)
+                            else
                             {
-                                <MudPaper Class="pa-3 my-2" Elevation="0">
-                                    <MudText Typo="Typo.h6" Color="Color.Error">@entry.Response</MudText>
-                                    <MudDivider Class="my-1" />
-                                    <MudText Typo="Typo.body1" Color="Color.Primary">Solution:</MudText>
-                                    <MudText Typo="Typo.subtitle2">@((MarkupString)entry.Solution)</MudText>
-                                </MudPaper>
+                                <MudText>No entries for this category</MudText>
                             }
-                        }
-                        else
-                        {
-                            <MudText>No errors found in this log.</MudText>
-                        }
-                    </div>
-                </MudTabPanel>
+                        </div>
+                    </MudTabPanel>
+                }            
 
-                <MudTabPanel Text="Raw">
-                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
-                        @if (!string.IsNullOrEmpty(uploadedFile))
-                        {
-                            <pre style="white-space: pre-wrap; word-break: break-all;">@uploadedFile</pre>
-                        }
-                        else
-                        {
-                            <MudText>No entries for this category</MudText>
-                        }
-                    </div>
-                </MudTabPanel>
-            }
-        </MudTabs>
-    </MudPaper>
-</MudContainer>
+                @if (categoryLoaded)
+                {
+                    var errorEntries = logEntries
+                    .Where(e => e.Category.Equals("Errors", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(e => e.Order);
+                    
+                    var errorBadgeEntry = errorEntries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                    var errorBadge = errorBadgeEntry?.BadgeText ?? (errorEntries.Any() ? "!" : "0");
+                    var errorBadgeColor = errorBadgeEntry?.BadgeColor ?? (errorEntries.Any() ? Color.Error : Color.Success);
+            
+                    <MudTabPanel Text="Errors" BadgeData="@errorBadge" BadgeColor="@errorBadgeColor">
+                        <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                            @if (errorEntries.Any())
+                            {
+                                foreach (var entry in errorEntries)
+                                {
+                                    <MudPaper Class="pa-3 my-2" Elevation="0">
+                                        <MudText Typo="Typo.h6" Color="Color.Error">@entry.Response</MudText>
+                                        <MudDivider Class="my-1" />
+                                        <MudText Typo="Typo.body1" Color="Color.Primary">Solution:</MudText>
+                                        <MudText Typo="Typo.subtitle2">@((MarkupString)entry.Solution)</MudText>
+                                    </MudPaper>
+                                }
+                            }
+                            else
+                            {
+                                <MudText>No errors found in this log.</MudText>
+                            }
+                        </div>
+                    </MudTabPanel>
+
+                    <MudTabPanel Text="Raw">
+                        <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                            @if (!string.IsNullOrEmpty(uploadedFile))
+                            {
+                                <pre style="white-space: pre-wrap; word-break: break-all;">@uploadedFile</pre>
+                            }
+                            else
+                            {
+                                <MudText>No entries for this category</MudText>
+                            }
+                        </div>
+                    </MudTabPanel>
+                }
+            </MudTabs>
+        </MudPaper>
+    </MudContainer>
+</div>
 
 @code {
     private class LogEntry //clean & found data
@@ -200,6 +212,7 @@
     private string logUrl = "";
 
     private bool categoryLoaded = false;
+    private bool _isDragOver = false;
 
     private readonly DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Large };
     private bool _ruleDialogVisible = false;
@@ -263,6 +276,71 @@
         }
         LoadingService.Hide();
         await ShowLoading();
+        
+        // Initialize drag and drop
+        await InitializeDragAndDrop();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitializeDragAndDrop();
+        }
+    }
+
+    private async Task InitializeDragAndDrop()
+    {
+        var dotNetRef = DotNetObjectReference.Create(this);
+        await JSRuntime.InvokeVoidAsync("initializeDragAndDrop", dotNetRef);
+    }
+
+    [JSInvokable]
+    public async Task HandleFileDrop(string fileName, string base64Content)
+    {
+        try
+        {
+            _isDragOver = false;
+            StateHasChanged();
+
+            if (!fileName.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
+            {
+                SnackbarService.Add("Only .log files are accepted", Severity.Warning);
+                return;
+            }
+
+            LoadingService.Show();
+            StateHasChanged();
+
+            var bytes = Convert.FromBase64String(base64Content);
+            var content = System.Text.Encoding.UTF8.GetString(bytes);
+
+            ProcessPlayerLogContent(content);
+            SnackbarService.Add($"File '{fileName}' processed successfully", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ShowError(ex);
+        }
+        finally
+        {
+            LoadingService.Hide();
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void HandleDragEnter()
+    {
+        _isDragOver = true;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void HandleDragLeave()
+    {
+        _isDragOver = false;
+        StateHasChanged();
     }
 
     private async Task ShowLoading()
@@ -448,7 +526,6 @@
         return html;
     }
     
-    //hardcode hell below (soon, maybe)
     private string GetOsStatus(string osLine)
     {
         if (osLine.Contains("Windows 10", StringComparison.OrdinalIgnoreCase) || osLine.Contains("Windows 11", StringComparison.OrdinalIgnoreCase))
@@ -463,4 +540,98 @@
         color: var(--mud-palette-primary);
         text-decoration: underline;
     }
+
+    .drag-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: none;
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+
+    .drag-overlay-visible {
+        display: flex !important;
+    }
+
+    .drag-overlay-content {
+        text-align: center;
+        padding: 2rem;
+        border: 2px dashed var(--mud-palette-primary);
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
 </style>
+
+<script>
+    window.initializeDragAndDrop = (dotNetRef) => {
+        let dragCounter = 0;
+
+        const handleDragEnter = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter++;
+            
+            if (dragCounter === 1) {
+                dotNetRef.invokeMethodAsync('HandleDragEnter');
+            }
+        };
+
+        const handleDragLeave = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter--;
+            
+            if (dragCounter === 0) {
+                dotNetRef.invokeMethodAsync('HandleDragLeave');
+            }
+        };
+
+        const handleDragOver = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+
+        const handleDrop = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter = 0;
+            
+            dotNetRef.invokeMethodAsync('HandleDragLeave');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                
+                if (!file.name.toLowerCase().endsWith('.log')) {
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64Content = btoa(event.target.result);
+                    dotNetRef.invokeMethodAsync('HandleFileDrop', file.name, base64Content);
+                };
+                reader.readAsBinaryString(file);
+            }
+        };
+
+        document.addEventListener('dragenter', handleDragEnter);
+        document.addEventListener('dragleave', handleDragLeave);
+        document.addEventListener('dragover', handleDragOver);
+        document.addEventListener('drop', handleDrop);
+        
+        window.dragDropCleanup = () => {
+            document.removeEventListener('dragenter', handleDragEnter);
+            document.removeEventListener('dragleave', handleDragLeave);
+            document.removeEventListener('dragover', handleDragOver);
+            document.removeEventListener('drop', handleDrop);
+        };
+    };
+</script>
