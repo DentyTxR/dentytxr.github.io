@@ -413,7 +413,7 @@
             LoadingService.Show();
             StateHasChanged();
 
-            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); //10mb
+            using var stream = file.OpenReadStream(maxAllowedSize: 200 * 1024 * 1024); //200mb
             using var reader = new StreamReader(stream);
             var content = await reader.ReadToEndAsync();
 
