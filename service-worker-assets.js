@@ -49,7 +49,7 @@
       "url": "data\/updates.json"
     },
     {
-      "hash": "sha256-MBC7fDawmJr5GtIWf57W+E7tDpMN6Si4Pb12mOT9P1s=",
+      "hash": "sha256-vApibv\/MwBL+pVbLIyEHSAtfuXjnxQEYdFzTcypmPNc=",
       "url": "data\/version.json"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-\/VcFJ2LzcDAhooEydTUlAzB05EBtn5VECMeyJehswTY=",
+      "hash": "sha256-YgHZm8MbByX0rRtfpX5VRwqkc7\/scc7o8L1cZe4JXVM=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -125,7 +125,7 @@
       "url": "_framework\/FuzzySharp.wasm"
     },
     {
-      "hash": "sha256-L15r8Qr6viZzSFMvKVrX5CrHpEy6X9\/RGiHRaATy7yg=",
+      "hash": "sha256-ZEbsh0Keo3nCEyp\/nGcyZNdTBnpgE03YhdLtoiZzupg=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -369,5 +369,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "WRlc8h8s"
+  "version": "Ye2ZxAGy"
 };
