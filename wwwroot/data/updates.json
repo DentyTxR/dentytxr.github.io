@@ -1,4 +1,13 @@
 [
+    {
+    "Title": "2.0.1",
+    "New": [
+    ],
+    "Changes": [
+      "Changed upload file size limit for playerlog tool to 200MB, this is for manual upload only, URL still has an limit due to CROS API."
+    ],
+    "LatestUpdate": true
+  },
   {
     "Title": "2.0.0",
     "New": [
