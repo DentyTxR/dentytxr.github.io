@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ghp_app.Models
+namespace ghp_app.Pages.SCPSL.Models
 {
     public class PlayerLogRule
     {
@@ -11,7 +11,7 @@ namespace ghp_app.Models
         public string Response { get; set; } = string.Empty;
 
         [JsonPropertyName("solution")]
-        public string? Solution { get; set; }
+        public string Solution { get; set; } = string.Empty;
 
         [JsonPropertyName("order")]
         public int Order { get; set; } = 0;

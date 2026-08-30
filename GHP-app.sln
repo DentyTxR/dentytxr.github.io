@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.002.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12112.369
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ghp-app", "ghp-app.csproj", "{D068653C-64A3-4C67-9C2F-B5FBDEF96B58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ghp_app", "ghp_app.csproj", "{D068653C-64A3-4C67-9C2F-B5FBDEF96B58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

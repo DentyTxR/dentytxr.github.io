@@ -1,6 +1,7 @@
 ﻿using ghp_app.Models;
+using ghp_app.Pages.SCPSL.Models;
 
-namespace ghp_app.Pages.SCPSL
+namespace ghp_app.Pages.SCPSL.PlayerLogTool
 {
     public class PlayerLogToolSettings
     {

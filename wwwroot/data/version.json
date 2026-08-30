@@ -1,5 +1,5 @@
 ﻿{
-  "version": "2.0.1",
-  "changes": "Increased manual upload limit for playerlog tool",
-  "date": "10/29/2025"
+  "version": "2.1.0",
+  "changes": "Updated playerlogtool, WIP discord auth, im back to working on this project :)",
+  "date": "8/29/2026"
 }

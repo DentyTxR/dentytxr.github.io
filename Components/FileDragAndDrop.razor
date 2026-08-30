@@ -1,0 +1,67 @@
+﻿﻿﻿<MudFileUpload DragAndDrop
+                T="IBrowserFile"
+                FilesChanged="OnFileUploaded"
+                Accept="@AllowedFileType"
+                @bind-Dragging="@_dragging"
+                @bind-Dragging:after="@ClearDragClass">
+
+    <SelectedTemplate>
+        <MudHidden />
+    </SelectedTemplate>
+
+    <CustomContent>
+        <MudPaper
+                  Outlined="true"
+                  @onclick="@context.OpenFilePickerAsync"
+                  @ondragenter="@SetDragClass"
+                  Class="@_dragClass">
+
+            <MudIcon Icon="@Icons.Material.Filled.CloudUpload" Size="Size.Large" Class="mb-2" />
+
+            <MudText Typo="Typo.subtitle1">
+                Drag & drop your
+                <MudText Typo="Typo.subtitle1" Inline Color="Color.Error">@AllowedFileType</MudText>
+                file here
+            </MudText>
+
+            <MudText Typo="Typo.caption" Class="mb-3">
+                or click to browse
+            </MudText>
+
+            <MudButton OnClick="@context.OpenFilePickerAsync"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Upload">
+                Browse Files
+            </MudButton>
+        </MudPaper>
+    </CustomContent>
+</MudFileUpload>
+
+@code {
+    [Parameter]
+    public EventCallback<IBrowserFile> OnFileUploaded { get; set; }
+
+    [Parameter]
+    [EditorRequired]
+    public string AllowedFileType { get; set; }
+
+    private const string DefaultDragClass = "relative d-flex flex-column p-r gap-2 rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full align-center";
+
+    private string _dragClass = DefaultDragClass;
+    private bool _dragging = false;
+
+    private void SetDragClass()
+    {
+        _dragClass = $"{DefaultDragClass} mud-border-success";
+        _dragging = true;
+    }
+
+    private void ClearDragClass()
+    {
+        if (!_dragging)
+        {
+            _dragClass = DefaultDragClass;
+        }
+    }
+}

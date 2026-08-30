@@ -7,15 +7,16 @@
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
     <MudText Typo="Typo.h3">Update Logs</MudText>
-    <MudDivider />
-    <MudDivider />
+
+    <MudDivider Class="my-4" />
 
     @foreach (var update in updates)
     {
         <UpdatesEntry LatestUpdate="update.LatestUpdate"
                       Title="@(update.Title)"
                       New="update.New"
-                      Changes="update.Changes" />
+                      Changes="update.Changes"
+                      Issues="update.Issues" />
 
     }
 </MudContainer>
@@ -37,6 +38,9 @@
         public required string Title { get; set; }
         public required List<string> New { get; set; }
         public required List<string> Changes { get; set; }
+      
+        public List<string> Issues { get; set; } = new();
+        
         public required bool LatestUpdate { get; set; }
     }
 }

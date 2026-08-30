@@ -8,15 +8,16 @@ namespace ghp_app.Utils
         public static bool Debug { get; set; } = false;
 
         private static readonly Dictionary<string, int?> _scoreCache = new();
-        private static Dictionary<string, HashSet<string>>? _cpuTokenIndex;
-        private static Dictionary<string, HashSet<string>>? _gpuTokenIndex;
+        private static readonly Dictionary<string, string> _normalizeCache = new();
+        private static Dictionary<string, HashSet<string>> _cpuTokenIndex;
+        private static Dictionary<string, HashSet<string>> _gpuTokenIndex;
 
         private static Dictionary<string, HashSet<string>> BuildTokenIndex(IEnumerable<string> keys)
         {
             var index = new Dictionary<string, HashSet<string>>();
             foreach (var key in keys)
             {
-                foreach (var token in Normalize(key).Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                foreach (var token in NormalizeWithCache(key).Split(' ', StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!index.TryGetValue(token, out var set))
                         index[token] = set = new HashSet<string>();
@@ -46,19 +47,19 @@ namespace ghp_app.Utils
             }
         }
 
-        public static string CompareCpu(string userCpu, string minCpu, Dictionary<string, int> cpuScores)
+        public static string CompareCpu(string userCpu, string minCpu, Dictionary<string, int> cpuScores, bool removeScores)
         {
             EnsureTokenIndex(cpuScores, isCpu: true);
-            return CompareHardware(userCpu, minCpu, cpuScores, _cpuTokenIndex!, "CPU");
+            return CompareHardware(userCpu, minCpu, cpuScores, _cpuTokenIndex!, "CPU", removeScores);
         }
 
-        public static string CompareGpu(string userGpu, string minGpu, Dictionary<string, int> gpuScores)
+        public static string CompareGpu(string userGpu, string minGpu, Dictionary<string, int> gpuScores, bool removeScores)
         {
             EnsureTokenIndex(gpuScores, isCpu: false);
-            return CompareHardware(userGpu, minGpu, gpuScores, _gpuTokenIndex!, "GPU");
+            return CompareHardware(userGpu, minGpu, gpuScores, _gpuTokenIndex!, "GPU", removeScores);
         }
 
-        private static string CompareHardware(string user, string min, Dictionary<string, int> scores, Dictionary<string, HashSet<string>> tokenIndex, string type)
+        private static string CompareHardware(string user, string min, Dictionary<string, int> scores, Dictionary<string, HashSet<string>> tokenIndex, string type, bool removeScores)
         {
             int? userScore = FindScore(user, scores, tokenIndex, type, "User");
             int? minScore = FindScore(min, scores, tokenIndex, type, "Minimum");
@@ -66,7 +67,20 @@ namespace ghp_app.Utils
             if (userScore == null || minScore == null)
                 return "[Unknown]";
 
-            return userScore >= minScore ? $"[Above Minimum]({minScore} <= {userScore})" : $"[Below Minimum]({minScore} <= {userScore})";
+            if (removeScores)
+                return userScore >= minScore ? $"[Above Minimum]" : $"[Below Minimum]";
+            else
+                return userScore >= minScore ? $"[Above Minimum]({minScore} <= {userScore})" : $"[Below Minimum]({minScore} <= {userScore})";
+        }
+
+        private static string NormalizeWithCache(string input)
+        {
+            if (_normalizeCache.TryGetValue(input, out var cached))
+                return cached;
+
+            var normalized = Normalize(input);
+            _normalizeCache[input] = normalized;
+            return normalized;
         }
 
         private static int? FindScore(string name, Dictionary<string, int> scores, Dictionary<string, HashSet<string>> tokenIndex, string type, string label)
@@ -74,13 +88,16 @@ namespace ghp_app.Utils
             if (string.IsNullOrWhiteSpace(name) || scores == null || scores.Count == 0)
                 return null;
 
-            var normalizedName = Normalize(name);
+            var normalizedName = NormalizeWithCache(name);
+
+            if (string.IsNullOrEmpty(normalizedName))
+                return null;
 
             if (_scoreCache.TryGetValue(normalizedName, out var cached))
                 return cached;
 
             // 1. Exact match (normalized)
-            var exact = scores.Keys.FirstOrDefault(k => Normalize(k) == normalizedName);
+            var exact = scores.Keys.FirstOrDefault(k => NormalizeWithCache(k) == normalizedName);
             if (exact != null)
             {
                 if (Debug)
@@ -91,7 +108,7 @@ namespace ghp_app.Utils
 
             // 2. Prefix or substring match (normalized)
             var substring = scores.Keys
-                .FirstOrDefault(k => Normalize(k).StartsWith(normalizedName) || normalizedName.StartsWith(Normalize(k)));
+                .FirstOrDefault(k => NormalizeWithCache(k).StartsWith(normalizedName) || normalizedName.StartsWith(NormalizeWithCache(k)));
             if (substring != null)
             {
                 if (Debug)
@@ -107,16 +124,19 @@ namespace ghp_app.Utils
                 var modelNumber = modelMatch.Groups[1].Value;
                 // Find all PassMark keys with the same model number
                 var modelCandidates = scores.Keys
-                    .Where(k => Regex.IsMatch(Normalize(k), $@"\b{modelNumber}\b"))
+                    .Where(k => Regex.IsMatch(NormalizeWithCache(k), $@"\b{modelNumber}\b"))
                     .ToList();
 
                 if (modelCandidates.Count > 0)
                 {
                     // Prefer those with the most tokens in common
                     var bestModel = modelCandidates
-                        .OrderByDescending(k => TokenOverlap(Normalize(k), normalizedName))
-                        .ThenByDescending(k => Normalize(k).Contains("rtx") ? 1 : 0)
-                        .First();
+                        .OrderByDescending(k => TokenOverlap(NormalizeWithCache(k), normalizedName))
+                        .ThenByDescending(k => NormalizeWithCache(k).Contains("rtx") ? 1 : 0)
+                        .FirstOrDefault();
+
+                    if (bestModel == null)
+                        return (int?)0.0;
 
                     if (Debug)
                         Console.WriteLine($"[{type}][{label}] Model number match: \"{name}\" -> \"{bestModel}\"");
@@ -141,8 +161,8 @@ namespace ghp_app.Utils
                 {
                     Key = key,
                     Score = Math.Max(
-                        Fuzz.TokenSetRatio(Normalize(key), normalizedName),
-                        Fuzz.PartialRatio(Normalize(key), normalizedName)
+                        Fuzz.TokenSetRatio(NormalizeWithCache(key), normalizedName),
+                        Fuzz.PartialRatio(NormalizeWithCache(key), normalizedName)
                     )
                 })
                 .OrderByDescending(x => x.Score)

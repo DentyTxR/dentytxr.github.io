@@ -1,4 +1,4 @@
-﻿namespace ghp_app.Pages.SCPSL
+﻿namespace ghp_app.Pages.SCPSL.DxdiagTool
 {
     public class DxdiagToolSettings
     {

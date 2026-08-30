@@ -3,6 +3,7 @@ using ghp_app;
 using ghp_app.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -20,6 +21,20 @@ builder.Services.AddSingleton<LoadingService>();
 builder.Services.AddSingleton<PageSettingsProvider>();
 builder.Services.AddScoped<SettingsService>();
 
+builder.Services.AddScoped<DiscordUserService>();
+
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+
+var discordService = host.Services.GetRequiredService<DiscordUserService>();
+
+try
+{
+    await discordService.GetUserInfoAsync();
+}
+catch (Exception ex)
+{
+}
+
+await host.RunAsync();

@@ -1,0 +1,477 @@
+﻿@using System.Text.RegularExpressions;
+@using System.Text.Json.Serialization;
+@using System.Text.Json;
+@using Microsoft.AspNetCore.Components.Forms;
+
+@inherits SettingsPageBase<PlayerLogToolSettings>
+@page "/scpsl/playerlogtool"
+
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject HttpClient Http
+@inject IDialogService DialogService
+@inject ISnackbar SnackbarService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>PlayerLog Tool</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center">
+        <MudText Typo="Typo.h4">PlayerLog Filter Tool</MudText>
+        <MudText Typo="Typo.body1">A simple tool to filter out data from a playerlog.</MudText>
+    </MudStack>
+
+    <MudPaper Elevation="1" Class="mt-2" Square>
+
+
+        @if (LoadingService.IsLoading && !RulesLoaded)
+        {
+            <MudStack Spacing="4">
+                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="400px" Animation="Animation.Pulse"/>
+            </MudStack>
+        }
+        else if (!RulesLoaded)
+        {
+            <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-height: 400px;" Spacing="3">
+                <MudIcon Icon="@Icons.Material.Filled.Rule" Size="Size.Large" Color="Color.Primary" Style="font-size: 4rem;" />
+                <MudText Typo="Typo.h5">No Rules Loaded</MudText>
+                <MudText Typo="Typo.body1" Color="Color.Secondary" Class="mb-4">
+                    Upload a JSON file that contains rules to filter the playerlog file.
+                </MudText>
+
+                <MudFileUpload T="IBrowserFile"
+                               @ref="rulesFileUpload"
+                               OnFilesChanged="@OnRulesFilesChanged"
+                               Accept=".json"
+                               Hidden="true">
+
+                    <CustomContent>
+                        <MudButton OnClick="@(async () => await context.OpenFilePickerAsync())"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   Variant="Variant.Filled"
+                                   Size="Size.Large"
+                                   Color="Color.Primary">
+                            Upload JSON Rules
+                        </MudButton>
+                    </CustomContent>
+                </MudFileUpload>
+            </MudStack>
+        }
+        else
+        {
+            <MudDivider Class="my-6" />
+
+            <FileDragAndDrop OnFileUploaded="HandleManualUpload" AllowedFileType=".log" />
+
+            <MudDivider Class="my-6" />
+
+        <MudStack Justify="Justify.Center" Spacing="2" Wrap="Wrap.Wrap" Class="pb-3">
+
+            <MudButton OnClick="UrlDialogPopup"
+                Variant="Variant.Outlined"
+                Color="Color.Primary"
+                StartIcon="@Icons.Material.Filled.Link">
+                Upload via URL
+            </MudButton>
+                <MudButton OnClick="ResetRulesToDefault"
+                           Variant="Variant.Outlined"
+                           Color="Color.Error"
+                           Size="Size.Small"
+                           StartIcon="@Icons.Material.Filled.Delete">
+                    Clear Rules
+                </MudButton>
+            </MudStack>
+
+        <MudTabs Elevation="0" Color="Color.Dark" Border="true" Rounded>
+            @foreach (var categoryName in compiledRules.Where(c => c.Category != "Errors").Select(c => c.Category).Distinct())
+            {
+                var entries = logEntries
+                .Where(e => e.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(e => e.Order);
+
+                var badgeEntry = entries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                <MudTabPanel Text="@categoryName" BadgeData="@(badgeEntry?.BadgeText)" BadgeColor="@(badgeEntry?.BadgeColor ?? Color.Success)">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (entries.Any())
+                        {
+                            @foreach (var entry in entries)
+                            {
+                                if (entry.DisplayName == "CPU" || entry.DisplayName == "GPU")
+                                {
+                                    <MudText Class="pb-2">
+                                        <MudText Inline Color="entry.HighlightText"><b>@entry.DisplayName:</b></MudText>
+                                        <MudText Inline Color="entry.HighlightText">@entry.Response</MudText>
+                                    </MudText>
+                                }
+                                else
+                                {
+                                    <MudText Class="pb-2">
+                                        <MudText Inline Color="Color.Primary"><b>@entry.DisplayName:</b></MudText> @entry.Response
+                                    </MudText>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <MudText>No entries for this category</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+            }
+
+            @if (categoryLoaded)
+            {
+                var errorEntries = logEntries
+                .Where(e => e.Category.Equals("Errors", StringComparison.OrdinalIgnoreCase))
+                .OrderBy(e => e.Order);
+
+                var errorBadgeEntry = errorEntries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.BadgeText));
+                var errorBadge = errorBadgeEntry?.BadgeText ?? (errorEntries.Any() ? "!" : "0");
+                var errorBadgeColor = errorBadgeEntry?.BadgeColor ?? (errorEntries.Any() ? Color.Error : Color.Success);
+
+                <MudTabPanel Text="Errors" BadgeData="@errorBadge" BadgeColor="@errorBadgeColor">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (errorEntries.Any())
+                        {
+                            @foreach (var entry in errorEntries)
+                            {
+                                <MudPaper Class="pa-4 my-3" Elevation="1" Style="border-left: 6px solid var(--mud-palette-error);">
+                                    <MudText Typo="Typo.h6" Color="Color.Error" Class="mb-2">@entry.Response</MudText>
+                                    <MudDivider Class="my-2" />
+        
+                                    <MudText Typo="Typo.subtitle1" Color="Color.Primary" Class="mt-2"><b>Suggested Solution:</b></MudText>
+        
+                                    <div class="markdown-body">
+                                        @MarkdownConverter.Parse(entry.Solution)
+                                    </div>
+                                </MudPaper>
+                            }
+                        }
+                        else
+                        {
+                            <MudText>No errors found in this log.</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+
+                <MudTabPanel Text="Raw">
+                    <div class="pt-2 pb-2 pl-3 pr-3" style="min-height:400px; max-height: 600px; overflow-y:auto;">
+                        @if (!string.IsNullOrEmpty(uploadedFile))
+                        {
+                            <pre style="white-space: pre-wrap; word-break: break-all;">@uploadedFile</pre>
+                        }
+                        else
+                        {
+                            <MudText>No entries for this category</MudText>
+                        }
+                    </div>
+                </MudTabPanel>
+            }
+        </MudTabs>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private const string CUSTOM_RULES_STORAGE_KEY = "PlayerLogTool_Rules";
+
+    private MudFileUpload<IBrowserFile>? rulesFileUpload;
+    private string uploadedFile = string.Empty;
+
+    private string minCpu = "";
+    private string minGpu = "";
+
+    public List<PlayerLogEntry> logEntries = new(); //actual cleaned
+    private List<CompiledRule> compiledRules = new(); //preload
+    private Dictionary<string, Dictionary<string, PlayerLogRule>> rules = new(); //raw
+    private Dictionary<string, int> cpuScores = new();
+    private Dictionary<string, int> gpuScores = new();
+
+    protected override string SettingsKey => "PlayerLogToolPage";
+
+    protected override List<PageSettingEntry> GetSettingEntries(PlayerLogToolSettings model) => new()
+    {
+        new PageSettingEntry
+        {
+            Title = "Hardware Comparison",
+            Description = "Should the uploaded hardware be compared to the min requirements of the game? (This is a PERFORMANCE BOOST when off)",
+            Editor = @<MudSwitch @bind-Value="model.EnableHardwareCompare" />
+        }
+    };
+
+
+    private string logUrl = "";
+
+    
+    private bool RulesLoaded = false;
+
+    private string _scpslMinSpecs = string.Empty;
+    private string _passmarkData = string.Empty;
+    private string _playerlogRules = string.Empty;
+
+    private bool categoryLoaded = false;
+
+    private readonly DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Large };
+    private bool _ruleDialogVisible = false;
+
+    private void OpenRuleDialog() => _ruleDialogVisible = true;
+    private void CloseRuleDialog() => _ruleDialogVisible = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadingService.Show("Loading data...");
+        try
+        {
+            LoadingService.Show("Loading data...");
+
+            _scpslMinSpecs = await Http.GetStringAsync("data/scpslMinHardware.json");
+            _passmarkData = await Http.GetStringAsync("data/passmark-data.json");
+
+            try
+            {
+                string? customRulesJson = await localStorage.GetItemAsStringAsync(CUSTOM_RULES_STORAGE_KEY);
+                if (!string.IsNullOrWhiteSpace(customRulesJson))
+                {
+                    rules = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRule>>>(customRulesJson) ?? new();
+                    RulesLoaded = rules.Count > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading rules from localstorage: {ex.Message}");
+                rules = new();
+                RulesLoaded = false;
+            }
+
+            if (rules.Count > 0)
+            {
+                compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
+                {
+                    Category = category.Key,
+                    DisplayName = rule.Key,
+                    Rule = rule.Value,
+                    CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
+                })).ToList();
+                categoryLoaded = true;
+            }
+
+            try
+            {
+                var minResults = System.Text.Json.JsonSerializer.Deserialize<MinRequirements>(_scpslMinSpecs) ?? new();
+                minCpu = minResults.MinCpu ?? "";
+                minGpu = minResults.MinGpu ?? "";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error parsing min requirements: {ex.Message}");
+            }
+
+            try
+            {
+                var passmarkResults = System.Text.Json.JsonSerializer.Deserialize<PassmarkData>(_passmarkData);
+                if (passmarkResults != null)
+                {
+                    cpuScores = passmarkResults.Cpu ?? new Dictionary<string, int>();
+                    gpuScores = passmarkResults.Gpu ?? new Dictionary<string, int>();
+                }
+                CompareHardwareHelper.Prime(cpuScores, gpuScores);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error parsing passmark data: {ex.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during initialization: {ex.Message}");
+        }
+        finally
+        {
+            LoadingService.Hide();
+        }
+    }
+
+    private async Task OnRulesFilesChanged(InputFileChangeEventArgs e)
+    {
+        if (e.File == null)
+            return;
+
+        await HandleRulesUploadAsync(e.File);
+    }
+
+    private async Task HandleRulesUploadAsync(IBrowserFile file)
+    {
+        try
+        {
+            LoadingService.Show("Saving JSON to local storage...");
+
+            using var stream = file.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024);
+            using var reader = new StreamReader(stream);
+            var rulesJson = await reader.ReadToEndAsync();
+
+            var parsedRules = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRule>>>(rulesJson);
+            if (parsedRules == null || parsedRules.Count == 0)
+            {
+                SnackbarService.Add("Invalid JSON or malformed", Severity.Error);
+                LoadingService.Hide();
+                return;
+            }
+
+            await localStorage.SetItemAsStringAsync(CUSTOM_RULES_STORAGE_KEY, rulesJson);
+
+            rules = parsedRules;
+            RulesLoaded = true;
+
+            compiledRules = rules.SelectMany(category => category.Value.Select(rule => new CompiledRule
+            {
+                Category = category.Key,
+                DisplayName = rule.Key,
+                Rule = rule.Value,
+                CompiledRegex = new Regex(rule.Value.Pattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)
+            })).ToList();
+
+            categoryLoaded = true;
+
+            SnackbarService.Add("JSON saved successfully to localstorage", Severity.Success);
+            StateHasChanged();
+        }
+        catch (JsonException ex)
+        {
+            SnackbarService.Add($"Invalid JSON format: {ex.Message}", Severity.Error);
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.Add($"Error uploading rules: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            LoadingService.Hide();
+        }
+    }
+
+    private async Task ResetRulesToDefault()
+    {
+        try
+        {
+            LoadingService.Show("Resetting JSON rules...");
+
+            await localStorage.RemoveItemAsync(CUSTOM_RULES_STORAGE_KEY);
+
+            rules = new();
+            compiledRules = new();
+            logEntries = new();
+            uploadedFile = string.Empty;
+            RulesLoaded = false;
+            categoryLoaded = false;
+
+            SnackbarService.Add("JSON rules have been cleared. To continue using the tool you will need to upload a new JSON.", Severity.Warning);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            SnackbarService.Add($"Error clearing rules: {ex.Message}", Severity.Error);
+        }
+        finally
+        {
+            LoadingService.Hide();
+        }
+    }
+
+    private async Task UrlDialogPopup()
+    {
+        if (!RulesLoaded)
+        {
+            SnackbarService.Add("No rules loaded, you need to upload it.", Severity.Error);
+            return;
+        }
+
+        var parameters = new DialogParameters<InsertUrlDialog>
+        {
+            { x => x.Content, @<MudAlert Severity="Severity.Warning">Larger files (5MB+) will not upload, This is due to the CORS proxy limit. Larger files will take longer to process.</MudAlert> },
+            { x => x.ButtonText, "Upload" }
+        };
+
+        var options = new DialogOptions
+        {
+            CloseOnEscapeKey = true,
+            MaxWidth = MaxWidth.ExtraSmall
+        };
+
+        var dialog = await DialogService.ShowAsync<InsertUrlDialog>("URL Upload", parameters, options);
+        var result = await dialog.Result;
+
+        if (!result.Canceled && result.Data is string url && !string.IsNullOrWhiteSpace(url))
+        {
+            logUrl = url;
+            await HandleUrlUpload();
+        }
+    }
+
+    private async Task HandleUrlUpload()
+    {
+        if (string.IsNullOrWhiteSpace(logUrl)) return;
+
+        LoadingService.Show("Downloading log file...");
+
+        try
+        {
+            var content = await Http.GetStringAsync("https://api.codetabs.com/v1/proxy?quest=" + Uri.EscapeDataString(logUrl));
+            uploadedFile = content;
+            logEntries = ProcessPlayerLogContent(content);
+        }
+        catch (Exception)
+        {
+            // Handle download error silently
+        }
+
+        LoadingService.Hide();
+    }
+
+    private async Task HandleManualUpload(IBrowserFile file)
+    {
+        if (!RulesLoaded)
+        {
+            SnackbarService.Add("Please upload a PlayerLogRules JSON file first", Severity.Error);
+            return;
+        }
+
+        try
+        {
+            LoadingService.Show("Processing uploaded file...");
+
+            using var stream = file.OpenReadStream(maxAllowedSize: 100 * 1024 * 1024); //100mb
+            using var reader = new StreamReader(stream);
+            var content = await reader.ReadToEndAsync();
+
+            uploadedFile = content;
+            logEntries = ProcessPlayerLogContent(content);
+            LoadingService.Hide();
+            StateHasChanged();
+        }
+        catch (Exception)
+        {
+            LoadingService.Hide();
+        }
+    }
+
+    public List<PlayerLogEntry> ProcessPlayerLogContent(string content)
+    {
+        return PlayerLogProcessor.Process(content, compiledRules.ToList(), minCpu, minGpu, cpuScores, gpuScores);
+    }
+}
+
+<style>
+    .markdown-body a {
+        color: #00a3ff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .markdown-body a:hover {
+            text-decoration: underline;
+        }
+
+    .markdown-body ul {
+        padding-left: 20px;
+        margin: 10px 0;
+    }
+</style>
