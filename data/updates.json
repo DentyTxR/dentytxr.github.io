@@ -1,5 +1,16 @@
 [
   {
+    "Title": "2.1.21",
+    "New": [
+    ],
+    "Changes": [
+      "Oops, fixed an issue."
+    ],
+    "Issues": [
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "2.1.1",
     "New": [
       "Added back a preset JSON for the playerlog tool but is locked behind a password. It does not contain any sensitive data, this is just to deal with unwanted people using my preset, make yo own :)"
@@ -10,7 +21,7 @@
     "Issues": [
       "Markdig package used for markdown rendering is not properly displaying markdown for solutions field in the playerlog tool."
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "2.1.0",

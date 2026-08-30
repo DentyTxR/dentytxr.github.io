@@ -45,11 +45,11 @@
       "url": "data\/scpslMinHardware.json"
     },
     {
-      "hash": "sha256-\/4VWfzwJ6BLDtz6DkiKkBJxTPaz2U\/Xpqjf4w6onvjA=",
+      "hash": "sha256-dZlTDVFPlwd+ZxCC72SVGxhGoWBATpwL8cj1Vg4qNlI=",
       "url": "data\/updates.json"
     },
     {
-      "hash": "sha256-Fu0o3BALrdYFBkWTLGytMQp8mbCCC5ngiowSko4hc2Q=",
+      "hash": "sha256-KtJo\/JvyB46oqn\/zjVrCITRI4IQhKEmil2jK3rM+vrQ=",
       "url": "data\/version.json"
     },
     {
@@ -113,7 +113,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-jGS6AAAXsIvEUmt8nCJJ7ehTPTsGtkCXvWFf9iW48Vc=",
+      "hash": "sha256-YxICKBtUJS8SmwGPBaSTl1dV7xEypPlfGFvtqsDnnGk=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -125,7 +125,7 @@
       "url": "_framework\/FuzzySharp.wasm"
     },
     {
-      "hash": "sha256-N3Ku7vbRfyRnVmKNQsRSJrS6P1oj4n\/1hIVb4+3KFWI=",
+      "hash": "sha256-eLqrVZnMAHhQEb5vJXM+Ho1YbG0l35cUxxn3EFoL7nc=",
       "url": "_framework\/ghp-app.wasm"
     },
     {
@@ -393,5 +393,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js.map"
     }
   ],
-  "version": "jgSi6HtG"
+  "version": "MZCuAoZn"
 };
