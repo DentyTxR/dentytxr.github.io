@@ -23,17 +23,26 @@
                     nameof(OnBuildChange));
     }
 
+    private RenderFragment UpdateRenderFragment(string Version, string Changelog) => @<div>
+        <MudText Typo="Typo.subtitle1">A new version of the app is available.</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Version:</b> @Version</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Update:</b> @Changelog</MudText>
+    </div>;
+
+    private RenderFragment BuildRenderFragment(string build) => @<div>
+        <MudText Typo="Typo.subtitle1">A build update has been released.</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary" ">Usually a bugfix, hotfix or rebuild.</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Build:</b> @build</MudText>
+    </div>;
+
+
     [JSInvokable(nameof(OnUpdateAvailable))]
     public Task OnUpdateAvailable(string Version, string Changelog)
     {
         Console.WriteLine($"Update available! Version: {Version} Changelog: {Changelog}");
 
         //UpdateService.NotifyUpdate(Version, Changelog);
-        SnackbarService.Add(
-            @<span><MudText Typo="Typo.subtitle1">A new version of the app is available.</MudText>
-            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Version:</b> @Version</MudText>
-            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Update:</b> @Changelog</MudText>
-            </span>,
+        SnackbarService.Add(UpdateRenderFragment(Version, Changelog),
             Severity.Info,
     configure: options =>
     {
@@ -59,11 +68,7 @@
     {
         Console.WriteLine($"Build ppdate available! Build Version: {build}");
 
-        SnackbarService.Add(
-            @<span><MudText Typo="Typo.subtitle1">A build update has been released.</MudText>
-            <MudText Typo="Typo.body2" Class="mud-text-secondary" ">Usually a bugfix, hotfix or rebuild.</MudText>
-            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Build:</b> @build</MudText>
-            </span>,
+        SnackbarService.Add(BuildRenderFragment(build),
             Severity.Info,
     configure: options =>
     {
