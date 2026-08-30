@@ -1,19 +1,9 @@
 [
   {
-    "Title": "2.1.21",
-    "New": [
-    ],
-    "Changes": [
-      "Oops, fixed an issue."
-    ],
-    "Issues": [
-    ],
-    "LatestUpdate": true
-  },
-  {
     "Title": "2.1.1",
     "New": [
-      "Added back a preset JSON for the playerlog tool but is locked behind a password. It does not contain any sensitive data, this is just to deal with unwanted people using my preset, make yo own :)"
+      "Added back a preset JSON for the playerlog tool but is locked behind a password. It does not contain any sensitive data, this is just to deal with unwanted people using my preset, make yo own :)",
+      "Implemented an app-build variable for when releasing builds, this will be helpful for minor fixes."
     ],
     "Changes": [
       "Severly improved the serviceworker and app update system, more cleaner and faster. (I hate JS but thankfully I was not the one that updated it)"
@@ -21,7 +11,7 @@
     "Issues": [
       "Markdig package used for markdown rendering is not properly displaying markdown for solutions field in the playerlog tool."
     ],
-    "LatestUpdate": false
+    "LatestUpdate": true
   },
   {
     "Title": "2.1.0",

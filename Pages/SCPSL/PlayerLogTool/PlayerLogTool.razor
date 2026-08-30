@@ -72,13 +72,16 @@
                 StartIcon="@Icons.Material.Filled.Link">
                 Upload via URL
             </MudButton>
-                <MudButton OnClick="ResetRulesToDefault"
-                           Variant="Variant.Outlined"
-                           Color="Color.Error"
-                           Size="Size.Small"
-                           StartIcon="@Icons.Material.Filled.Delete">
-                    Clear Rules
-                </MudButton>
+                @if (!HasPassword)
+                {
+                    <MudButton OnClick="ResetRulesToDefault"
+                               Variant="Variant.Outlined"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               StartIcon="@Icons.Material.Filled.Delete">
+                        Clear Rules
+                    </MudButton>
+                }
             </MudStack>
 
         <MudTabs Elevation="0" Color="Color.Dark" Border="true" Rounded>

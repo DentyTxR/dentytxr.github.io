@@ -14,7 +14,7 @@
                 }
             };
 
-            setInterval(checkUpdate, 60 * 1000);
+            setInterval(checkUpdate, 5 * 1000);
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') checkUpdate();
             });
@@ -49,14 +49,24 @@ async function triggerUpdateNotification(worker, caller, methodName) {
     try {
         const response = await fetch(`/data/version.json?nocache=${Date.now()}`);
         const data = await response.json();
+
         const previousVersion = localStorage.getItem('app-version');
+        const previousBuild = localStorage.getItem('app-build');
 
-        console.log(`Version check -> Server: ${data.version} | Local: ${previousVersion}`);
+        console.log(`Version check -> Server: ${data.version} (Build: ${data.build}) | Local: ${previousVersion} (localBuild: ${previousBuild})`);
 
-        if (data.version !== previousVersion) {
+        if (data.version !== previousVersion || data.build !== previousBuild) {
             localStorage.setItem('app-version', data.version);
-            console.log("New version confirmed! Invoking C# method...");
-            await caller.invokeMethodAsync(methodName, data.version, data.changes || '');
+            localStorage.setItem('app-build', data.build);
+
+            console.log("New update detected! Invoking C# method...");
+
+            if (data.version !== previousVersion) {
+                await caller.invokeMethodAsync("OnUpdateAvailable", data.version, data.changes || '');
+            }
+            else if (data.build !== previousBuild) {
+                await caller.invokeMethodAsync("OnBuildChange", data.build || '');
+            }
         }
     } catch (error) {
         console.error('Error fetching version info:', error);

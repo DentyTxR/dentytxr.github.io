@@ -1,5 +1,6 @@
 ﻿{
-  "version": "2.1.2",
+  "version": "2.1.1",
+  "build": "8-30-2026-fix1",
   "changes": "Oops, fixed an issue.",
   "date": "8/30/2026"
 }

@@ -23,6 +23,7 @@ namespace ghp_app.Services
             {
                 AppStateData = result;
                 await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "app-version", result.Version);
+                await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "app-build", result.Build);
             }
         }
     }

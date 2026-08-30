@@ -19,7 +19,8 @@
         await _jsRuntime.InvokeAsync<object>(
                     identifier: "registerForUpdateAvailableNotification",
                     _objRef,
-                    nameof(OnUpdateAvailable));
+                    nameof(OnUpdateAvailable),
+                    nameof(OnBuildChange));
     }
 
     [JSInvokable(nameof(OnUpdateAvailable))]
@@ -27,9 +28,13 @@
     {
         Console.WriteLine($"Update available! Version: {Version} Changelog: {Changelog}");
 
-        UpdateService.NotifyUpdate(Version, Changelog);
-
-        SnackbarService.Add(@<span>A new version of the app is available.<br /> <b>Version:</b> @Version<br /><b>Update:</b> @Changelog</span>, Severity.Info,
+        //UpdateService.NotifyUpdate(Version, Changelog);
+        SnackbarService.Add(
+            @<span><MudText Typo="Typo.subtitle1">A new version of the app is available.</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Version:</b> @Version</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Update:</b> @Changelog</MudText>
+            </span>,
+            Severity.Info,
     configure: options =>
     {
         options.RequireInteraction = true;
@@ -37,6 +42,39 @@
         options.Action = "Update";
         options.ActionColor = Color.Info;
         options.SnackbarVariant = Variant.Outlined;
+        options.Icon = Icons.Material.Filled.SystemUpdateAlt;
+        options.OnClick = snackbar =>
+        {
+            ReloadPage();
+            return Task.CompletedTask;
+        };
+    });
+
+
+        return Task.CompletedTask;
+    }
+
+    [JSInvokable(nameof(OnBuildChange))]
+    public Task OnBuildChange(string build)
+    {
+        Console.WriteLine($"Build ppdate available! Build Version: {build}");
+
+        // UpdateService.NotifyUpdate();
+
+        SnackbarService.Add(
+            @<span><MudText Typo="Typo.subtitle1">A build update has been released.</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary" ">Usually a bugfix, hotfix or rebuild.</MudText>
+            <MudText Typo="Typo.body2" Class="mud-text-secondary"><b>Build:</b> @build</MudText>
+            </span>,
+            Severity.Info,
+    configure: options =>
+    {
+        options.RequireInteraction = true;
+        options.ShowCloseIcon = true;
+        options.Action = "Update";
+        options.ActionColor = Color.Info;
+        options.SnackbarVariant = Variant.Outlined;
+        options.Icon = Icons.Material.Filled.SystemUpdateAlt;
         options.OnClick = snackbar =>
         {
             ReloadPage();
