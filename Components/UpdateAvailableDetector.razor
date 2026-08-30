@@ -1,30 +1,10 @@
 ﻿@inject ISnackbar SnackbarService
 @inject IJSRuntime _jsRuntime
 @inject NavigationManager NavigationManager
-
-@if (_newVersionAvailable)
-{
-    var config = (SnackbarOptions options) =>
-    {
-        options.RequireInteraction = true;
-        options.ShowCloseIcon = true;
-        options.Action = "Update";
-        options.ActionColor = Color.Info;
-        options.SnackbarVariant = Variant.Outlined;
-        options.OnClick = Snackbar =>
-        {
-            _newVersionAvailable = false;
-            StateHasChanged();
-            ReloadPage();
-            return Task.CompletedTask;
-        };
-    };
-
-    SnackbarService.Add(@<span>A new version of the app is available.<br /> <b>Version:</b> @UpdateService.NewVersion<br /><b>Update:</b> @UpdateService.UpdateChanges</span>, Severity.Info, configure: config);
-}
+@inject AppUpdateService UpdateService
 
 @code {
-    private bool _newVersionAvailable = false;
+    private DotNetObjectReference<UpdateAvailableDetector>? _objRef;
 
     protected override async Task OnInitializedAsync()
     {
@@ -33,10 +13,13 @@
 
     private async Task RegisterForUpdateAvailableNotification()
     {
+        // Save the reference so blazors garbage collector doesnt destroy it
+        _objRef = DotNetObjectReference.Create(this);
+
         await _jsRuntime.InvokeAsync<object>(
-            identifier: "registerForUpdateAvailableNotification",
-            DotNetObjectReference.Create(this),
-            nameof(OnUpdateAvailable));
+                    identifier: "registerForUpdateAvailableNotification",
+                    _objRef,
+                    nameof(OnUpdateAvailable));
     }
 
     [JSInvokable(nameof(OnUpdateAvailable))]
@@ -45,8 +28,21 @@
         Console.WriteLine($"Update available! Version: {Version} Changelog: {Changelog}");
 
         UpdateService.NotifyUpdate(Version, Changelog);
-        _newVersionAvailable = true;
-        StateHasChanged();
+
+        SnackbarService.Add(@<span>A new version of the app is available.<br /> <b>Version:</b> @Version<br /><b>Update:</b> @Changelog</span>, Severity.Info,
+    configure: options =>
+    {
+        options.RequireInteraction = true;
+        options.ShowCloseIcon = true;
+        options.Action = "Update";
+        options.ActionColor = Color.Info;
+        options.SnackbarVariant = Variant.Outlined;
+        options.OnClick = snackbar =>
+        {
+            ReloadPage();
+            return Task.CompletedTask;
+        };
+    });
 
         return Task.CompletedTask;
     }
@@ -56,8 +52,8 @@
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 
-    private void UpdateStorage()
+    public void Dispose()
     {
-
+        _objRef?.Dispose();
     }
 }

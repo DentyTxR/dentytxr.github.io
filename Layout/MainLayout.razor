@@ -60,6 +60,8 @@
     {
         ErrorService.Initialize(Snackbar);
         Theme = await SettingsService.GetThemeAsync();
+
+        PageSettingsProvider.OnChange += StateHasChanged;
     }
 
     protected override void OnParametersSet()
@@ -75,11 +77,13 @@
     private async Task ShowPageSettings()
     {
         var entries = PageSettingsProvider.CurrentSettings ?? new List<PageSettingEntry>();
+
         var parameters = new DialogParameters
-    {
-        { "SettingEntries", entries },
-        { "OnSave", EventCallback.Factory.Create(this, SavePageSettingsFromLayout) }
-    };
+        {
+            { "SettingEntries", entries },
+            { "OnSave", EventCallback.Factory.Create(this, SavePageSettingsFromLayout) }
+        };
+
         await DialogService.ShowAsync<GlobalSettingsDialog>("Page Settings", parameters);
     }
 
@@ -87,5 +91,10 @@
     {
         if (PageSettingsProvider.SaveSettingsAction is not null)
             await PageSettingsProvider.SaveSettingsAction();
+    }
+
+    public void Dispose()
+    {
+        PageSettingsProvider.OnChange -= StateHasChanged;
     }
 }

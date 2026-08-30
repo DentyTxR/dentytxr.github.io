@@ -6,5 +6,9 @@ namespace ghp_app.Services
     {
         public List<PageSettingEntry>? CurrentSettings { get; set; }
         public Func<Task>? SaveSettingsAction { get; set; }
+
+        public event Action? OnChange;
+
+        public void NotifyChanged() => OnChange?.Invoke();
     }
 }

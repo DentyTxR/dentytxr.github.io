@@ -1,4 +1,8 @@
-﻿<CascadingValue Value="@AppVersionState">
+﻿@inject AppVersionService AppVersionState
+@inject AppUpdateService UpdateService
+@inject IJSRuntime JSRuntime
+
+<CascadingValue Value="@AppVersionState">
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -15,10 +19,11 @@
     </Router>
 </CascadingValue>
 
+@inject AppVersionService AppVersionState
+
 @code {
     protected override async Task OnInitializedAsync()
     {
-        //load version.json
         await AppVersionState.LoadAsync();
     }
 }

@@ -170,7 +170,7 @@
         {
             isLoading = true;
 
-            _scpslMinSpecs = await Http.GetStringAsync("data/playerlogRules.json");
+            _scpslMinSpecs = await Http.GetStringAsync("data/scpslMinHardware.json");
             _passmarkData = await Http.GetStringAsync("data/passmark-data.json");
 
             compiledRules = HardcodedRules();

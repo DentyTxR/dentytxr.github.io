@@ -61,7 +61,7 @@
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
-        <a class="dismiss">ðŸ—™</a>
+        <a class="dismiss">🗙</a>
     </div>
 
     <script>
@@ -80,5 +80,52 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="sw-registrator.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+
+    <script>
+        window.decryptData = async (encryptedBase64, password) => {
+            try {
+                const binString = atob(encryptedBase64.trim());
+                const dataBytes = new Uint8Array(binString.length);
+                for (let i = 0; i < binString.length; i++) {
+                    dataBytes[i] = binString.charCodeAt(i);
+                }
+
+                const salt = dataBytes.slice(0, 16);
+                const iv = dataBytes.slice(16, 28);
+                const tag = dataBytes.slice(28, 44);
+                const ciphertext = dataBytes.slice(44);
+
+                // Recombine ciphertext and tag for SubtleCrypto (Web Crypto expects tag appended to ciphertext)
+                const ciphertextAndTag = new Uint8Array(ciphertext.length + tag.length);
+                ciphertextAndTag.set(ciphertext);
+                ciphertextAndTag.set(tag, ciphertext.length);
+
+                const encoder = new TextEncoder();
+                const passwordBytes = encoder.encode(password);
+
+                const importedKey = await window.crypto.subtle.importKey(
+                    "raw", passwordBytes, "PBKDF2", false, ["deriveKey"]
+                );
+
+                const cryptoKey = await window.crypto.subtle.deriveKey(
+                    { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+                    importedKey,
+                    { name: "AES-GCM", length: 256 },
+                    false,
+                    ["decrypt"]
+                );
+
+                const decryptedBuffer = await window.crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv, tagLength: 128 },
+                    cryptoKey,
+                    ciphertextAndTag
+                );
+
+                return new TextDecoder().decode(decryptedBuffer);
+            } catch (e) {
+                return null;
+            }
+        };
+    </script>
 </body>
 </html>

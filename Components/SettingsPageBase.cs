@@ -26,6 +26,8 @@ namespace ghp_app.Components
 
             PageSettingsProvider.CurrentSettings = GetSettingEntries(EditSettings);
             PageSettingsProvider.SaveSettingsAction = ApplyAndSaveSettings;
+
+            PageSettingsProvider.NotifyChanged();
         }
 
         public async Task ApplyAndSaveSettings()
@@ -46,6 +48,8 @@ namespace ghp_app.Components
         {
             PageSettingsProvider.CurrentSettings = null;
             PageSettingsProvider.SaveSettingsAction = null;
+
+            PageSettingsProvider.NotifyChanged();
         }
     }
 }

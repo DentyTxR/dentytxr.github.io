@@ -23,13 +23,13 @@
     <MudPaper Elevation="1" Class="mt-2" Square>
 
 
-        @if (LoadingService.IsLoading && !RulesLoaded)
+        @if (!_isInitialized && !RulesLoaded)
         {
             <MudStack Spacing="4">
                 <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="400px" Animation="Animation.Pulse"/>
             </MudStack>
         }
-        else if (!RulesLoaded)
+        else if (!RulesLoaded && !HasPassword)
         {
             <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Style="min-height: 400px;" Spacing="3">
                 <MudIcon Icon="@Icons.Material.Filled.Rule" Size="Size.Large" Color="Color.Primary" Style="font-size: 4rem;" />
@@ -48,7 +48,7 @@
                         <MudButton OnClick="@(async () => await context.OpenFilePickerAsync())"
                                    StartIcon="@Icons.Material.Filled.CloudUpload"
                                    Variant="Variant.Filled"
-                                   Size="Size.Large"
+                                   Size="Size.Medium"
                                    Color="Color.Primary">
                             Upload JSON Rules
                         </MudButton>
@@ -174,6 +174,20 @@
 @code {
     private const string CUSTOM_RULES_STORAGE_KEY = "PlayerLogTool_Rules";
 
+    protected override string SettingsKey => "PlayerLogToolPage";
+
+    protected override List<PageSettingEntry> GetSettingEntries(PlayerLogToolSettings model) => new()
+    {
+        new PageSettingEntry
+        {
+            Title = "ENRC",
+            Description = "Password to unlock preset.",
+            Editor = @<MudInput @bind-Value="model.Password" Type="InputType.Password" />
+        }
+    };
+
+    private bool _isInitialized;
+
     private MudFileUpload<IBrowserFile>? rulesFileUpload;
     private string uploadedFile = string.Empty;
 
@@ -186,23 +200,12 @@
     private Dictionary<string, int> cpuScores = new();
     private Dictionary<string, int> gpuScores = new();
 
-    protected override string SettingsKey => "PlayerLogToolPage";
-
-    protected override List<PageSettingEntry> GetSettingEntries(PlayerLogToolSettings model) => new()
-    {
-        new PageSettingEntry
-        {
-            Title = "Hardware Comparison",
-            Description = "Should the uploaded hardware be compared to the min requirements of the game? (This is a PERFORMANCE BOOST when off)",
-            Editor = @<MudSwitch @bind-Value="model.EnableHardwareCompare" />
-        }
-    };
-
-
     private string logUrl = "";
-
     
     private bool RulesLoaded = false;
+    private bool HasPassword = false;
+
+    private string? decryptedJsonString;
 
     private string _scpslMinSpecs = string.Empty;
     private string _passmarkData = string.Empty;
@@ -218,12 +221,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LoadingService.Show("Loading data...");
+        await base.OnInitializedAsync();
+
         try
         {
             LoadingService.Show("Loading data...");
 
+            if (!string.IsNullOrEmpty(PageSettings.Password))
+            {
+                bool success = await TryDecrypt(PageSettings.Password);
+                if (success)
+                {
+                    HasPassword = true;
+                    RulesLoaded = true;
+                }
+            }
+
             _scpslMinSpecs = await Http.GetStringAsync("data/scpslMinHardware.json");
+            LoadingService.Show("Loading benchmark data, this may take a bit...");
             _passmarkData = await Http.GetStringAsync("data/passmark-data.json");
 
             try
@@ -287,7 +302,28 @@
         finally
         {
             LoadingService.Hide();
+            _isInitialized = true;
         }
+    }
+
+    private async Task<bool> TryDecrypt(string password)
+    {
+        try
+        {
+            string encryptedPayload = await Http.GetStringAsync($"data/plt.enc?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}");
+
+            decryptedJsonString = await JSRuntime.InvokeAsync<string>("window.decryptData", encryptedPayload, password);
+            
+            if (!string.IsNullOrEmpty(decryptedJsonString))
+            {
+                _playerlogRules = decryptedJsonString;
+                return true;
+            }
+        } catch (Exception ex)
+        {
+        }
+        Console.WriteLine("nuh uh, nice try pal.");
+        return false;
     }
 
     private async Task OnRulesFilesChanged(InputFileChangeEventArgs e)

@@ -1,5 +1,5 @@
 ﻿{
-  "version": "2.1.0",
-  "changes": "Updated playerlogtool, WIP discord auth, im back to working on this project :)",
-  "date": "8/29/2026"
+  "version": "2.1.1",
+  "changes": "Improved service worker and app update system, a lot better now.",
+  "date": "8/30/2026"
 }

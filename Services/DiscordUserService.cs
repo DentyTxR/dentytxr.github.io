@@ -18,9 +18,9 @@ namespace ghp_app.Services
 
         public DiscordUserService(HttpClient http, IJSRuntime jsRuntime)
         {
-            Console.WriteLine("loaded discord user service");
+            /*Console.WriteLine("loaded discord user service");
             _http = http;
-            _jsRuntime = jsRuntime;
+            _jsRuntime = jsRuntime;*/
         }
 
         public async Task<DiscordUser?> GetUserInfoAsync(bool forceRefresh = false)
