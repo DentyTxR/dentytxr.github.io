@@ -1,12 +1,28 @@
 [
-    {
+  {
+    "Title": "2.1.0",
+    "New": [
+      "IM BACK",
+      "WIP Discord auth, not at all finished and im not sure what I will use it for due to static limitations.",
+      "Added new field for updates log, which will allow me to add any known issues."
+    ],
+    "Changes": [
+      "Updated the playerlog tool, merged it from a more active project, the tool also requires the user to upload a rules JSON.",
+      "dxdiag tool has the same treatment, but its quite a not popular used thing so its a bit... not visually nice and likely broken."
+    ],
+    "Issues": [
+      "Markdig package used for markdown rendering is not properly displaying markdown for solutions field in the playerlog tool."
+    ],
+    "LatestUpdate": true
+  },
+  {
     "Title": "2.0.1",
     "New": [
     ],
     "Changes": [
       "Changed upload file size limit for playerlog tool to 200MB, this is for manual upload only, URL still has an limit due to CROS API."
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "2.0.0",
@@ -21,7 +37,7 @@
       "Better naming stuff.",
       "The codebase is getting worse and im already lost my mind looking at it, surely I will make it cleaner and better."
     ],
-    "LatestUpdate": true
+    "LatestUpdate": false
   },
   {
     "Title": "1.9.99",
