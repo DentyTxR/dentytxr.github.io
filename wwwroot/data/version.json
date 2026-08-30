@@ -1,5 +1,5 @@
 ﻿{
-  "version": "2.1.1",
-  "changes": "Improved service worker and app update system, a lot better now.",
+  "version": "2.1.2",
+  "changes": "Oops, fixed an issue.",
   "date": "8/30/2026"
 }

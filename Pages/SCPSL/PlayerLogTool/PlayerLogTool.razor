@@ -233,7 +233,16 @@
                 if (success)
                 {
                     HasPassword = true;
-                    RulesLoaded = true;
+
+                    try
+                    {
+                        rules = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, PlayerLogRule>>>(_playerlogRules) ?? new();
+                        RulesLoaded = rules.Count > 0;
+                    }
+                    catch (Exception parseEx)
+                    {
+                        Console.WriteLine("Failed to parse JSON into rules: " + parseEx.Message);
+                    }
                 }
             }
 
